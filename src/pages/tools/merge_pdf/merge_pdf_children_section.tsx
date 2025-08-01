@@ -7,6 +7,7 @@ import {
 import { XIcon } from "lucide-react";
 import { Document, Page } from "react-pdf";
 import useMergePdfStore from "./merge_pdf_store";
+import DraggableList from "../draggable";
 
 const MergePdfChildrenSection = () => {
   const {
@@ -39,7 +40,8 @@ const MergePdfChildrenSection = () => {
             <TooltipContent className="text-white">
               <p>Remove File</p>
             </TooltipContent>
-          </Tooltip>
+                              </Tooltip>
+                              <DraggableList/>
                 <Document
                   key={index}
                   scale={0.2}
