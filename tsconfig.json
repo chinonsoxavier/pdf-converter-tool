@@ -6,7 +6,30 @@
     "paths": {
       "@/*": ["./src/*"]
     },
-    
+    "esModuleInterop": true
+
     // ...
   }
 }
+
+// {
+//   "compilerOptions": {
+//     // "target": "ES2020", // Supports private identifiers
+//     // "module": "NodeNext", // Matches moduleResolution setting
+//     // "moduleResolution": "nodenext", // Matches Vite's ESM behavior
+//     "jsx": "react-jsx", // For React 17+ JSX transform
+//     "esModuleInterop": true, // Fixes TS1259 errors
+//     "allowSyntheticDefaultImports": true, // Works with esModuleInterop
+//     "strict": true, // Recommended for type safety
+//     "skipLibCheck": true, // Avoids type conflicts in dependencies
+//     "forceConsistentCasingInFileNames": true,
+//     "noEmit": true, // Vite handles emission
+//     "types": ["vite/client", "node"], // Include Vite and Node types
+//     "baseUrl": ".",
+//     "paths": {
+//       "@/*": ["src/*"] // Optional: for aliasing src/ imports
+//     }
+//   },
+//   "include": ["src/**/*", "vite.config.ts"],
+//   "exclude": ["node_modules", "dist"]
+// }
