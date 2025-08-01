@@ -39,12 +39,12 @@ export const EmailCapture = () => {
           initial={"inactive"}
           whileInView={"active"}
           viewport={{ once: true }}
-          className="w-full"
+          className="w-full mb-12 sm:mb-20"
         >
-          <Card className="p-6 mt-20 mx-auto bg-secondary w-full">
+          <Card className="p-6 mt-12 sm:mt-20 mx-auto bg-secondary w-full">
             <div className="flex flex-col md:flex-row items-center justify-between  gap-4">
-              <div className="flex items-center md:items-start w-full gap-3">
-                <div className="w-10 h-10 bg-accent rounded-full flex items-center justify-center">
+              <div className="flex items-start w-full gap-3">
+                <div className="w-10 h-10 min-w-10 bg-accent rounded-full flex items-center justify-center">
                   <Mail className="h-5 w-5 text-white" />
                 </div>
                 <div>

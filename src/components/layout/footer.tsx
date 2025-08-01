@@ -11,49 +11,50 @@ import {
 import { motion } from "motion/react";
 
 const Footer = () => {
-       const variants1 = {
-         inactive: {
-           y: 110,
-           opacity: 0,
-         },
-         active: {
-           y: 0,
-           opacity: 1,
-           transition: { duration: 1.5 },
-         },
+  const variants1 = {
+    inactive: {
+      y: 110,
+      opacity: 0,
+    },
+    active: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 1.5 },
+    },
   };
   const variants2 = {
-         inactive: {
-           y: 120,
-           opacity: 0,
-         },
-         active: {
-           y: 0,
-           opacity: 1,
-           transition: { duration: 1.5 },
-         },
+    inactive: {
+      y: 120,
+      opacity: 0,
+    },
+    active: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 1.5 },
+    },
   };
   const variants3 = {
-         inactive: {
-           y: 130,
-           opacity: 0,
-         },
-         active: {
-           y: 0,
-           opacity: 1,
-           transition: { duration: 1.5 },
-         },
-       };     const variants4 = {
-         inactive: {
-           y: 140,
-           opacity: 0,
-         },
-         active: {
-           y: 0,
-           opacity: 1,
-           transition: { duration: 1.5 },
-         },
-       };
+    inactive: {
+      y: 130,
+      opacity: 0,
+    },
+    active: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 1.5 },
+    },
+  };
+  const variants4 = {
+    inactive: {
+      y: 140,
+      opacity: 0,
+    },
+    active: {
+      y: 0,
+      opacity: 1,
+      transition: { duration: 1.5 },
+    },
+  };
   return (
     <footer className="px-4 pt-10 sm:pt-20 border-t">
       <div className="grid max-width mx-auto grid-cols-2 md:grid-cols-5 gap-8">
@@ -89,7 +90,6 @@ const Footer = () => {
             </ul>
           </div>
         </motion.div>
-
         {/* PDF Converter */}
         <motion.div
           variants={variants1}
@@ -98,23 +98,22 @@ const Footer = () => {
           viewport={{ once: true }}
           className="w-full"
         >
-        <div>
-          <h3 className="font-medium text-primary-foreground mb-4">
-            PDF Converter
-          </h3>
-          <ul className="space-y-2">
-            <li>
-              <Link
-                to="/blog"
-                className="text-secondary-foreground hover:text-primary-foreground text-sm"
-              >
-                Blog
-              </Link>
-            </li>
-          </ul>
-        </div>
+          <div>
+            <h3 className="font-medium text-primary-foreground mb-4">
+              PDF Converter
+            </h3>
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  to="/blog"
+                  className="text-secondary-foreground hover:text-primary-foreground text-sm"
+                >
+                  Blog
+                </Link>
+              </li>
+            </ul>
+          </div>
         </motion.div>
-
         {/* Company */}
         <motion.div
           variants={variants1}
@@ -123,29 +122,30 @@ const Footer = () => {
           viewport={{ once: true }}
           className="w-full"
         >
-        <div>
-          <h3 className="font-medium text-primary-foreground mb-4">Company</h3>
-          <ul className="space-y-2">
-            <li>
-              <Link
-                to="terms-and-privacy"
-                className="text-secondary-foreground hover:text-primary-foreground text-sm"
-              >
-                Terms and Privacy
-              </Link>
-            </li>
-            <li>
-              <Link
-                to="/"
-                className="text-secondary-foreground hover:text-primary-foreground text-sm"
-              >
-                Developers API
-              </Link>
-            </li>
-          </ul>
-        </div>
+          <div>
+            <h3 className="font-medium text-primary-foreground mb-4">
+              Company
+            </h3>
+            <ul className="space-y-2">
+              <li>
+                <Link
+                  to="terms-and-privacy"
+                  className="text-secondary-foreground hover:text-primary-foreground text-sm"
+                >
+                  Terms and Privacy
+                </Link>
+              </li>
+              <li>
+                <Link
+                  to="/"
+                  className="text-secondary-foreground hover:text-primary-foreground text-sm"
+                >
+                  Developers API
+                </Link>
+              </li>
+            </ul>
+          </div>
         </motion.div>
-
         <motion.div
           variants={variants4}
           initial={"inactive"}
@@ -171,30 +171,60 @@ const Footer = () => {
           </div>
         </motion.div>
 
-        {/* PDF Converter Brand */}
-           <motion.div
+        {/* Admin  */}
+        <motion.div
           variants={variants4}
           initial={"inactive"}
           whileInView={"active"}
           viewport={{ once: true }}
           className="w-full"
         >
-        <div className="col-span-2 md:col-span-1">
-          <div className="flex items-center gap-2 mb-2">
-            <div className="w-5 h-5 min-w-5 bg-red-500 rounded-sm flex items-center justify-center">
-              <FileText className="w-3 h-3 text-white" />
+          <div className="col-span-2 md:col-span-1">
+            <div className="flex items-center gap-2 mb-2">
+              <span className="font-medium whitespace-nowrap text-primary-foreground">
+                Admin
+              </span>
             </div>
-            <span className="font-medium whitespace-nowrap text-primary-foreground">
-              PDF Converter
-            </span>
+            <div className="text-secondary-foreground font-mono text-sm whitespace-nowrap ">
+              <Link to="/dashboard">Dashoard</Link>
+            </div>
+            <div className="text-secondary-foreground font-mono text-sm whitespace-nowrap">
+              <Link to="/dashboard/users">Users</Link>
+            </div>
+            <div className="text-secondary-foreground font-mono text-sm whitespace-nowrap ">
+              <Link to="/dashboard/tools">Tools</Link>
+            </div>
+            <div className="text-secondary-foreground font-mono text-sm whitespace-nowrap">
+              <Link to="/dashboard/analysis">Analysis</Link>
+            </div>
+            <div className="text-secondary-foreground font-mono text-sm whitespace-nowrap">
+              <Link to="/dashboard/settings">Settings</Link>
+            </div>
           </div>
-          <div className="text-red-500 font-mono text-lg font-medium">
-            255792515918
+        </motion.div>
+
+        {/* PDF Converter Brand */}
+        <motion.div
+          variants={variants4}
+          initial={"inactive"}
+          whileInView={"active"}
+          viewport={{ once: true }}
+          className="w-full"
+        >
+          <div className="col-span-2 md:col-span-1">
+            <div className="flex items-center gap-2 mb-2">
+              <div className="w-5 h-5 min-w-5 bg-red-500 rounded-sm flex items-center justify-center">
+                <FileText className="w-3 h-3 text-white" />
+              </div>
+              <span className="font-medium whitespace-nowrap text-primary-foreground">
+                PDF Nest
+              </span>
+            </div>
+            <div className=" font-mono text-secondary-foreground text-sm whitespace-nowrap font-medium">255792515918</div>
+            <div className="text-secondary-foreground text-sm">
+              files converted since 2005
+            </div>
           </div>
-          <div className="text-secondary-foreground text-sm">
-            files converted since 2005
-          </div>
-        </div>
         </motion.div>
       </div>
 
@@ -260,6 +290,6 @@ const Footer = () => {
       </div>
     </footer>
   );
-}
+};
 
-export default Footer
+export default Footer;

@@ -7,7 +7,6 @@ import {
   JPGTOPDF,
   LockPdf,
   MergePdf,
-  MoreHoriz,
   OcrPdf,
   OrganisePdf,
   PdfToExcell,
@@ -44,7 +43,7 @@ import {
   Redo2,
   Search,
 } from "lucide-react";
-import { Navigate, useNavigate } from "react-router-dom";
+import {  useNavigate } from "react-router-dom";
 const ToolsSection = () => {
   const navigate = useNavigate();
   const [_, setShowAllTools] = useState(false);
@@ -58,7 +57,7 @@ const ToolsSection = () => {
     "#fff5f8",
     "#f8fcff",
     "#fffdfa",
-    "#f7f9fb",
+    "#  ",
     "#f7fcff",
     "#fffcf9",
     "#fafffe",
@@ -102,7 +101,7 @@ const ToolsSection = () => {
   // const filterTools = (query,)
 
   return (
-    <ContainerLayout className="space-y-5 w-full border-t py-12 sm:py-28 text-center flex-col">
+    <ContainerLayout className="space-y-5 w-full border-t pt-12 sm:pt-28 text-center flex-col">
       <motion.div
         variants={variants1}
         initial={"inactive"}
@@ -121,7 +120,7 @@ const ToolsSection = () => {
         viewport={{ once: true }}
       >
         <div className="flex-col flex items-center gap-5 justify-center">
-          <div className="fle max-w-xl w-full items-center justify-center relative">
+          <div className="max-w-xl w-full relative">
             <Search
               className="absolute my-auto inset-0 top-0 bottom-0 left-4 text-light-text"
               size={17}
@@ -139,8 +138,8 @@ const ToolsSection = () => {
                 setSelectedTools("all-tools");
                 setShowAllTools(true);
               }}
-              variant={selectedTools === "all-tools" ? "default" : "ghost"}
-              className={`duration-500 shadow-xs  hover:text-white px-8 h-8 center dark:bg-secondary,${
+              variant={selectedTools === "all-tools" ? "default" : "secondary"}
+              className={`duration-500 rounded-md text-sm sm:text-base shadow-xs h-8 center dark:bg-secondary,${
                 selectedTools === "all-tools"
                   ? "text-white"
                   : "text-secondary-foreground"
@@ -155,8 +154,8 @@ const ToolsSection = () => {
                 setSelectedTools("convert");
                 setShowAllTools(true);
               }}
-              variant={selectedTools === "convert" ? "default" : "ghost"}
-              className={`duration-500 shadow-xs  hover:text-white px-8 h-8 center dark:bg-secondary,${
+              variant={selectedTools === "convert" ? "default" : "secondary"}
+              className={`duration-500 rounded-md text-xs sm:text-base shadow-xs 8 h-8 center dark:bg-secondary,${
                 selectedTools === "convert"
                   ? "text-white"
                   : "text-secondary-foreground"
@@ -171,8 +170,8 @@ const ToolsSection = () => {
                 setSelectedTools("edit");
                 setShowAllTools(true);
               }}
-              variant={selectedTools === "edit" ? "default" : "ghost"}
-              className={`duration-500 shadow-xs  hover:text-white px-8 h-8 center dark:bg-secondary,${
+              variant={selectedTools === "edit" ? "default" : "secondary"}
+              className={`duration-500 rounded-md text-xs sm:text-base shadow-xs h-8 center dark:bg-secondary,${
                 selectedTools === "edit"
                   ? "text-white"
                   : "text-secondary-foreground"
@@ -187,8 +186,8 @@ const ToolsSection = () => {
                 setSelectedTools("organize");
                 setShowAllTools(true);
               }}
-              variant={selectedTools === "organize" ? "default" : "ghost"}
-              className={`duration-500 shadow-xs  hover:text-white px-8 h-8 center dark:bg-secondary,${
+              variant={selectedTools === "organize" ? "default" : "secondary"}
+              className={`duration-500 rounded-md text-xs sm:text-base shadow-xs h-8 center dark:bg-secondary,${
                 selectedTools === "organize"
                   ? "text-white"
                   : "text-secondary-foreground"
@@ -203,8 +202,8 @@ const ToolsSection = () => {
                 setSelectedTools("secure");
                 setShowAllTools(true);
               }}
-              variant={selectedTools === "secure" ? "default" : "ghost"}
-              className={`duration-500 shadow-xs  hover:text-white px-8 h-8 center dark:bg-secondary,${
+              variant={selectedTools === "secure" ? "default" : "secondary"}
+              className={`duration-500 rounded-md text-xs sm:text-base shadow-xs h-8 center dark:bg-secondary,${
                 selectedTools === "secure"
                   ? "text-white"
                   : "text-secondary-foreground"
@@ -219,8 +218,8 @@ const ToolsSection = () => {
                 setSelectedTools("enhance");
                 setShowAllTools(true);
               }}
-              variant={selectedTools === "enhance" ? "default" : "ghost"}
-              className={`duration-500 shadow-xs  hover:text-white px-8 h-8 center dark:bg-secondary,${
+              variant={selectedTools === "enhance" ? "default" : "secondary"}
+              className={`duration-500 rounded-md text-xs sm:text-base shadow-xs h-8 center dark:bg-secondary,${
                 selectedTools === "enhance"
                   ? "text-white"
                   : "text-secondary-foreground"
@@ -233,7 +232,7 @@ const ToolsSection = () => {
           </div>
         </div>
       </motion.div>
-      <div className="grid grid-cols-[repeat(auto-fit,minmax(120px,1fr))] sm:grid-cols-[repeat(auto-fit,minmax(160px,1fr))] gap-1.5 sm:gap-3 pb-12 sm:pb-20 w-full mt-4">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-1.5 sm:gap-3 pb-12 sm:pb-20 w-full mt-4">
         {[
           {
             label: "PDF to Word",
@@ -437,34 +436,32 @@ const ToolsSection = () => {
             );
             const randomColor = toolsSectionThemes[randomIndex];
 
-            const getColorClass = (color: string) => {
-              return `bg-[${color}]`;
-            };
-
             return (
               <motion.div
                 key={index}
                 variants={variants1}
-                // style={{ backgroundColor: randomColor }}
                 initial={"inactive"}
                 whileInView={"active"}
                 viewport={{ once: true }}
-                className={`w-full center flex-col border rounded-lg bg-[${randomColor}]`}
+                data-color={randomColor}
+                className={cn(
+                  `w-full relative center tools flex-col border rounded-lg`,
+                  `theme-${randomIndex}`
+                )}
               >
                 <Tooltip key={index}>
-                  <TooltipTrigger className="w-full rounded-lg" >
+                  <TooltipTrigger className="w-full rounded-lg">
                     <div
                       onClick={() => {
                         const targetPath = tool.label
                           .toLocaleLowerCase()
                           .replace(/\s+/g, "_");
                         tool.isFree
-                          ? navigate('/'+targetPath)
+                          ? navigate("/" + targetPath)
                           : navigate("/pricing");
                       }}
                       className={cn(
-                        getColorClass(randomColor),
-                        `tools h-full w-full flex-1 group relative gap-4 flex-col duration-500 cursor-pointer flex items-center justify-center rounded-xl pt-2 pb-7`
+                        `tols h-full w-full flex-1 group relative gap-4 flex-col duration-500 cursor-pointer flex items-center justify-center rounded-xl pt-2 pb-7`
                       )}
                     >
                       <TooltipContent className="text-white">
@@ -477,10 +474,10 @@ const ToolsSection = () => {
                             tool.isFree
                               ? "bg-[rgba(21,128,61,.10)]"
                               : "bg-orange-100 dark:bg-transparent",
-                            "rounded-full  px-2 text-xs py-1 whitespace-nowrap absolute left-3 top-3 flex items-center justify-center"
+                            "rounded-full w-7 h-7 z-10  text-xs whitespace-nowrap absolute left-3 top-3 flex items-center justify-center"
                           )}
                         >
-                          {tool.isFree ? "🟢 Free" : "🔒 Premium"}
+                          {tool.isFree ? "🟢" : "🔒"}
                         </div>
                       </div>
                       <div className="flex items-center ease-linear scale-95 duration-100 group-hover:scale-110 justify-center rounded-xl w-12 h-12 sm:w-22 sm:h-22">

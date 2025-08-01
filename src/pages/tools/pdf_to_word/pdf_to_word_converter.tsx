@@ -7,18 +7,18 @@ const PdfToWordConverter = () => {
   const [file,setFile]=useState(null);
 
   return (
-    <>
+    <div className="">
       <ConverterLayout
+        actionButtonText="Convert Pdf To Word"
         label="Pdf To Word Converter"
-        labelIcon={PdfToWord}
         desc="Convert PDFs to editable Word documents"
-        fileType="Word"
+        fileType={['pdf']}
         file={file}
         setFile={setFile}
-      >
-        layout
-      </ConverterLayout>
-    </>
+        convertingStateText="Converting PDF To Word"
+      />
+        
+    </div>
   );
 }
 

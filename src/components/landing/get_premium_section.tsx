@@ -96,7 +96,7 @@ const GetPremiumSection = () => {
         viewport={{ once: true }}
         >
         <svg
-          className="w-96 h-72"
+          className="sm:w-96 sm:h-72"
           fill="none"
           xmlns="http://www.w3.org/2000/svg"
         >

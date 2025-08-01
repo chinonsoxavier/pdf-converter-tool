@@ -13,7 +13,7 @@
   --primary-foreground: #2f2f2f;
   --secondary: oklch(0.968 0.007 247.896);
   --secondary-foreground: #4a4a4a;
-  --muted: #fafafa;
+  --muted: #f3f4f6;
   --muted-foreground: oklch(0.556 0 0);
   --accent: #ce1c1c;
   --accent-foreground: #ce1c1c;
@@ -128,10 +128,6 @@ body {
 .max-width {
   max-width: 83em;
   @apply px-4 sm:px-8 w-full;
-}
-
-.tools {
-  @apply dark:bg-secondary;
 }
 
 .center {
