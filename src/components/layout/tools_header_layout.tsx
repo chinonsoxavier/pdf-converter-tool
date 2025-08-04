@@ -1,36 +1,6 @@
 import { Button } from "../ui/button";
-import { ChevronDown, Coffee, Crown, Menu } from "lucide-react";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import {
-  AddPagesToPdf,
-  CompressPdf,
-  EditPdf,
-  ExcelToPdf,
-  ExtractPages,
-  JPGTOPDF,
-  LockPdf,
-  MergePdf,
-  OcrPdf,
-  OrganisePdf,
-  PdfToExcell,
-  PdfToJpg,
-  PdfToPowerpoint,
-  PdfToWord,
-  PowerPointToPdf,
-  RedactPdf,
-  RemovePages,
-  RepairPdf,
-  RotatePdf,
-  SignPdf,
-  SplitPdf,
-  UnlockPdf,
-  WaterMarkPdf,
-  WordToPdf,
-} from "@/assets/svg/export";
+import { Coffee, Menu } from "lucide-react";
+
 import { Link } from "react-router-dom";
 import { ModeToggle } from "../mode_toggle";
 import { motion } from "motion/react";

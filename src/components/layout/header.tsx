@@ -1,5 +1,5 @@
 import { Button } from "../ui/button";
-import { ChevronDown, Coffee, Crown, Menu, XCircle } from "lucide-react";
+import { ChevronDown, Coffee, Menu, XCircle } from "lucide-react";
 import {
   HoverCard,
   HoverCardContent,
@@ -71,8 +71,8 @@ const Header: React.FC = () => {
     },
   };
 
-    const { sideMenuOpen } = useLandingStore()
-    const { toggleSideMenuOpen } = useLandingStore();
+  const { sideMenuOpen } = useLandingStore();
+  const { toggleSideMenuOpen } = useLandingStore();
 
   return (
     <header className="flex overflow-hidden items-center bg-white dark:bg-primary px-4 border-y sm:px-8 sm:py-5 h-full py-3 justify-between">
@@ -411,7 +411,7 @@ const Header: React.FC = () => {
             <Button
               size="sm"
               className="dark:bg-transparent dark:px-0 dark:border-none dark:underline"
-              variant="ghost"
+              variant="secondary"
             >
               <Link to="/signin">Sign In </Link>
             </Button>
@@ -434,9 +434,7 @@ const Header: React.FC = () => {
               <XCircle className="w-8 h-8 cursor-pointer" />
             </div>
           ) : (
-            <div
-              className="w-8 h-8 p-0 cursor-pointer text-secondary-foreground items-center justify-center flex md:hidden"
-            >
+            <div className="w-8 h-8 p-0 cursor-pointer text-secondary-foreground items-center justify-center flex md:hidden">
               <Menu
                 onClick={toggleSideMenuOpen}
                 className="w-8 h-8 cursor-pointer"

@@ -5,7 +5,6 @@ const ToolsFileExtensionCard = ({
 }: {
   fileType: string;
 }) => {
-  const fileTypes = ["doc", "docx"];
   const toolsFilesExtensionIcon = [
     { label: "pptt", icon: PowerPointIcon },
     { label: "doc", icon: WordIcon },

@@ -1,4 +1,3 @@
-import ToolsSection from "@/components/landing/tools_section";
 import Footer from "@/components/layout/footer";
 import Header from "@/components/layout/header";
 import SidemenuLyout from "@/components/layout/sidemenu_layout";
@@ -62,11 +61,6 @@ export default function ToolDownload({ label }: { label: string }) {
                 </div>
               </div>
             </div>
-          </div>
-
-          {/* tools section */}
-          <div className="" >
-            <ToolsSection />
           </div>
 
         </div>

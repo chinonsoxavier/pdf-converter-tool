@@ -11,14 +11,17 @@ interface MergePdfStore {
   setFileName: (arg0: string) => void;
   setSelectedFiles: (arg0: string) => void;
   removeSelectedFiles: (arg0: string) => void;
+  recorderFiles: (arg0: string[]) => void;
 }
 
 const useMergePdfStore = create<MergePdfStore>((set) => ({
-  selectedFiles: [],
-  fileNames: [''],
+  selectedFiles: [""],
+  fileNames: [""],
   fileSize: [],
   numPages: [],
   fileType: ["pdf"],
+  recorderFiles: (newOrder: string[]) =>
+    set(() => ({ selectedFiles: newOrder })),
   setSelectedFiles: (newFile: string) =>
     set((state) => ({ selectedFiles: [...state.selectedFiles, newFile] })),
   setFileSize: (newFileSize: number) =>
@@ -29,7 +32,9 @@ const useMergePdfStore = create<MergePdfStore>((set) => ({
     set((state) => ({ fileNames: [...state.fileNames, newFileName] })),
   removeSelectedFiles: (fileToRemove: string) =>
     set((state) => ({
-      selectedFiles: state.selectedFiles.filter((file) => file !== fileToRemove),
+      selectedFiles: state.selectedFiles.filter(
+        (file) => file !== fileToRemove
+      ),
     })),
 }));
 

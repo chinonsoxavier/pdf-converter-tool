@@ -10,15 +10,15 @@ const ConverterLayoutSidebar = ({ label, setProcessingTool, fileType, disabled, 
     <aside
       className={cn(
         sideMenuOpen ? "translate-x-0" : "-translate-x-full",
-        "z-10 absolute pb-6 ight-0 w-full sm:hidden overflow-clip h-full border-l border-r flex-col flex items-center justify-between max-w-[80%] xs:max-w-xs bg-white dark:bg-secondary duration-1000"
+        "absolute z-20 pb-6 ight-0 w-full sm:hidden overflow-clip h-full border-l border-r flex-col flex items-center justify-between max-w-[80%] xs:max-w-sm bg-white dark:bg-secondary duration-1000"
       )}
     >
-      <div className="w-full overflow-clip">
-        <div className="border-b py-6">
+        <div className="border-b h-[12%] py-6 w-full">
           <p className="text-xl overflow-ellipsis sm:text-2xl font-medium text-secondary-foreground text-center ">
             {label}
           </p>
         </div>
+      <div className="w-full h-[76%] overflow-scroll">
 
         {/* <div className="py-2 gap-2 hidden grid-cols-[repeat(auto-fill,minmax(120px,1fr))]">
           <div className="px-4 hover:border duration-500 hover:shadow hover:cursor-pointer hover:bg-secondary center gap-2 py-3 g-secondary rounded-lg flex h-12">
@@ -65,14 +65,14 @@ const ConverterLayoutSidebar = ({ label, setProcessingTool, fileType, disabled, 
 
         </div>
         
-      <div className="px-6 w-full">
+      <div className="px-6 w-full h-[12%]">
         <Button disabled={disabled}
           onClick={() => setProcessingTool(true)}
-          className="max-w-sm text-lg sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center h w-full"
+          className="max-w-sm font-semibold text-lg sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center h w-full"
           type="submit"
         >
           Convert {fileType.toUpperCase()} File
-          <ArrowRightCircleIcon />
+          {/* <ArrowRightCircleIcon /> */}
         </Button>
       </div>
     </aside>

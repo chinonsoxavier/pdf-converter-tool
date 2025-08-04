@@ -1,6 +1,5 @@
 import { PdfToWord } from "@/assets/svg/export";
 import ContainerLayout from "../layout/container_layout";
-import { Badge } from "../ui/badge";
 import { Download } from "lucide-react";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { motion } from "motion/react";

@@ -1,31 +1,17 @@
 import ConverterLayout from "@/components/tools/layout_types/converter_layout";
-import { useState } from "react";
-import MergePdfChildrenSection from "./merge_pdf_children_section";
-import useMergePdfStore from "./merge_pdf_store";
+import MergePdfChildrenSection from "../../../components/tools/merge_pdf/merge_pdf_children_section";
+import useToolsStore from "../tools_store";
 
 const MergePdf = () => {
-  const { selectedFiles,setSelectedFiles,setFileName,setFileSize,fileNames,fileSize } = useMergePdfStore();
-  // const [file, setFile] = useState(null);
-  // alert(selectedFiles.length)
+  const { selectedFiles } = useToolsStore();
 
   return (
     <ConverterLayout
       children={<MergePdfChildrenSection />}
       actionButtonText="Merge Pdf"
-      label="Merge PDF files"
+      label="Merge PDF Files"
       desc="Combine PDF files online for free in just seconds."
-      fileType={["pdf"]}
-      file={selectedFiles}
       disabled={selectedFiles.length <= 1}
-      setFile={setSelectedFiles}
-      setFileName={setFileName}
-      setFileSize={setFileSize}
-      fileName={fileNames[0]}
-      fileSize={fileSize[0]}
-      // setProcessingTool={() => {}}
-      // processingTool={false}
-      // convertingTool={false}
-      // convertingToolText="Merging PDF files"
 
       convertingStateText="Merging PDF files"
       actionMenuSideBar={
@@ -38,7 +24,6 @@ const MergePdf = () => {
           </div>
         </div>
       }
-      //   buttonDisabled={}
     />
   );
 };

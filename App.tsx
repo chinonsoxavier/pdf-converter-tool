@@ -1,0 +1,185 @@
+import { Route, Routes } from "react-router-dom";
+import LandingPage from "./src/pages/landing/landing_page";
+import SignInPage from "./src/pages/(auth)/signin/signin_page";
+import SignUpPage from "./src/pages/(auth)/signup/signup_page";
+import ForgotPasswordPage from "./src/pages/(auth)/forgot-password/forgot_password_page";
+import { ThemeProvider } from "./src/components/theme_provider";
+import PdfToWordConverter from "./src/pages/tools/pdf_to_word/pdf_to_word_converter";
+import WordToPdfConverter from "./src/pages/tools/word_to_pdf/word_to_pdf_converter";
+import DashboardOverviewMainView from "./src/pages/dashboard/overview/overview_main_view";
+import DashboardLayoutView from "./src/pages/dashboard/dashboard_layout_view";
+import DashboardUsersMainView from "./src/pages/dashboard/users/dashboard_users_main_view";
+import DashboardToolsMainView from "./src/pages/dashboard/tools/dashboard_tools_main_view";
+import DashboardSettingsMainView from "./src/pages/dashboard/settings/dashboard_settings_main_view";
+import DashboardContentMainView from "./src/pages/dashboard/content/dashboard_content_main_view";
+import DashboardAnalyticsMainView from "./src/pages/dashboard/analytics/dashboard_analytics_main_view";
+import ScrollManager from "./src/components/scroll_manager";
+import ToolDownloadLayout from "./src/components/tools/layout_types/tool_download_layout";
+import MergePdf from "./src/pages/tools/merge_pdf/merge_pdf";
+import SplitPdf from "./src/pages/tools/split_pdf/split_pdf";
+import CompressPdf from "@/pages/tools/compress_pdf/compress_pdf";
+import PdfToJpg from "@/pages/tools/pdf_to_jpg/pdf_to_jpg";
+import JpgToPdf from "@/pages/tools/jpg_to_pdf/jpg_to_pdf";
+import RotatePdf from "@/pages/tools/rotate_pdf/rotate_pdf";
+
+// pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
+// Set workerSrc to the imported worker=
+// pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
+const App = () => {
+  return (
+    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <ScrollManager smoothRestore={true} />
+      <Routes>
+        <Route path="/" element={<LandingPage />} />
+        {/* auth routes */}
+        <Route path="/signin" element={<SignInPage />} />
+        <Route path="/signup" element={<SignUpPage />} />
+        <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        {/* end of auth routes */}
+        {/* admin routes */}
+        <Route path="/dashboard" element={<DashboardLayoutView />}>
+          <Route index element={<DashboardOverviewMainView />} />
+          <Route path="/dashboard/users" element={<DashboardUsersMainView />} />
+          <Route path="/dashboard/tools" element={<DashboardToolsMainView />} />
+          <Route
+            path="/dashboard/settings"
+            element={<DashboardSettingsMainView />}
+          />
+          <Route
+            path="/dashboard/content"
+            element={<DashboardContentMainView />}
+          />
+          <Route
+            path="/dashboard/analytics"
+            element={<DashboardAnalyticsMainView />}
+          />
+        </Route>
+        {/* end of auth routes */}
+        {/* tools routes */}
+        {/* pfd to word routes */}
+        <Route path="/pdf_to_word" element={<PdfToWordConverter />} />
+        <Route
+          path="/pdf_to_word/download/:id"
+          element={
+            <ToolDownloadLayout label="PDF file has been converted to WORD" />
+          }
+        />
+        {/* end of pdt to word routes */}
+        {/* merge pdf */}
+        <Route path="/merge_pdf" element={<MergePdf />} />
+        <Route
+          path="/merge_pdf/download/:id"
+          element={<ToolDownloadLayout label="Pdf files has been merged" />}
+        />
+        {/* end of merge pdf */}
+        {/* split pdf */}
+        <Route path="/split_pdf" element={<SplitPdf />} />
+        <Route
+          path="/split_pdf/download/:id"
+          element={<ToolDownloadLayout label="Pdf files has been split" />}
+        />
+        {/* end of split pdf */}
+        {/* word to pdf */}
+        <Route path="/word_to_pdf" element={<WordToPdfConverter />} />
+        <Route
+          path="/word_to_pdf/download/:id"
+          element={
+            <ToolDownloadLayout label="Word files has been converted to PDF" />
+          }
+        />
+        {/* end of word to pdf */}
+        {/* compress pdf */}
+        <Route path="/compress_pdf" element={<CompressPdf />} />
+        <Route
+          path="/compress_pdf/download/:id"
+          element={<ToolDownloadLayout label="Pdf files has been compressed" />}
+        />
+        {/* end of compress pdf */}
+        {/* pdf to jpg */}
+        <Route path="/pdf_to_jpg" element={<PdfToJpg />} />
+        <Route
+          path="/pdf_to_jpg/download/:id"
+          element={
+            <ToolDownloadLayout label="Pdf files has been converted to jpg" />
+          }
+        />
+        {/* end of pdf to jpg */}
+        {/* jpg to pdf */}
+        <Route path="/jpg_to_pdf" element={<JpgToPdf />} />
+        <Route
+          path="/jpg_to_pdf/download/:id"
+          element={
+            <ToolDownloadLayout label="Pdf files has been converted to jpg" />
+          }
+        />
+        {/* end of jpg to pdf */}
+        {/*rotate pdf pages */}
+        <Route path="/rotate_pdf" element={<RotatePdf />} />
+        <Route
+          path="/rotate_pdf/download/:id"
+          element={
+            <ToolDownloadLayout label="Pdf files has been rotated successfully" />
+          }
+        />
+        {/* end of rotate pdf pages */}
+        {/* organise pages */}
+        <Route path="/organise_pdf" element={<RotatePdf />} />
+        <Route
+          path="/organise_pdf/download/:id"
+          element={
+            <ToolDownloadLayout label="Pdf files has been organised successfully" />
+          }
+        />
+        {/* end of organise pages */}
+
+        {/* extract pages */}
+        <Route path="/extract_pdf" element={<RotatePdf />} />
+        <Route
+          path="/extract_pdf/download/:id"
+          element={
+            <ToolDownloadLayout label="Pdf pages has been extracted successfully" />
+          }
+        />
+        {/* end of extract pages */}
+
+        {/* delete pages */}
+        <Route path="/delete_pdf_pages" element={<RotatePdf />} />
+        <Route
+          path="/delete_pdf_pages/download/:id"
+          element={
+            <ToolDownloadLayout label="Pdf pages has been deleted successfully" />
+          }
+        />
+        {/* end of delete pages */}
+
+        {/* add pages pages */}
+        <Route path="/add_pdf_pages" element={<RotatePdf />} />
+        <Route
+          path="/add_pdf_pages/download/:id"
+          element={
+            <ToolDownloadLayout label="Pdf pages has been added successfully" />
+          }
+        />
+        {/* end of add pages pages */}
+
+        {/* add headers/footers pages */}
+        <Route path="/add_header_footer" element={<RotatePdf />} />
+        <Route
+          path="/add_header_footer/download/:id"
+          element={
+            <ToolDownloadLayout label="Pdf pages has been extracted successfully" />
+          }
+        />
+        {/* end of add headers/footers pages */}
+
+        {/* preview pages */}
+        <Route path="/preview" element={<RotatePdf />} />
+        {/* end of preview pages */}
+        
+        {/* end of tools routes */}
+      </Routes>
+    </ThemeProvider>
+  );
+};
+
+export default App;

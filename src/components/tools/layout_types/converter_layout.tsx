@@ -4,18 +4,15 @@ import Footer from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
-import { StyleSheet } from "@react-pdf/renderer";
 import { motion } from "motion/react";
 
 import {
-  ArrowRightCircleIcon,
   CloudUpload,
   PlusIcon,
   Settings,
   XIcon,
 } from "lucide-react";
-import { useEffect, useRef, useState } from "react";
-import { Document, Page } from "react-pdf";
+import {useRef, useState } from "react";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import {
@@ -26,12 +23,12 @@ import {
 import ToolsFileExtensionCard from "../tools_file_extension_card";
 import { cn } from "@/lib/utils";
 import ToolPageLoader from "../tool_page_loader";
-import { useNavigate } from "react-router-dom";
 import Header from "@/components/layout/header";
 import HistorySection from "../history_section";
 import SidemenuLyout from "@/components/layout/sidemenu_layout";
 import ConverterLayoutSidebar from "@/components/layout/converter_layout_sidebar";
 import useToolsStore from "@/pages/tools/tools_store";
+import PdfRenderer from "@/components/pdf_renderer";
 interface FilePickerCardProps {
   desc?: string;
   fileType?: string;
@@ -44,16 +41,7 @@ const ConverterLayout = ({
   actionMenuSideBar,
   label,
   desc,
-  file,
-  fileType,
-  setFile,
   convertingStateText,
-  fileName,
-  setFileName,
-  numPages,
-  setNumPages,
-  fileSize,
-  setFileSize,
 }: Readonly<{
   disabled?: boolean;
   actionButtonText:string;
@@ -61,35 +49,25 @@ const ConverterLayout = ({
   actionMenuSideBar?: React.ReactNode;
   label: string;
   desc: string;
-  file?: null | File[] | string[];
-  fileType: string[];
-  fileSize?: number;
-  setFile: (arg0: string) => void;
-  fileName?: string;
-  setFileName?: (arg0: string) => void;
-  numPages?: number;
-  setNumPages?: (arg0: number) => void;
-  setFileSize?: (arg0: number) => void;
   convertingStateText: string;
 }>) => {
-  const styles = StyleSheet.create({
-    page: {
-      flexDirection: "row",
-      backgroundColor: "pink",
-    },
-    section: {
-      margin: 10,
-      padding: 10,
-      flexGrow: 1,
-    },
-  });
+
+  const {
+    selectedFiles,
+    setSelectedFiles,
+    setFileName,
+    setFileSize,
+    fileNames,
+    setNumPages,
+    numPages,
+    toggleSideMenuOpen,
+    fileSize,
+    fileType,
+  } = useToolsStore();
+
+
   const fileInputRef = useRef<HTMLInputElement>(null);
-  // const [numPages, setNumPages] = useState(0);
-  // const [fileName, setFileName] = useState(null);
-  // const [fileSize, setFileSize] = useState(null);
   const [processingTool, setProcessingTool] = useState(false);
-  const navigate = useNavigate();
-  const { toggleSideMenuOpen } = useToolsStore();
 
   const variants1 = {
     inactive: {
@@ -103,14 +81,14 @@ const ConverterLayout = ({
     },
   };
 
-  useEffect(() => {
-    // setTimeout(() => {
-    //   setProcessingTool(false);
-    //   if (file) {
-    //     navigate("download/hxdbhuabhsahvxas");
-    //   }
-    // }, 8000); // Simulate a delay for processing
-  }, [processingTool]);
+  // useEffect(() => {
+  //   setTimeout(() => {
+  //     setProcessingTool(false);
+  //     if (file) {
+  //       navigate("download/hxdbhuabhsahvxas");
+  //     }
+  //   }, 8000); // Simulate a delay for processing
+  // }, [processingTool]);
 
   const handleButtonClick = () => {
     fileInputRef.current?.click();
@@ -131,7 +109,7 @@ const ConverterLayout = ({
         return;
       }
       const fileUrl = URL.createObjectURL(file);
-      setFile(fileUrl);
+      setSelectedFiles(fileUrl);
       setFileName(file.name);
       setFileSize(file.size);
 
@@ -150,11 +128,10 @@ const ConverterLayout = ({
         <ToolPageLoader convertingStateText={convertingStateText} />
       ) : (
         <main className="w-full min-h-lvh h-full dark:bg-primary">
-          {/* <ToolsHeaderLayout labelIcon={labelIcon} label={label} /> */}
           <div className="h-[12%]">
             <Header />
           </div>
-          {!!file[0] === false ? (
+          {!!selectedFiles[0] === false ? (
             <>
               <div className="w-full flex-col center p-4 py-20 rounded-lg to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)]">
                 <motion.div
@@ -174,12 +151,12 @@ const ConverterLayout = ({
                   viewport={{ once: true }}
                   className="w-full mx-auto center"
                 >
-                  <Card className="sm:p-10 p-5 bg-secondary/30 dark:border-primary border-dashed border-accent border-3 w-full center gap-3 sm:gap-5 max-w-xl my-10">
+                  <Card className="sm:p-10 p-6 bg-secondary/30 dark:border-primary border-dashed border-accent border-2 w-full center gap-3 sm:gap-5 max-w-xl my-10">
                     <h1 className="text-secondary-foreground dark:text-secondary-foreground text-center text-lg sm:text-xl sm:mb-5">
                       {desc}
                     </h1>
                     <CloudUpload className="text-primary sm:w-18 sm:h-18 w-10 h-10" />
-                    <p className="text-[13px] text-secondary-foreground">
+                    <p className="text-[14px] text-secondary-foreground">
                       Or drag and drop here...
                     </p>
                     <Input
@@ -198,7 +175,9 @@ const ConverterLayout = ({
                     />
                     <p className="text-secondary-foreground hidden dark:text-secondary-foreground text-xl text-center">
                       Upload your {fileType} file below and get started.
-                    </p>
+                      </p>
+                      <div className="flex items-center justify-center gap-3 w-full">
+
                     <Button
                       onClick={handleButtonClick}
                       className="max-w-sm py-0 text-lg sm:text-xl rounded-lg flex items-center h-12 w-full"
@@ -206,6 +185,23 @@ const ConverterLayout = ({
                     >
                       Choose {fileType[0].toUpperCase()} File
                     </Button>
+                    <Tooltip>
+                      <TooltipTrigger className="rounded-full bg-accent p-2 w-10 h-10 text-white">
+                        <svg
+                          xmlns="http://www.w3.org/2000/svg"
+                          viewBox="0 0 18 16"
+                        >
+                          <path
+                            fill="currentColor"
+                            d="M8.7375,5.80725 L3.021,15.70725 L0.12375,10.69725 L5.847,0.795 L8.7375,5.80725 Z M17.865,10.38225 L12.078,10.39125 L6.378,0.489 L12.1725,0.489 L17.865,10.38225 Z M17.87625,10.9875 L14.9865,15.9975 L3.5415,15.99 L6.43425,10.98375 L17.87625,10.9875 Z"
+                          ></path>
+                        </svg>
+                        <TooltipContent className="text-white">
+                          Select file from Google Drive
+                        </TooltipContent>
+                      </TooltipTrigger>
+                    </Tooltip>
+                      </div>
                   </Card>
                 </motion.div>
               </div>
@@ -223,7 +219,7 @@ const ConverterLayout = ({
               <Footer />
             </>
           ) : (
-            <div className="gap-8 h-[88%] to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)] relative flex items-start justify-between w-full">
+            <div className="h-[88%] to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)] relative flex items-start justify-start w-full">
               {/* converter layout sidebar */}
               <ConverterLayoutSidebar
                 disabled={disabled}
@@ -232,18 +228,18 @@ const ConverterLayout = ({
                 setProcessingTool={setProcessingTool}
                 label={label}
               />
-              <div className="center relative flex-col p-7 h-full flex-1">
-                {children ? (
-                  children
-                ) : (
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <div className="center flex-col border bg-white dark:bg-secondary rounded-lg hover:shadow-md duration-200 hover:border relative group p-3">
+              <div className="h-full overflow-y-scroll flex items-start w-full justify-center ">
+                <div className="flex items-center justify-center relative flex-col p-7 h-full flex-1">
+                  {children ? (
+                    children
+                  ) : (
+                    <Tooltip>
+                      <TooltipTrigger>
                         <Tooltip>
                           {/* <TooltipTrigger  className="w-full rounded-lg"> */}
                           <TooltipTrigger
                             asChild
-                            onClick={() => setFile(null)}
+                            onClick={() => setSelectedFiles(null)}
                             className="items-center absolute top-1 hover:shadow right-1 z-30 bg-secondary p-1 text-primary-foreground cursor-pointer justify-center group-hover:opacity-100 duration-500 flex opacity-0 rounded-full w-8 h-8"
                           >
                             <XIcon className="w-4 h-4" />
@@ -254,108 +250,101 @@ const ConverterLayout = ({
                           </TooltipContent>
                         </Tooltip>
                         {fileType[0] === "pdf" ? (
-                          <Document
-                            scale={0.3}
-                            file={file[0]}
+                          <PdfRenderer
+                            label={fileNames[1]}
+                            className={`p-3 w-min mx-auto my-auto`}
+                            scale={0.8}
+                            file={selectedFiles[0]}
+                            pageNumber={1}
                             onLoadSuccess={({ numPages }) =>
                               setNumPages(numPages)
                             }
-                            className="w-full center"
-                          >
-                            {/* {Array.from({ length: 1 }, (_, index) => ( */}
-                            <Page className="border" pageNumber={1} />
-                            {/* ))} */}
-                          </Document>
+                          />
                         ) : (
                           <ToolsFileExtensionCard fileType={fileType[0]} />
                         )}
+                      </TooltipTrigger>
 
-                        <p className="whitespace-nowrap mt-2 text-sm text-secondary-foreground font-medium">
-                          {fileName}
+                      <TooltipContent className="text-white">
+                        <p className="text-[13px]">
+                          {fileSize + " -" + numPages + " pages"}
                         </p>
-                      </div>
-                    </TooltipTrigger>
-
-                    <TooltipContent className="text-white">
-                      <p className="text-[13px]">
-                        {fileSize + " -" + numPages + " pages"}
-                      </p>
-                    </TooltipContent>
-                  </Tooltip>
-                )}
-                <div className="center right-4 shadow drop-shadow-md sm:right-0 top-20 duration-500 cursor-pointer bg-accent text-white p-2 absolute rounded-full">
-                  <Input
-                    ref={fileInputRef}
-                    type="file"
-                    accept={fileType
-                      .map(
-                        (file) =>
-                          `.${file.toLowerCase()},application/${file.toLowerCase()}`
-                      )
-                      .join(",")}
-                    // accept=".pdf,application/pdf"
-                    onChange={handleFileChange}
-                    className="hidden"
-                    aria-label="Choose PDF file"
-                  />
-                  <Tooltip>
-                    <TooltipTrigger onClick={handleButtonClick}>
-                      <PlusIcon className="cursor-pointer" />
-
-                      <TooltipContent className="text-white">
-                        Add More Files
                       </TooltipContent>
-                    </TooltipTrigger>
-                  </Tooltip>
-                </div>
+                    </Tooltip>
+                  )}
+                  <div className="center absolute mr-5 sm:mr-0 right-0 shadow drop-shadow-md sm:right-5 sm:top-5 top-20 duration-500 cursor-pointer bg-accent text-white p-2 rounded-full">
+                    <Input
+                      ref={fileInputRef}
+                      type="file"
+                      accept={fileType
+                        .map(
+                          (file) =>
+                            `.${file.toLowerCase()},application/${file.toLowerCase()}`
+                        )
+                        .join(",")}
+                      // accept=".pdf,application/pdf"
+                      onChange={handleFileChange}
+                      className="hidden"
+                      aria-label="Choose PDF file"
+                    />
+                    <Tooltip>
+                      <TooltipTrigger onClick={handleButtonClick}>
+                        <PlusIcon className="cursor-pointer" />
 
-                <div
-                  onClick={toggleSideMenuOpen}
-                  className="flex sm:hidden items-center justify-center right-4 shadow drop-shadow-md sm:right-0 top-36 group  duration-500 cursor-pointer bg-secondary text-white p-2 absolute rounded-full"
+                      </TooltipTrigger>
+                        <TooltipContent className="text-white">
+                          Add More Files
+                        </TooltipContent>
+                    </Tooltip>
+                  </div>
+
+                  <div
+                    onClick={toggleSideMenuOpen}
+                    className="flex sm:hidden absolute mr-5 sm:mr-0 right-0 shadow drop-shadow-md sm:right-5 sm:top-18 top-36 duration-500 cursor-pointer bg-secondary hover:text-accent text-white p-2 rounded-full"
+                  >
+                    <Tooltip>
+                      <TooltipTrigger>
+                        <Settings className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
+
+                      </TooltipTrigger>
+                        <TooltipContent className="text-white">
+                          Action Menu
+                        </TooltipContent>
+                    </Tooltip>
+                  </div>
+                </div>
+                <Button
+                  disabled={disabled}
+                  onClick={() => setProcessingTool(true)}
+                  className="max-w-sm font-semibold absolute bottom-10 left-10 sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center sm:hidden"
+                  type="submit"
                 >
-                  <Tooltip>
-                    <TooltipTrigger>
-                      <Settings className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
-
-                      <TooltipContent className="text-white">
-                        Action Menu
-                      </TooltipContent>
-                    </TooltipTrigger>
-                  </Tooltip>
-                </div>
+                  {actionButtonText}
+                  {/* <ArrowRightCircleIcon className="group-hover:translate-x-3 duration-1000" /> */}
+                </Button>
               </div>
-              <Button
-                disabled={disabled}
-                onClick={() => setProcessingTool(true)}
-                className="max-w-sm absolute bottom-10 left-10 sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center sm:hidden"
-                type="submit"
-              >
-                {actionButtonText}
-                <ArrowRightCircleIcon className="group-hover:translate-x-3 duration-1000" />
-              </Button>
-
               <aside
                 className={cn(
-                  "hidden overflow-hidden h-full w-full border-l flex-col sm:flex items-center justify-between max-w-xs bg-white dark:bg-secondary duration-1000"
+                  "hidden overflow-hidden h-full w-full border-l flex-col sm:flex items-center justify-between max-w-sm bg-white dark:bg-secondary duration-1000"
                 )}
               >
-                <div className="w-full">
-                  <div className="border-b px-5 py-6">
-                    <p className="text-xl sm:text-2xl font-medium text-secondary-foreground text-center ">
-                      {label}
-                    </p>
-                  </div>
+                <div className="border-b px-5 py-6 h-[12%] w-full">
+                  <p className="text-xl sm:text-2xl font-medium text-secondary-foreground text-center ">
+                    {label}
+                  </p>
+                </div>
+                <div className="h-[76%] w-full overflow-y-scroll">
                   {actionMenuSideBar}
                 </div>
-                <div className="px-6 w-full py-6">
+                <div className="px-6 w-full py-6 -[12%]">
                   <Button
                     disabled={disabled}
                     onClick={() => setProcessingTool(true)}
-                    className="max-w-sm text-lg sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center w-full"
+                    className="max-w-sm font-semibold text-lg sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center w-full"
                     type="submit"
                   >
                     {actionButtonText}
-                    <ArrowRightCircleIcon className="" />
+                    {/* <ArrowRightCircleIcon className="" /> */}
                   </Button>
                 </div>
               </aside>

@@ -46,7 +46,7 @@ import {
 import {  useNavigate } from "react-router-dom";
 const ToolsSection = () => {
   const navigate = useNavigate();
-  const [_, setShowAllTools] = useState(false);
+  const [showAllTools, setShowAllTools] = useState(false);
   const [selectedTools, setSelectedTools] = useState("all-tools");
   const [searchQuery, setSearchQuery] = useState("");
   const toolsSectionThemes = [
@@ -75,17 +75,7 @@ const ToolsSection = () => {
       transition: { duration: 1.5 },
     },
   };
-  const variants2 = {
-    inactive: {
-      y: 150,
-      opacity: 0,
-    },
-    active: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 1.5 },
-    },
-  };
+ 
   const variants3 = {
     inactive: {
       y: 120,
@@ -98,7 +88,7 @@ const ToolsSection = () => {
     },
   };
 
-  // const filterTools = (query,)
+  console.log(showAllTools)
 
   return (
     <ContainerLayout className="space-y-5 w-full border-t pt-12 sm:pt-28 text-center flex-col">
