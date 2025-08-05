@@ -139,7 +139,7 @@ const Header: React.FC = () => {
                         className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
                       >
                         <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-xs font-semibold text-light-text">
+                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
                           {tool.label}
                         </p>
                       </div>
@@ -172,7 +172,7 @@ const Header: React.FC = () => {
                         className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
                       >
                         <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-xs font-semibold text-light-text">
+                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
                           {tool.label}
                         </p>
                       </div>
@@ -287,7 +287,7 @@ const Header: React.FC = () => {
                         className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
                       >
                         <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-xs font-semibold text-light-text">
+                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
                           {tool.label}
                         </p>
                       </div>
@@ -321,7 +321,7 @@ const Header: React.FC = () => {
                         className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
                       >
                         <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-xs font-semibold text-light-text">
+                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
                           {tool.label}
                         </p>
                       </div>
@@ -355,7 +355,7 @@ const Header: React.FC = () => {
                         className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
                       >
                         <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-xs font-semibold text-light-text">
+                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
                           {tool.label}
                         </p>
                       </div>
@@ -388,7 +388,7 @@ const Header: React.FC = () => {
                         className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
                       >
                         <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-xs font-semibold text-light-text">
+                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
                           {tool.label}
                         </p>
                       </div>

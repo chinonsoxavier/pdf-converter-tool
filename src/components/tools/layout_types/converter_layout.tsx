@@ -42,6 +42,7 @@ const ConverterLayout = ({
   label,
   desc,
   convertingStateText,
+  fileType=["string"],
 }: Readonly<{
   disabled?: boolean;
   actionButtonText:string;
@@ -49,6 +50,7 @@ const ConverterLayout = ({
   actionMenuSideBar?: React.ReactNode;
   label: string;
   desc: string;
+  fileType?: string[];
   convertingStateText: string;
 }>) => {
 
@@ -62,7 +64,7 @@ const ConverterLayout = ({
     numPages,
     toggleSideMenuOpen,
     fileSize,
-    fileType,
+    
   } = useToolsStore();
 
 
@@ -100,15 +102,21 @@ const ConverterLayout = ({
     const file = event.target.files?.[0];
     const allowedFileTypes = fileType;
     if (file) {
-      const FileType = file.name.split(".").pop();
+      const FileType = file.name.split(".").pop().toString();
       if (!fileType || !allowedFileTypes.includes(FileType)) {
-        alert(`Please select a valid ${allowedFileTypes.join(", ")} file`);
+        console.log('invalid input');
+        console.log('allowedFiles', allowedFileTypes);
+        console.log('fileType', fileType);
+        console.log("FileType", FileType);
+        console.log("allowedFiles", allowedFileTypes);
+        alert(`Please select a valid ${allowedFileTypes.join(", ")}`);
         if (fileInputRef.current) {
           fileInputRef.current.value = ""; // Clear the input value
         }
         return;
       }
       const fileUrl = URL.createObjectURL(file);
+      alert(fileUrl);
       setSelectedFiles(fileUrl);
       setFileName(file.name);
       setFileSize(file.size);
@@ -175,33 +183,50 @@ const ConverterLayout = ({
                     />
                     <p className="text-secondary-foreground hidden dark:text-secondary-foreground text-xl text-center">
                       Upload your {fileType} file below and get started.
-                      </p>
-                      <div className="flex items-center justify-center gap-3 w-full">
-
-                    <Button
-                      onClick={handleButtonClick}
-                      className="max-w-sm py-0 text-lg sm:text-xl rounded-lg flex items-center h-12 w-full"
-                      type="submit"
-                    >
-                      Choose {fileType[0].toUpperCase()} File
-                    </Button>
-                    <Tooltip>
-                      <TooltipTrigger className="rounded-full bg-accent p-2 w-10 h-10 text-white">
-                        <svg
-                          xmlns="http://www.w3.org/2000/svg"
-                          viewBox="0 0 18 16"
-                        >
-                          <path
-                            fill="currentColor"
-                            d="M8.7375,5.80725 L3.021,15.70725 L0.12375,10.69725 L5.847,0.795 L8.7375,5.80725 Z M17.865,10.38225 L12.078,10.39125 L6.378,0.489 L12.1725,0.489 L17.865,10.38225 Z M17.87625,10.9875 L14.9865,15.9975 L3.5415,15.99 L6.43425,10.98375 L17.87625,10.9875 Z"
-                          ></path>
-                        </svg>
-                        <TooltipContent className="text-white">
-                          Select file from Google Drive
-                        </TooltipContent>
-                      </TooltipTrigger>
-                    </Tooltip>
+                    </p>
+                    <div className="flex items-center flex-col justify-center gap-3 w-full">
+                      <Button
+                        onClick={handleButtonClick}
+                        className="max-w-sm py-0 text-lg sm:text-xl rounded-lg flex items-center h-12 w-full"
+                        type="submit"
+                      >
+                        Choose {fileType[0].toUpperCase()} File
+                      </Button>
+                      <div className="center gap-4">
+                        <Tooltip>
+                          <TooltipTrigger className="rounded-full bg-accent p-2 w-10 h-10 text-white">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 18 16"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M8.7375,5.80725 L3.021,15.70725 L0.12375,10.69725 L5.847,0.795 L8.7375,5.80725 Z M17.865,10.38225 L12.078,10.39125 L6.378,0.489 L12.1725,0.489 L17.865,10.38225 Z M17.87625,10.9875 L14.9865,15.9975 L3.5415,15.99 L6.43425,10.98375 L17.87625,10.9875 Z"
+                              ></path>
+                            </svg>
+                            <TooltipContent className="text-white hidden border bottom-0">
+                              Select file from Google Drive
+                            </TooltipContent>
+                          </TooltipTrigger>
+                        </Tooltip>{" "}
+                        <Tooltip>
+                          <TooltipTrigger className="rounded-full bg-accent p-2 w-10 h-10 text-white">
+                            <svg
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 18 16"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M8.7375,5.80725 L3.021,15.70725 L0.12375,10.69725 L5.847,0.795 L8.7375,5.80725 Z M17.865,10.38225 L12.078,10.39125 L6.378,0.489 L12.1725,0.489 L17.865,10.38225 Z M17.87625,10.9875 L14.9865,15.9975 L3.5415,15.99 L6.43425,10.98375 L17.87625,10.9875 Z"
+                              ></path>
+                            </svg>
+                            <TooltipContent className="text-white hidden border bottom-0">
+                              Select file from Google Drive
+                            </TooltipContent>
+                          </TooltipTrigger>
+                        </Tooltip>
                       </div>
+                    </div>
                   </Card>
                 </motion.div>
               </div>
@@ -249,7 +274,7 @@ const ConverterLayout = ({
                             <p>Remove File</p>
                           </TooltipContent>
                         </Tooltip>
-                        {fileType[0] === "pdf" ? (
+                        {fileType.includes("pdf") ? (
                           <PdfRenderer
                             label={fileNames[1]}
                             className={`p-3 w-min mx-auto my-auto`}
@@ -261,13 +286,26 @@ const ConverterLayout = ({
                             }
                           />
                         ) : (
-                          <ToolsFileExtensionCard fileType={fileType[0]} />
+                          <ToolsFileExtensionCard
+                            src={selectedFiles[0]}
+                            fileType={fileType[0]}
+                          />
                         )}
                       </TooltipTrigger>
 
                       <TooltipContent className="text-white">
                         <p className="text-[13px]">
-                          {fileSize + " -" + numPages + " pages"}
+                          {`${
+                            Math.round(fileSize[0] / (1024 * 1024)) < 1
+                              ? Math.ceil(fileSize[0] / (1024)).toFixed(2) +
+                                "KB"
+                              : Math.ceil(fileSize[0] / (1024)) +
+                                "MB"
+                          }${
+                            fileType[0] === "jpg" || fileType[0] === "png"
+                              ? ""
+                              : numPages + " - pages"
+                          }`}
                         </p>
                       </TooltipContent>
                     </Tooltip>
@@ -290,11 +328,10 @@ const ConverterLayout = ({
                     <Tooltip>
                       <TooltipTrigger onClick={handleButtonClick}>
                         <PlusIcon className="cursor-pointer" />
-
                       </TooltipTrigger>
-                        <TooltipContent className="text-white">
-                          Add More Files
-                        </TooltipContent>
+                      <TooltipContent className="text-white">
+                        Add More Files
+                      </TooltipContent>
                     </Tooltip>
                   </div>
 
@@ -305,11 +342,10 @@ const ConverterLayout = ({
                     <Tooltip>
                       <TooltipTrigger>
                         <Settings className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
-
                       </TooltipTrigger>
-                        <TooltipContent className="text-white">
-                          Action Menu
-                        </TooltipContent>
+                      <TooltipContent className="text-white">
+                        Action Menu
+                      </TooltipContent>
                     </Tooltip>
                   </div>
                 </div>
@@ -340,7 +376,7 @@ const ConverterLayout = ({
                   <Button
                     disabled={disabled}
                     onClick={() => setProcessingTool(true)}
-                    className="max-w-sm font-semibold text-lg sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center w-full"
+                    className="max-w-sm font-semibold sm:h-16 text-lg sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center w-full"
                     type="submit"
                   >
                     {actionButtonText}

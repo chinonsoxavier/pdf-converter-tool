@@ -29,7 +29,7 @@ const PdfRenderer = ({
       key={index}
       className={cn(
         className,
-        "center bg-white flex-wrap border-2 hover:bg-secondary/70 hover:border-black/40 duration-500 border-dashed rounded-lg relative"
+        "center bg-white dark:bg-secondary flex-wrap border-2 hover:bg-secondary/70 hover:border-black/40 duration-500 border-dashed rounded-lg relative"
       )}
     >
       <Tooltip>
@@ -43,7 +43,7 @@ const PdfRenderer = ({
         scale={scale}
         onLoadSuccess={onLoadSuccess}
         onLoadError={(error) => console.error("PDF load error:", error)}
-        className="w-full flex-1 gap-5 flex-col hover:border-black/40 duration-500 center p-5 rounded-lg pdf_shadow2 hover:border border bg-white"
+        className="w-full flex-1 gap-5 flex-col hover:border-black/40 duration-500 center p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-white"
       >
         <Page
           className="pdf_shadow rounded border"
