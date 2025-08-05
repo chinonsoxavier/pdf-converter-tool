@@ -13,7 +13,7 @@ const LandingPage = () => {
       <Header />
 
       {/* side menu */}
-      {/* <SidemenuLyout/> */}
+      <SidemenuLyout/>
 
       {/* main content */}
 

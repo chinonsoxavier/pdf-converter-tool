@@ -1,5 +1,6 @@
 import DashboardHeaderLayout from "@/components/layout/dashboard_header_layout";
 import DashboardSidebarLayout from "@/components/layout/dashboard_sidebar_layout";
+import DashboardSidemenuLayout from "@/components/layout/dashboard_sidemenu_layout";
 import { Outlet,useLocation } from "react-router-dom";
 
 const DashboardLayoutView = () => {
@@ -10,6 +11,9 @@ const DashboardLayoutView = () => {
         <DashboardHeaderLayout />
       </div>
 
+      {/* sidebar menu */}
+       <DashboardSidemenuLayout/>
+      
       {/* main content */}
       <section className="flex h-[88%] items-start justify-start overflow-scrol">
        <DashboardSidebarLayout/>

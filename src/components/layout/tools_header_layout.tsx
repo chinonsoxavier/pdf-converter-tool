@@ -1,36 +1,6 @@
 import { Button } from "../ui/button";
-import { ChevronDown, Coffee, Crown, Menu } from "lucide-react";
-import {
-  HoverCard,
-  HoverCardContent,
-  HoverCardTrigger,
-} from "@/components/ui/hover-card";
-import {
-  AddPagesToPdf,
-  CompressPdf,
-  EditPdf,
-  ExcelToPdf,
-  ExtractPages,
-  JPGTOPDF,
-  LockPdf,
-  MergePdf,
-  OcrPdf,
-  OrganisePdf,
-  PdfToExcell,
-  PdfToJpg,
-  PdfToPowerpoint,
-  PdfToWord,
-  PowerPointToPdf,
-  RedactPdf,
-  RemovePages,
-  RepairPdf,
-  RotatePdf,
-  SignPdf,
-  SplitPdf,
-  UnlockPdf,
-  WaterMarkPdf,
-  WordToPdf,
-} from "@/assets/svg/export";
+import { Coffee, Menu } from "lucide-react";
+
 import { Link } from "react-router-dom";
 import { ModeToggle } from "../mode_toggle";
 import { motion } from "motion/react";
@@ -78,7 +48,7 @@ const ToolsHeaderLayout: React.FC<IHeaderProp> = ({
   };
   return (
     <>
-      <header className="flex overflow-hidden items-center bg-white dark:bg-primary px-4 border-y sm:px-8 sm:py-5 py-3 justify-between">
+      <header className="flex overflow-hidden h-[12%] items-center bg-white dark:bg-primary px-4 border-y sm:px-8 sm:py-5 py-3 justify-between">
         <motion.div
           variants={variants1}
           initial={"inactive"}
@@ -106,7 +76,7 @@ const ToolsHeaderLayout: React.FC<IHeaderProp> = ({
           <div className="flex items-center justify-end gap-2">
             <nav className="flex items-center justify-end gap-4">
               <Button
-                size="sm"
+                // size="sm"
                 className="dark:bg-transparent dark:px-0 dark:border-none dark:underline"
                 variant="ghost"
               >
@@ -114,7 +84,7 @@ const ToolsHeaderLayout: React.FC<IHeaderProp> = ({
               </Button>
               <span className="bg-gray-400 h-max min-h-8 w-[1px]"></span>
               <Button
-                size="sm"
+                // size="sm"
                 className="hidden xs:flex dark:bg-[#ce1c1c] dark:text-white"
               >
                 <Coffee />
