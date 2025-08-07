@@ -149,7 +149,7 @@ const SidemenuLyout = () => {
               ],
             },
           ].map((tool, index) => (
-            <AccordionItem key={index} value={index + 1}>
+            <AccordionItem key={index} value={(index + 1).toString()}>
               <AccordionTrigger className="px-8 text-[17px] font-semibold text-secondary-foreground">
                 {tool.label}
               </AccordionTrigger>

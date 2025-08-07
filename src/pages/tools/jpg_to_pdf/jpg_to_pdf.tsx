@@ -80,7 +80,7 @@ const JpgToPdf = () => {
               </div>
 
               <div className="flex gap-2 items-center w-full justify-start">
-                <Input className="fle-1 w-min bg-[blue]" type="checkbox" />
+                <Input className="fle-1 w-min" type="checkbox" />
                 <p className="w-full" >Merge all images in one PDF file</p>
               </div>
               {/* <div className="center gap-4 py-4">

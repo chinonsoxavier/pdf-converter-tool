@@ -17,7 +17,7 @@ const PdfToJpg = () => {
                 onClick={() => setImageQuality("high")}
                 className={`py-5 duration-300 cursor-pointer px-4  border-b ${
                   imageQuality === "high" &&
-                  "bg-muted dark:bg-primary hover:bg-muted/6 dark:hover::bg-primary/5"
+                "bg-muted dark:bg-primary hover:bg-muted/80 dark:hover:bg-primary/5"
                 }`}
               >
                 <p className="text-lg font-medium text-accent">High Quality</p>
@@ -40,7 +40,7 @@ const PdfToJpg = () => {
                 onClick={() => setImageQuality("standard")}
                 className={`py-5 duration-300 cursor-pointer px-4  border-b ${
                   imageQuality === "standard" &&
-                  "bg-muted dark:bg-primary hover:bg-muted/6 dark:hover::bg-primary/5"
+                "bg-muted dark:bg-primary hover:bg-muted/80 dark:hover:bg-primary/5"
                 }`}
               >
                 <p className="text-lg font-medium text-accent">Standard Quality</p>
@@ -63,7 +63,7 @@ const PdfToJpg = () => {
                 onClick={() => setImageQuality("low")}
                 className={`py-5 duration-300 cursor-pointer px-4  border-b ${
                   imageQuality === "low" &&
-                  "bg-muted dark:bg-primary hover:bg-muted/6 dark:hover::bg-primary/5"
+                "bg-muted dark:bg-primary hover:bg-muted/80 dark:hover:bg-primary/5"
                 }`}
               >
                 <p className="text-lg font-medium text-accent">Low Quality</p>

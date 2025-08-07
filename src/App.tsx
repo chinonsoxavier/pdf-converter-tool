@@ -1,30 +1,27 @@
 import { Route, Routes } from "react-router-dom";
-import LandingPage from "./src/pages/landing/landing_page";
-import SignInPage from "./src/pages/(auth)/signin/signin_page";
-import SignUpPage from "./src/pages/(auth)/signup/signup_page";
-import ForgotPasswordPage from "./src/pages/(auth)/forgot-password/forgot_password_page";
-import { ThemeProvider } from "./src/components/theme_provider";
-import PdfToWordConverter from "./src/pages/tools/pdf_to_word/pdf_to_word_converter";
-import WordToPdfConverter from "./src/pages/tools/word_to_pdf/word_to_pdf_converter";
-import DashboardOverviewMainView from "./src/pages/dashboard/overview/overview_main_view";
-import DashboardLayoutView from "./src/pages/dashboard/dashboard_layout_view";
-import DashboardUsersMainView from "./src/pages/dashboard/users/dashboard_users_main_view";
-import DashboardToolsMainView from "./src/pages/dashboard/tools/dashboard_tools_main_view";
-import DashboardSettingsMainView from "./src/pages/dashboard/settings/dashboard_settings_main_view";
-import DashboardContentMainView from "./src/pages/dashboard/content/dashboard_content_main_view";
-import DashboardAnalyticsMainView from "./src/pages/dashboard/analytics/dashboard_analytics_main_view";
-import ScrollManager from "./src/components/scroll_manager";
-import ToolDownloadLayout from "./src/components/tools/layout_types/tool_download_layout";
-import MergePdf from "./src/pages/tools/merge_pdf/merge_pdf";
-import SplitPdf from "./src/pages/tools/split_pdf/split_pdf";
+import LandingPage from "./pages/landing/landing_page";
+import SignInPage from "./pages/(auth)/signin/signin_page";
+import SignUpPage from "./pages/(auth)/signup/signup_page";
+import ForgotPasswordPage from "./pages/(auth)/forgot-password/forgot_password_page";
+import { ThemeProvider } from "./components/theme_provider";
+import PdfToWordConverter from "./pages/tools/pdf_to_word/pdf_to_word_converter";
+import WordToPdfConverter from "./pages/tools/word_to_pdf/word_to_pdf_converter";
+import DashboardOverviewMainView from "./pages/dashboard/overview/overview_main_view";
+import DashboardLayoutView from "./pages/dashboard/dashboard_layout_view";
+import DashboardUsersMainView from "./pages/dashboard/users/dashboard_users_main_view";
+import DashboardToolsMainView from "./pages/dashboard/tools/dashboard_tools_main_view";
+import DashboardSettingsMainView from "./pages/dashboard/settings/dashboard_settings_main_view";
+import DashboardContentMainView from "./pages/dashboard/content/dashboard_content_main_view";
+import DashboardAnalyticsMainView from "./pages/dashboard/analytics/dashboard_analytics_main_view";
+import ScrollManager from "./components/scroll_manager";
+import ToolDownloadLayout from "./components/tools/layout_types/tool_download_layout";
+import MergePdf from "./pages/tools/merge_pdf/merge_pdf";
+import SplitPdf from "./pages/tools/split_pdf/split_pdf";
 import CompressPdf from "@/pages/tools/compress_pdf/compress_pdf";
 import PdfToJpg from "@/pages/tools/pdf_to_jpg/pdf_to_jpg";
 import JpgToPdf from "@/pages/tools/jpg_to_pdf/jpg_to_pdf";
 import RotatePdf from "@/pages/tools/rotate_pdf/rotate_pdf";
 
-// pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.mjs`;
-// Set workerSrc to the imported worker=
-// pdfjs.GlobalWorkerOptions.workerSrc = `//unpkg.com/pdfjs-dist@${pdfjs.version}/build/pdf.worker.min.js`
 const App = () => {
   return (
     <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
@@ -175,7 +172,7 @@ const App = () => {
         {/* preview pages */}
         <Route path="/preview" element={<RotatePdf />} />
         {/* end of preview pages */}
-        
+
         {/* end of tools routes */}
       </Routes>
     </ThemeProvider>

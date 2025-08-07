@@ -446,9 +446,11 @@ const ToolsSection = () => {
                         const targetPath = tool.label
                           .toLocaleLowerCase()
                           .replace(/\s+/g, "_");
-                        tool.isFree
-                          ? navigate("/" + targetPath)
-                          : navigate("/pricing");
+                        if (tool.isFree) {
+                          navigate("/" + targetPath);
+                        } else {
+                          navigate("/pricing");
+                        }
                       }}
                       className={cn(
                         `tols h-full w-full flex-1 group relative gap-4 flex-col duration-500 cursor-pointer flex items-center justify-center rounded-xl pt-2 pb-7`

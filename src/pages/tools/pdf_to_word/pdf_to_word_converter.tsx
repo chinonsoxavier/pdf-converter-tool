@@ -18,7 +18,7 @@ const PdfToWordConverter = () => {
               onClick={() => setOCR(!true)}
               className={`py-5 duration-300 cursor-pointer px-4  border-b ${
                 !OCR &&
-                "bg-muted dark:bg-primary hover:bg-muted/6 dark:hover::bg-primary/5"
+                "bg-muted dark:bg-primary hover:bg-muted/80 dark:hover:bg-primary/5"
               }`}
             >
               <p className="text-lg font-medium text-accent">NO OCR</p>
@@ -40,7 +40,7 @@ const PdfToWordConverter = () => {
               onClick={() => setOCR(true)}
               className={`py-5 duration-300 cursor-pointer px-4  border-b ${
                 OCR &&
-                "bg-muted dark:bg-primary hover:bg-muted/6 dark:hover::bg-primary/5"
+                "bg-muted dark:bg-primary hover:bg-muted/80 dark:hover:bg-primary/5"
               }`}
             >
               <p className="text-lg font-medium gap-1 text-accent flex items-center">

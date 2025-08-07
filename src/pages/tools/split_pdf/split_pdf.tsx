@@ -1,5 +1,5 @@
 import ConverterLayout from "@/components/tools/layout_types/converter_layout";
-import {  useState } from "react";
+import { useState } from "react";
 import useSplitPdfStore from "./split_pdf_store";
 import SplitPdfChildrenSection from "../../../components/tools/split_pdf/split_pdf_children_section";
 import { Button } from "@/components/ui/button";
@@ -31,25 +31,30 @@ const SplitPdf = () => {
 
     updateRange({ name, from: fromNum, to: toNum }, name);
   };
-  const { selectedFiles, numPages } = useToolsStore();
+  const { selectedFiles, selectedIndex } = useToolsStore();
   const { reOrderRange } = useSplitPdfStore();
 
   window.addEventListener("DOMContentLoaded", () => {
-    updateRange({ name: "Range 1", from: 1, to: numPages[0] }, "Range 1");
+    updateRange(
+      { name: "Range 1", from: 1, to: selectedFiles[selectedIndex]?.numPages },
+      "Range 1"
+    );
   });
 
   const handleAddRange = () => {
     addRange({
       name: `Range ${Ranges.length + 1}`,
-      from: numPages[0],
-      to: numPages[0],
+      from: selectedFiles[selectedIndex]?.numPages,
+      to: selectedFiles[selectedIndex]?.numPages,
     });
   };
 
-
   const handleRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRange(parseInt(e.target.value));
-    setFixedRange(numPages[0], parseInt(e.target.value));
+    setFixedRange(
+      selectedFiles[selectedIndex]?.numPages,
+      parseInt(e.target.value)
+    );
   };
 
   return (
@@ -59,7 +64,6 @@ const SplitPdf = () => {
       label="Split PDF Files"
       desc="Separate one page or a whole set for easy conversion into independent PDF files."
       disabled={selectedFiles.length <= 1}
-
       convertingStateText="Spliting PDF files"
       actionMenuSideBar={
         <div className="w-full">
@@ -75,7 +79,7 @@ const SplitPdf = () => {
             <Button
               onClick={() => {
                 setSelectedRange("fixed");
-                setFixedRange(numPages[0], range);
+                setFixedRange(selectedFiles[selectedIndex]?.numPages, range);
               }}
               size="sm"
               className="w-full"
@@ -93,14 +97,18 @@ const SplitPdf = () => {
                 <Input
                   defaultValue={range}
                   onChange={(e) => {
-                    parseInt(e.target.value) > 0 && handleRangeChange(e);
+                    const value = parseInt(e.target.value);
+                    if (value > 0) {
+                      handleRangeChange(e);
+                    }
                   }}
                   placeholder="Type a number..."
                 />
               </div>
               <div className="bg-secondary p-4 rounded">
                 <p className="text-secondary-foreground text-sm font-medium">
-                  This PDF will be split into {Math.round(numPages[0] / range)}{" "}
+                  This PDF will be split into
+                  {Math.round(selectedFiles[selectedIndex]?.numPages / range)}
                   different files
                 </p>
               </div>
@@ -168,7 +176,8 @@ const SplitPdf = () => {
                           <Input
                             // value={range.to}
                             onChange={(e) =>
-                              parseInt(e.target.value) <= numPages[0] &&
+                              parseInt(e.target.value) <=
+                                selectedFiles[selectedIndex]?.numPages &&
                               handleUpdateRange(
                                 range.name,
                                 range.from.toString(),
@@ -176,8 +185,8 @@ const SplitPdf = () => {
                               )
                             }
                             // min={range.to}
-                            max={numPages[0]}
-                            defaultValue={numPages[0]}
+                            max={selectedFiles[selectedIndex]?.numPages}
+                            defaultValue={selectedFiles[selectedIndex]?.numPages}
                             className="outline-none"
                           />
                         </div>

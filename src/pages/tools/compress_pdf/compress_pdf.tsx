@@ -18,7 +18,7 @@ const CompressPdf = () => {
               onClick={() => setCompressionOption("extreme")}
               className={`py-5 duration-300 cursor-pointer px-4  border-b ${
                 compressionOption === "extreme" &&
-                "bg-muted dark:bg-primary hover:bg-muted/6 dark:hover::bg-primary/5"
+                "bg-muted dark:bg-primary hover:bg-muted/80 dark:hover:bg-primary/5"
               }`}
             >
               <p className="text-lg font-medium text-accent">
@@ -43,7 +43,7 @@ const CompressPdf = () => {
               onClick={() => setCompressionOption("recommended")}
               className={`py-5 duration-300 cursor-pointer px-4  border-b ${
                 compressionOption === "recommended" &&
-                "bg-muted dark:bg-primary hover:bg-muted/6 dark:hover::bg-primary/5"
+                "bg-muted dark:bg-primary hover:bg-muted/80 dark:hover:bg-primary/5"
               }`}
             >
               <p className="text-lg font-medium text-accent">
@@ -68,7 +68,7 @@ const CompressPdf = () => {
               onClick={() => setCompressionOption("less")}
               className={`py-5 duration-300 cursor-pointer px-4  border-b ${
                 compressionOption === "less" &&
-                "bg-muted dark:bg-primary hover:bg-muted/6 dark:hover::bg-primary/5"
+                "bg-muted dark:bg-primary hover:bg-muted/80 dark:hover:bg-primary/5"
               }`}
             >
               <p className="text-lg font-medium text-accent">
