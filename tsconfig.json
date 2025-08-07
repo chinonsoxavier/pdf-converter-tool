@@ -5,12 +5,18 @@
     "baseUrl": ".",
     "paths": {
       "@/*": ["./src/*"]
-    }
-  //   "esModuleInterop": true,
-  //   "module": "NodeNext", // Changed from ESNext to NodeNext
-  //   "moduleResolution": "NodeNext" // Resolves rollup/parseAst and other ESM modules
+    },
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    "target": "es2018",
+    "module": "CommonJS",
+        // "moduleResolution": "bundler",
+    "skipLibCheck": true // Skip type checking of all declaration files
 
-  //   // ...
+    //   "module": "NodeNext", // Changed from ESNext to NodeNext
+    //   "moduleResolution": "NodeNext" // Resolves rollup/parseAst and other ESM modules
+
+    //   // ...
   }
 }
 

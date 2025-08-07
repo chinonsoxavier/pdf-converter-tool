@@ -10,10 +10,7 @@ import SplitPdfSizeLayout from "@/components/tools/split_pdf/split_pdf_size_layo
 pdfjs.GlobalWorkerOptions.workerSrc = "/pdf.worker.min.mjs";
 
 const SplitPdfChildrenSection = () => {
-  const {
-    selectedFiles,
-    fileType,
-  } = useToolsStore();
+  const { selectedFiles, selectedIndex } = useToolsStore();
   const [newItemText, setNewItemText] = useState(selectedFiles);
   const { splitMethod } = useSplitPdfStore();
 
@@ -28,7 +25,7 @@ const SplitPdfChildrenSection = () => {
       {/* {selectedFiles} */}
       {/* {numPages}"numpages" */}
       {/* <DraggableContainer/> */}
-      {fileType[0] === "pdf" ? (
+      {selectedFiles[selectedIndex]?.fileType[0] === "pdf" ? (
         splitMethod === "Range" ? (
           <SplitPdfRangeLayout />
         ) : splitMethod === "Pages" ? (
@@ -37,7 +34,9 @@ const SplitPdfChildrenSection = () => {
           <SplitPdfSizeLayout />
         )
       ) : (
-        <ToolsFileExtensionCard fileType={fileType[0]} />
+        <ToolsFileExtensionCard
+          fileType={selectedFiles[selectedIndex]?.fileType[0]}
+        />
       )}
     </div>
   );

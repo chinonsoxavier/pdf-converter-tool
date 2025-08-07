@@ -149,7 +149,7 @@ body {
 
 @layer base {
   * {
-    font-family: "IBM Plex Sans", sans-serif;
+    font-family: "Nunito", sans-serif;
     @apply border-border outline-ring/50;
   }
   body {

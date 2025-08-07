@@ -10,9 +10,8 @@ import {
   CloudUpload,
   PlusIcon,
   Settings,
-  XIcon,
 } from "lucide-react";
-import {useRef, useState } from "react";
+import {useEffect, useRef, useState } from "react";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import {
@@ -29,11 +28,11 @@ import SidemenuLyout from "@/components/layout/sidemenu_layout";
 import ConverterLayoutSidebar from "@/components/layout/converter_layout_sidebar";
 import useToolsStore from "@/pages/tools/tools_store";
 import PdfRenderer from "@/components/pdf_renderer";
-interface FilePickerCardProps {
-  desc?: string;
-  fileType?: string;
-  onFileSelect?: (file: File) => void;
-}
+// interface FilePickerCardProps {
+//   desc?: string;
+//   fileType?: string;
+//   onFileSelect?: (file: File) => void;
+// }
 const ConverterLayout = ({
   disabled,
   children,
@@ -42,7 +41,7 @@ const ConverterLayout = ({
   label,
   desc,
   convertingStateText,
-  fileType=["string"],
+  fileType=["pdf"],
 }: Readonly<{
   disabled?: boolean;
   actionButtonText:string;
@@ -56,21 +55,20 @@ const ConverterLayout = ({
 
   const {
     selectedFiles,
-    setSelectedFiles,
-    setFileName,
-    setFileSize,
-    fileNames,
-    setNumPages,
-    numPages,
+    setSelectedFile,
     toggleSideMenuOpen,
-    fileSize,
-    
+    selectedIndex,
   } = useToolsStore();
 
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [processingTool, setProcessingTool] = useState(false);
-
+  useEffect(() => {
+    console.log("changed numPages");
+    // initRotate(0, selectedFiles[selectedIndex]?.numPages);
+    // console.log(selectedFiles[selectedIndex]?.numPages);
+    // console.log(selectedFiles[selectedIndex]?.numPages, "yes");
+  }, [selectedFiles[0]?.numPages]);
   const variants1 = {
     inactive: {
       y: 80,
@@ -104,27 +102,25 @@ const ConverterLayout = ({
     if (file) {
       const FileType = file.name.split(".").pop().toString();
       if (!fileType || !allowedFileTypes.includes(FileType)) {
-        console.log('invalid input');
-        console.log('allowedFiles', allowedFileTypes);
-        console.log('fileType', fileType);
-        console.log("FileType", FileType);
-        console.log("allowedFiles", allowedFileTypes);
-        alert(`Please select a valid ${allowedFileTypes.join(", ")}`);
-        if (fileInputRef.current) {
+           if (fileInputRef.current) {
           fileInputRef.current.value = ""; // Clear the input value
         }
         return;
       }
       const fileUrl = URL.createObjectURL(file);
-      alert(fileUrl);
-      setSelectedFiles(fileUrl);
-      setFileName(file.name);
-      setFileSize(file.size);
+      setSelectedFile({fileUrl:fileUrl,fileName:file.name,fileSize:file.size,fileType:fileType});
 
       console.log("Selected file:", file.name, "Size:", file.size, "bytes");
       return;
     }
   };
+
+  // const {numPages} = selectedFiles[0].numPages
+
+  // useEffect(() => {
+  //  setNumPages(selectedIndex,selectedFiles[0]?.numPages)
+  // }, [fileInputRef.current])
+  
 
   return (
     <div className="overflow-scroll h-lvh">
@@ -139,7 +135,7 @@ const ConverterLayout = ({
           <div className="h-[12%]">
             <Header />
           </div>
-          {!!selectedFiles[0] === false ? (
+          {!selectedFiles[selectedIndex] ? (
             <>
               <div className="w-full flex-col center p-4 py-20 rounded-lg to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)]">
                 <motion.div
@@ -258,57 +254,22 @@ const ConverterLayout = ({
                   {children ? (
                     children
                   ) : (
-                    <Tooltip>
-                      <TooltipTrigger>
-                        <Tooltip>
-                          {/* <TooltipTrigger  className="w-full rounded-lg"> */}
-                          <TooltipTrigger
-                            asChild
-                            onClick={() => setSelectedFiles(null)}
-                            className="items-center absolute top-1 hover:shadow right-1 z-30 bg-secondary p-1 text-primary-foreground cursor-pointer justify-center group-hover:opacity-100 duration-500 flex opacity-0 rounded-full w-8 h-8"
-                          >
-                            <XIcon className="w-4 h-4" />
-                          </TooltipTrigger>
-                          {/* </div> */}
-                          <TooltipContent className="text-white">
-                            <p>Remove File</p>
-                          </TooltipContent>
-                        </Tooltip>
-                        {fileType.includes("pdf") ? (
-                          <PdfRenderer
-                            label={fileNames[1]}
-                            className={`p-3 w-min mx-auto my-auto`}
-                            scale={0.8}
-                            file={selectedFiles[0]}
-                            pageNumber={1}
-                            onLoadSuccess={({ numPages }) =>
-                              setNumPages(numPages)
-                            }
-                          />
-                        ) : (
-                          <ToolsFileExtensionCard
-                            src={selectedFiles[0]}
-                            fileType={fileType[0]}
-                          />
-                        )}
-                      </TooltipTrigger>
-
-                      <TooltipContent className="text-white">
-                        <p className="text-[13px]">
-                          {`${
-                            Math.round(fileSize[0] / (1024 * 1024)) < 1
-                              ? Math.ceil(fileSize[0] / (1024)).toFixed(2) +
-                                "KB"
-                              : Math.ceil(fileSize[0] / (1024)) +
-                                "MB"
-                          }${
-                            fileType[0] === "jpg" || fileType[0] === "png"
-                              ? ""
-                              : numPages + " - pages"
-                          }`}
-                        </p>
-                      </TooltipContent>
-                    </Tooltip>
+                    <>
+                      {fileType.includes("pdf") ? (
+                        <PdfRenderer
+                          label={selectedFiles[selectedIndex]?.fileName}
+                          className={`p-3 w-min mx-auto my-auto`}
+                          scale={0.8}
+                          file={selectedFiles[selectedIndex]?.fileUrl}
+                          pageNumber={"1"}
+                        />
+                      ) : (
+                        <ToolsFileExtensionCard
+                          src={selectedFiles[selectedIndex]?.fileUrl}
+                          fileType={selectedFiles[selectedIndex]?.fileType[0]}
+                        />
+                      )}
+                    </>
                   )}
                   <div className="center absolute mr-5 sm:mr-0 right-0 shadow drop-shadow-md sm:right-5 sm:top-5 top-20 duration-500 cursor-pointer bg-accent text-white p-2 rounded-full">
                     <Input
