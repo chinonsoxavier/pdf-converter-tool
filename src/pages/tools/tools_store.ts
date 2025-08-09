@@ -7,12 +7,26 @@ interface ISelectedFile {
   fileType: string[];
   fileSize: number;
   numPages?: number;
+  pdfPages?: PageItem[];
 }
+
+// Define the structure of a PDF page item
+interface PageItem {
+  id: string | number; // Unique identifier for the page
+  pageNumber: number; // Page number for react-pdf
+  rotate: number[]; // Rotation for the page (synchronized with ISelectedFile.rotate)
+}
+
+// interface DraggedItem {
+//   item: PageItem;
+//   index: number;
+// }
 
 interface ToolsStore {
   selectedFiles: ISelectedFile[];
   selectedIndex: number;
   sideMenuOpen: boolean;
+  setItems?: (pageIndex: number, pages: PageItem[]) => void;
   rotateIndividualPage: (fileIndex: number, pageIndex: number) => void;
   initRotate: (fileIndex: number, pageLength: number) => void;
   setRotateRight: (fileIndex: number, pageLength: number) => void;
@@ -27,6 +41,31 @@ interface ToolsStore {
 const useToolsStore = create<ToolsStore>((set) => ({
   selectedFiles: [], // Initialize as empty to avoid default object issues
   sideMenuOpen: false,
+  pdfPages: [],
+  // setItems: (pageIndex: number, newPdfPages: PageItem[]) =>
+  //   set((state) => {
+  //     const PdfPages = [...state.selectedFiles];
+  //     PdfPages[pageIndex] = {
+  //       ...PdfPages[pageIndex],
+  //       pdfPages: newPdfPages,
+  //     };
+  //     return { selectedFiles: PdfPages };
+  //   }),
+
+  // setItems: (pageIndex:number,newItems: PageItem[]) => {
+  //   useToolsStore.setState((state) => {
+  //     const newSelectedFiles = [...state.selectedFiles];
+  //     // if (selectedIndex >= 0 && selectedIndex < newSelectedFiles.length) {
+  //       // Update rotate array to match new page order
+  //       const newRotate = newItems.map((item) => item.rotate);
+  //       newselectedFiles[selectedIndex]? = {
+  //         ...newselectedFiles[selectedIndex]?,
+  //         rotate: newRotate,
+  //       // };
+  //     }
+  //     return { selectedFiles: newSelectedFiles };
+  //   });
+  // };
   selectedIndex: 0,
   toggleSideMenuOpen: () =>
     set((state) => ({ sideMenuOpen: !state.sideMenuOpen })),
@@ -138,27 +177,48 @@ const useToolsStore = create<ToolsStore>((set) => ({
       }
       return { selectedFiles: newSelectedFiles };
     }),
-  removeSelectedFiles: (fileName: string) =>
+  removeSelectedFiles: (fileUrl: string) =>
     set((state) => ({
       selectedFiles: state.selectedFiles.filter(
-        (file) => file.fileName !== fileName
+        (file) => file.fileUrl !== fileUrl
       ),
     })),
   setNumPages: (fileIndex: number, numPages: number) =>
     set((state) => {
       const newSelectedFiles = [...state.selectedFiles];
       // if (fileIndex >= 0 && fileIndex < newSelectedFiles.length) {
-        newSelectedFiles[fileIndex] = {
-          ...newSelectedFiles[fileIndex],
-         numPages: numPages,
+      newSelectedFiles[fileIndex] = {
+        ...newSelectedFiles[fileIndex],
+        numPages: numPages,
+        pdfPages: Array.from({ length: numPages }, (_, i) => ({
+          id: `page-${i + 1}`,
+          pageNumber: i + 1,
           rotate: Array(numPages).fill(0),
+        })),
+        rotate: Array(numPages).fill(0),
         // };
         // console.log(
         //   `Set numPages for file ${fileIndex} to ${numPages}, rotate:`,
         //   newSelectedFiles[fileIndex].rotate
         // );
-      }
+      };
       return { selectedFiles: newSelectedFiles };
+    }),
+  setItems: (pageIndex: number, newItems: PageItem[]) =>
+    set((state) => {
+      const newSelectedFiles = [...state.selectedFiles];
+      const fileIndex = state.selectedIndex;
+      if (fileIndex >= 0 && fileIndex < newSelectedFiles.length) {
+        newSelectedFiles[fileIndex] = {
+          ...newSelectedFiles[fileIndex],
+          pdfPages: newItems,
+          // rotate: newItems.map((item) => item.rotate),
+        };
+      }
+      return {
+        selectedFiles: newSelectedFiles,
+        // items: newItems,
+      };
     }),
 }));
 

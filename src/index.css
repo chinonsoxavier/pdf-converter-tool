@@ -115,7 +115,8 @@
 }
 
 @theme {
-  --breakpoint-large: 930px;
+  --breakpoint-large: 960px;
+  /* --breakpoint-large: 930px; */
   --breakpoint-medium: 870px;
   --breakpoint-xs: 470px;
 }
@@ -144,6 +145,10 @@ body {
 }
 
 #hero_section {
+  @apply to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)];
+}
+
+.gradient {
   @apply to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)];
 }
 

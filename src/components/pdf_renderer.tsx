@@ -41,12 +41,15 @@ const PdfRenderer = ({
   console.log(selectedFiles[selectedIndex]?.numPages + "here");
   // }, [selectedFiles, numPages]);
 
+// useEffect(() => {
+//   console.log('rotate',selectedFiles[0].rotate)
+// }, [selectedFiles[0].rotate ])
+
 
   return (
     <Tooltip>
       <TooltipTrigger>
         <div
-          key={index}
           className={cn(
             className,
             "center bg-white dark:bg-secondary flex-wrap border-2 hover:bg-secondary/70 hover:border-black/40 duration-500 border-dashed rounded-lg relative"
@@ -89,7 +92,7 @@ const PdfRenderer = ({
               file={file}
               scale={scale}
               onLoadSuccess={({ numPages }) => {
-                setNumPages(0, numPages);
+                setNumPages(selectedIndex,numPages);
               }}
               onLoadError={(error) => console.error("PDF load error:", error)}
               className="items-center flex-col justify-evenly flex-wrap flex gap-5 hover:border-black/40 duration-500 p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-white"
@@ -101,11 +104,12 @@ const PdfRenderer = ({
                     {/* {selected[0]} */}
                     {/* {rotate[0][0]} */}
                     {/* {rotate[0][index]} */}
+                    {/* {}j */}
                     {pagerotable && (
                       <Tooltip>
                         <TooltipTrigger
                           asChild
-                          onClick={() => rotateIndividualPage(0, index)}
+                          onClick={() => rotateIndividualPage(selectedIndex, index)}
                           className="absolute bottom-0 text-white opacity-80 hover:opacity-100 duration-700 bg-[rgba(0,0,0,0.6)] center right-0 z-10 rounded-full w-7 h-7 p-1.5"
                         >
                           <RotateCwIcon />
@@ -116,7 +120,7 @@ const PdfRenderer = ({
                       </Tooltip>
                     )}
                     <Page
-                      rotate={selectedFiles[selectedIndex]?.rotate[0]} // Use the specific rotation for each page
+                      rotate={selectedFiles[selectedIndex]?.rotate[index+1]} // Use the specific rotation for each page
                       className="pdf_shadow flex-1 w-full rounded border"
                       pageNumber={index + 1} // Pages are 1-indexed
                       width={150} // Reduced for better performance
@@ -125,7 +129,7 @@ const PdfRenderer = ({
                     />
                     <p className="text-xs mt-2 text-center leading text-secondary-foreground">{`Page ${
                       index + 1
-                      }`} {selectedFiles[selectedIndex]?.numPages }</p>
+                      }`}</p>
                   </div>
                 )
               )}
@@ -135,7 +139,7 @@ const PdfRenderer = ({
               file={file}
               scale={scale}
               onLoadSuccess={({ numPages }) => {
-                setNumPages(index, numPages);
+                setNumPages(selectedIndex, numPages);
                 // alert(numPages);
               }}
               onLoadError={(error) => console.error("PDF load error:", error)}

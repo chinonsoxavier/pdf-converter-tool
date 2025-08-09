@@ -1,6 +1,6 @@
 import ConverterLayout from "@/components/tools/layout_types/converter_layout";
 import { useState } from "react";
-import useSplitPdfStore from "./split_pdf_store";
+import useExtractPdfStore from "./extract_pdf_store";
 import SplitPdfChildrenSection from "../../../components/tools/split_pdf/split_pdf_children_section";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -9,7 +9,7 @@ import { ArrowRightLeftIcon, Move, Plus, XIcon } from "lucide-react";
 import useToolsStore from "../tools_store";
 // import { Reorder } from "motion/dist/react";
 
-const SplitPdf = () => {
+const ExtractPdf = () => {
   const {
     selectedRange,
     Ranges,
@@ -186,7 +186,9 @@ const SplitPdf = () => {
                             }
                             // min={range.to}
                             max={selectedFiles[selectedIndex]?.numPages}
-                            defaultValue={selectedFiles[selectedIndex]?.numPages}
+                            defaultValue={
+                              selectedFiles[selectedIndex]?.numPages
+                            }
                             className="outline-none"
                           />
                         </div>
@@ -215,4 +217,4 @@ const SplitPdf = () => {
   );
 };
 
-export default SplitPdf;
+export default ExtractPdf;

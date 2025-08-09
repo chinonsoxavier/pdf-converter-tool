@@ -114,14 +114,6 @@ const ConverterLayout = ({
       return;
     }
   };
-
-  // const {numPages} = selectedFiles[0].numPages
-
-  // useEffect(() => {
-  //  setNumPages(selectedIndex,selectedFiles[0]?.numPages)
-  // }, [fileInputRef.current])
-  
-
   return (
     <div className="overflow-scroll h-lvh">
       {/* side menu */}
@@ -131,13 +123,13 @@ const ConverterLayout = ({
       {processingTool ? (
         <ToolPageLoader convertingStateText={convertingStateText} />
       ) : (
-        <main className="w-full min-h-lvh h-full dark:bg-primary">
+        <main className="w-full  min-h-lvh h-full dark:bg-primary">
           <div className="h-[12%]">
             <Header />
           </div>
           {!selectedFiles[selectedIndex] ? (
             <>
-              <div className="w-full flex-col center p-4 py-20 rounded-lg to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)]">
+              <div className="w-full flex-col  gradient center p-4 py-20 rounded-lg ">
                 <motion.div
                   variants={variants1}
                   initial={"inactive"}
@@ -172,7 +164,6 @@ const ConverterLayout = ({
                             `.${file.toLowerCase()},application/${file.toLowerCase()}`
                         )
                         .join(",")}
-                      // accept=".pdf,application/pdf"
                       onChange={handleFileChange}
                       className="hidden"
                       aria-label="Choose PDF file"
@@ -204,7 +195,8 @@ const ConverterLayout = ({
                               Select file from Google Drive
                             </TooltipContent>
                           </TooltipTrigger>
-                        </Tooltip>{" "}
+                        </Tooltip>
+
                         <Tooltip>
                           <TooltipTrigger className="rounded-full bg-accent p-2 w-10 h-10 text-white">
                             <svg
@@ -213,11 +205,11 @@ const ConverterLayout = ({
                             >
                               <path
                                 fill="currentColor"
-                                d="M8.7375,5.80725 L3.021,15.70725 L0.12375,10.69725 L5.847,0.795 L8.7375,5.80725 Z M17.865,10.38225 L12.078,10.39125 L6.378,0.489 L12.1725,0.489 L17.865,10.38225 Z M17.87625,10.9875 L14.9865,15.9975 L3.5415,15.99 L6.43425,10.98375 L17.87625,10.9875 Z"
+                                d="M5.3475,0.7035 L0.096,4.125 L3.708,7.03725 L9.018,3.765 L5.3475,0.7035 Z M17.904,4.14 L12.66525,0.7275 L9.01875,3.7725 L14.29875,7.03875 L17.904,4.14 Z M9.01875,10.305 L12.66525,13.35975 L17.904,9.945 L14.2995,7.0395 L9.01875,10.305 Z M0.096,9.9585 L5.3475,13.35975 L9.01875,10.305 L3.70875,7.0455 L0.096,9.9585 Z M9.01875,10.9635 L5.35575,14.0385 L3.786,13.02 L3.786,14.16 L9.01875,17.30475 L14.271,14.15175 L14.271,13.0125 L12.693,14.031 L9.01875,10.9635 Z"
                               ></path>
                             </svg>
                             <TooltipContent className="text-white hidden border bottom-0">
-                              Select file from Google Drive
+                              Select file from Dropbox
                             </TooltipContent>
                           </TooltipTrigger>
                         </Tooltip>
@@ -240,7 +232,7 @@ const ConverterLayout = ({
               <Footer />
             </>
           ) : (
-            <div className="h-[88%] to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)] relative flex items-start justify-start w-full">
+            <div className="h-[88%] to-accent relative flex items-start justify-start w-full">
               {/* converter layout sidebar */}
               <ConverterLayoutSidebar
                 disabled={disabled}
@@ -250,7 +242,7 @@ const ConverterLayout = ({
                 label={label}
               />
               <div className="h-full overflow-y-scroll flex items-start w-full justify-center ">
-                <div className="flex items-center justify-center relative flex-col p-7 h-full flex-1">
+                <div className="flex gradient w-full items-center justify-center relative flex-col p-7 h-full flex-1">
                   {children ? (
                     children
                   ) : (
@@ -258,7 +250,7 @@ const ConverterLayout = ({
                       {fileType.includes("pdf") ? (
                         <PdfRenderer
                           label={selectedFiles[selectedIndex]?.fileName}
-                          className={`p-3 w-min mx-auto my-auto`}
+                          className={`p-3 w- w-full min-w-fit mx-auto my-auto`}
                           scale={0.8}
                           file={selectedFiles[selectedIndex]?.fileUrl}
                           pageNumber={"1"}

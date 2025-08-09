@@ -281,7 +281,7 @@ const ToolsSection = () => {
             category: "edit",
           },
           {
-            label: "Recorder Pages",
+            label: "Organise Pages",
             icon: OrganisePdf,
             isFree: true,
             info: "Drag & drop rearrangement of pages",

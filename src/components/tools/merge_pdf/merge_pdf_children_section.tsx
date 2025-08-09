@@ -1,10 +1,4 @@
 import ToolsFileExtensionCard from "@/components/tools/tools_file_extension_card";
-import {
-  Tooltip,
-  TooltipContent,
-  TooltipTrigger,
-} from "@/components/ui/tooltip";
-import { XIcon } from "lucide-react";
 import useMergePdfStore from "../../../pages/tools/merge_pdf/merge_pdf_store";
 import { Reorder } from "framer-motion";
 import { useEffect, useState } from "react";
@@ -12,7 +6,7 @@ import useToolsStore from "../../../pages/tools/tools_store";
 import PdfRenderer from "@/components/pdf_renderer";
 
 const MergePdfChildrenSection = () => {
-  const { selectedFiles, removeSelectedFiles, selectedIndex } = useToolsStore();
+  const { selectedFiles,  selectedIndex } = useToolsStore();
 
   const { recorderFiles } = useMergePdfStore();
   const [newItemText, setNewItemText] = useState(selectedFiles);
@@ -38,7 +32,7 @@ const MergePdfChildrenSection = () => {
             value={file.fileUrl}
             className="relative bg-[green w-full] p-2"
           >
-            <Tooltip>
+            {/* <Tooltip>
               <TooltipTrigger className="p-3 h-full min-h-36 max-w-56 min-w-0 w-48.5">
                 <Tooltip>
                   <TooltipTrigger
@@ -51,7 +45,7 @@ const MergePdfChildrenSection = () => {
                   <TooltipContent className="text-white">
                     <p>Remove File</p>
                   </TooltipContent>
-                </Tooltip>
+                </Tooltip> */}
                 <PdfRenderer
                   className={`p-3 w-min mx-auto my-auto`}
                   label={selectedFiles[index].fileName}
@@ -59,7 +53,7 @@ const MergePdfChildrenSection = () => {
                   pageNumber={"1"}
                   index={index}
                 />
-              </TooltipTrigger>
+              {/* </TooltipTrigger>
               <TooltipContent className="text-white">
                 <p className="text-[13px]">
                   {`${
@@ -69,8 +63,8 @@ const MergePdfChildrenSection = () => {
                       : Number(selectedFiles[index]?.fileSize / (1024 * 1024)).toFixed(2) + "MB"
                   }`}
                 </p>
-              </TooltipContent>
-            </Tooltip>
+              </TooltipContent> */}
+            {/* </Tooltip> */}
           </Reorder.Item>
         ))
       ) : (
