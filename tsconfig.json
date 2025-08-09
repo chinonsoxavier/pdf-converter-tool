@@ -1,43 +1,22 @@
 {
   "compilerOptions": {
-    // ...
+    "target": "ESNext",
+    "module": "ESNext",
+    "moduleResolution": "Bundler", 
     "jsx": "react-jsx",
+    "strict": true,
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "noEmit": true,
     "baseUrl": ".",
     "paths": {
-      "@/*": ["./src/*"]
+      "@/*": ["src/*"]
     },
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "target": "es2018",
-    "module": "CommonJS",
-        // "moduleResolution": "bundler",
-    "skipLibCheck": true // Skip type checking of all declaration files
-
-    //   "module": "NodeNext", // Changed from ESNext to NodeNext
-    //   "moduleResolution": "NodeNext" // Resolves rollup/parseAst and other ESM modules
-
-    //   // ...
-  }
+    "types": ["vite/client"],
+    "allowImportingTsExtensions": true,
+    "allowSyntheticDefaultImports": true
+  },
+  "include": ["src", "vite.config.ts"],
+  "exclude": ["node_modules", "dist"]
 }
-
-// {
-//   "compilerOptions": {
-//     // "target": "ES2020", // Supports private identifiers
-//     // "module": "NodeNext", // Matches moduleResolution setting
-//     // "moduleResolution": "nodenext", // Matches Vite's ESM behavior
-//     "jsx": "react-jsx", // For React 17+ JSX transform
-//     "esModuleInterop": true, // Fixes TS1259 errors
-//     "allowSyntheticDefaultImports": true, // Works with esModuleInterop
-//     "strict": true, // Recommended for type safety
-//     "skipLibCheck": true, // Avoids type conflicts in dependencies
-//     "forceConsistentCasingInFileNames": true,
-//     "noEmit": true, // Vite handles emission
-//     "types": ["vite/client", "node"], // Include Vite and Node types
-//     "baseUrl": ".",
-//     "paths": {
-//       "@/*": ["src/*"] // Optional: for aliasing src/ imports
-//     }
-//   },
-//   "include": ["src/**/*", "vite.config.ts"],
-//   "exclude": ["node_modules", "dist"]
-// }
