@@ -443,7 +443,7 @@ const ToolsSection = () => {
                   <TooltipTrigger className="w-full rounded-lg">
                     <div
                       onClick={() => {
-                        const targetPath = tool.label
+                        const targetPath = tool?.label
                           .toLocaleLowerCase()
                           .replace(/\s+/g, "_");
                         if (tool.isFree) {
