@@ -22,8 +22,8 @@ const OrganisePdf = () => {
             <div className="flex flex-wrap w-full pb-20 items-center justify-center h-full">
                     <DraggableGrid
                         label={selectedFiles[selectedIndex]?.fileName}
-                items={selectedFiles[selectedIndex]?.pdfPages}
-                setItems={setItems}
+                items={selectedFiles[selectedIndex]?.pdfPages ?? []}
+                setItems={setItems ?? (() => {}) }
                 file={selectedFiles[selectedIndex]?.fileUrl}
                 scale={1}
                 selectedIndex={selectedIndex}
