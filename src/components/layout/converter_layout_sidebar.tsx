@@ -64,7 +64,7 @@ const ConverterLayoutSidebar = ({ label, setProcessingTool, fileType, disabled, 
 
         </div>
         
-      <div className="px-6 w-full h-[12%]">
+      <div className="px-6 w-full center border-t h-[12%]">
         <Button disabled={disabled}
           onClick={() => setProcessingTool(true)}
           className="max-w-sm font-semibold text-lg sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center h w-full"

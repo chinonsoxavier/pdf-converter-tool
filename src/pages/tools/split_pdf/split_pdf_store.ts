@@ -85,7 +85,7 @@ const useSplitPdfStore = create<SplitPdfStore>((set) => ({
         { length: maxRanges },
         (_, index) => {
           const from = index * rangeSize + 1;
-          const to = Math.min(from + rangeSize - 1, numPages);
+          const to = Math.min(from + rangeSize - 1);
           return {
             name: `Range ${index + 1}`,
             from,

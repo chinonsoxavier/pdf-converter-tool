@@ -1,5 +1,4 @@
 import HowToSection from "@/components/landing/how_to_section";
-import ToolsSection from "@/components/landing/tools_section";
 import Footer from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -28,6 +27,7 @@ import SidemenuLyout from "@/components/layout/sidemenu_layout";
 import ConverterLayoutSidebar from "@/components/layout/converter_layout_sidebar";
 import useToolsStore from "@/pages/tools/tools_store";
 import PdfRenderer from "@/components/pdf_renderer";
+import { useNavigate } from "react-router-dom";
 // interface FilePickerCardProps {
 //   desc?: string;
 //   fileType?: string;
@@ -60,6 +60,8 @@ const ConverterLayout = ({
     selectedIndex,
   } = useToolsStore();
 
+  const navigate = useNavigate();
+  const [progress,setProgress] = useState(0);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [processingTool, setProcessingTool] = useState(false);
@@ -71,7 +73,7 @@ const ConverterLayout = ({
   }, [selectedFiles[0]?.numPages]);
   const variants1 = {
     inactive: {
-      y: 80,
+      y: 20,
       opacity: 0,
     },
     active: {
@@ -81,13 +83,50 @@ const ConverterLayout = ({
     },
   };
 
+
+  const handleSubmitFile = () => {
+    setProcessingTool(true);
+    setProgress(0);
+    // let interval: number;
+    const interval: number = setInterval(() => {
+      setProgress((prev) => {
+        if (prev >= 100) {
+          clearInterval(interval);
+             setProgress(100);
+             setProcessingTool(false);
+             navigate("download/hxdbhuabhsahvxas");
+          return 100;
+        }
+        if (prev > 80) {
+          return prev + Math.random() * 15; // Increment progress by 10%
+        }
+        return prev + Math.random() * 35;
+      });
+    }, 1500); // Update every 800ms
+
+ 
+  }
+
   // useEffect(() => {
-  //   setTimeout(() => {
-  //     setProcessingTool(false);
-  //     if (file) {
-  //       navigate("download/hxdbhuabhsahvxas");
-  //     }
-  //   }, 8000); // Simulate a delay for processing
+  //   let interval:number;
+  //   setProgress(0);
+  //   interval = setInterval(() => {
+  //     setProgress((prev) => {
+  //       if (prev >= 100) {
+  //         clearInterval(interval);
+  //         return 100;
+  //       }
+  //       return prev + 10; // Increment progress by 10%
+  //     });
+  //   }
+  //  });
+
+  // //   setTimeout(() => {
+  // //     setProcessingTool(false);
+  // //     if (selectedFiles[selectedIndex]?.fileUrl) {
+  // //       navigate("download/hxdbhuabhsahvxas");
+  // //     }
+  // //   }, 8000); // Simulate a delay for processing
   // }, [processingTool]);
 
   const handleButtonClick = () => {
@@ -124,7 +163,7 @@ const FileType =
 
       {/* main content */}
       {processingTool ? (
-        <ToolPageLoader convertingStateText={convertingStateText} />
+        <ToolPageLoader setProgress={setProgress} progress={progress} convertingStateText={convertingStateText} />
       ) : (
         <main className="w-full  min-h-lvh h-full dark:bg-primary">
           <div className="h-[12%]">
@@ -132,7 +171,7 @@ const FileType =
           </div>
           {!selectedFiles[selectedIndex] ? (
             <>
-              <div className="w-full flex-col  gradient center p-4 py-20 rounded-lg ">
+              <div className="w-full flex-col center p-4 py-20 rounded-lg ">
                 <motion.div
                   variants={variants1}
                   initial={"inactive"}
@@ -221,9 +260,6 @@ const FileType =
               {/* How to section */}
               <HowToSection />
 
-              {/* Tools Section */}
-              <ToolsSection />
-
               {/* Footer */}
               <Footer />
             </>
@@ -300,7 +336,7 @@ const FileType =
                 </div>
                 <Button
                   disabled={disabled}
-                  onClick={() => setProcessingTool(true)}
+                      onClick={() => { handleSubmitFile(); setProcessingTool(true)}}
                   className="max-w-sm font-semibold absolute bottom-10 left-10 sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center sm:hidden"
                   type="submit"
                 >

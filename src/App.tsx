@@ -3,7 +3,7 @@ import LandingPage from "./pages/landing/landing_page";
 import SignInPage from "./pages/(auth)/signin/signin_page";
 import SignUpPage from "./pages/(auth)/signup/signup_page";
 import ForgotPasswordPage from "./pages/(auth)/forgot-password/forgot_password_page";
-import { ThemeProvider } from "./components/theme_provider";
+// import { ThemeProvider } from "./components/theme_provider";
 import PdfToWordConverter from "./pages/tools/pdf_to_word/pdf_to_word_converter";
 import WordToPdfConverter from "./pages/tools/word_to_pdf/word_to_pdf_converter";
 import DashboardOverviewMainView from "./pages/dashboard/overview/overview_main_view";
@@ -22,11 +22,12 @@ import PdfToJpg from "@/pages/tools/pdf_to_jpg/pdf_to_jpg";
 import JpgToPdf from "@/pages/tools/jpg_to_pdf/jpg_to_pdf";
 import RotatePdf from "@/pages/tools/rotate_pdf/rotate_pdf";
 import OrganisePdf from "./pages/tools/organise_pdf/organise_pdf";
-// import ExtractPdf from "./pages/tools/extract_pdf/extract_pdf";
+import AppThemeProvider from "./components/theme_provider";
+import ExtractPdf from "./pages/tools/extract_pdf/extract_pdf";
 
 const App = () => {
   return (
-    <ThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+    <AppThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <ScrollManager smoothRestore={true} />
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -132,7 +133,7 @@ const App = () => {
         {/* end of organise pages */}
 
         {/* extract pages */}
-        {/* <Route path="/extract_pdf" element={<ExtractPdf />} /> */}
+        <Route path="/extract_pdf" element={<ExtractPdf />} />
         <Route
           path="/extract_pdf/download/:id"
           element={
@@ -177,7 +178,7 @@ const App = () => {
 
         {/* end of tools routes */}
       </Routes>
-    </ThemeProvider>
+    </AppThemeProvider>
   );
 };
 

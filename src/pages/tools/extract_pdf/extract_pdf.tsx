@@ -1,175 +1,28 @@
-// import ConverterLayout from "@/components/tools/layout_types/converter_layout";
-// import SplitPdfChildrenSection from "../../../components/tools/split_pdf/split_pdf_children_section";
-// import { Button } from "@/components/ui/button";
-// import { Input } from "@/components/ui/input";
-// import { Reorder } from "framer-motion";
-// import { ArrowRightLeftIcon, Move, Plus, XIcon } from "lucide-react";
-// import useToolsStore from "../tools_store";
-// // import { Reorder } from "motion/dist/react";
+import ConverterLayout from "@/components/tools/layout_types/converter_layout";
+import useToolsStore from "../tools_store";
+import ExtractPdfChildrenSection from "../../../components/tools/extract_pdf/extract_pdf_children_section";
 
-// const ExtractPdf = () => {
+const ExtractPdf = () => {
 
-//   const {selectedFiles}=useToolsStore()
+  const {selectedFiles}=useToolsStore()
  
 
-//   return (
-//     <ConverterLayout
-//       children={<SplitPdfChildrenSection />}
-//       actionButtonText="Split Pdf"
-//       label="Split PDF Files"
-//       desc="Separate one page or a whole set for easy conversion into independent PDF files."
-//       disabled={selectedFiles.length <= 1}
-//       convertingStateText="Spliting PDF files"
-//       actionMenuSideBar={
-//         <div className="w-full">
-//           <div className="center gap-4 p-4 py-6">
-//             <Button
-//               // onClick={() => setSelectedRange("custom")}
-//               size="sm"
-//               className="w-full"
-//               // variant={`${selectedRange === "custom" ? "default" : "outline"}`}
-//             >
-//               Custom Ranges
-//             </Button>
-//             <Button
-//               onClick={() => {
-//                 setSelectedRange("fixed");
-//                 setFixedRange(selectedFiles[selectedIndex]?.numPages, range);
-//               }}
-//               size="sm"
-//               className="w-full"
-//               variant={`${selectedRange === "fixed" ? "default" : "outline"}`}
-//             >
-//               Fixed Ranges
-//             </Button>
-//           </div>
-//           {selectedRange === "fixed" ? (
-//             <div className="space-y-3 p-4">
-//               <div className="space-y-3 gap-4 flex-col fle items-">
-//                 <p className="text-secondary-foreground font-medium">
-//                   Split into fixed ranges of:
-//                 </p>
-//                 <Input
-//                   defaultValue={range}
-//                   onChange={(e) => {
-//                     const value = parseInt(e.target.value);
-//                     if (value > 0) {
-//                       handleRangeChange(e);
-//                     }
-//                   }}
-//                   placeholder="Type a number..."
-//                 />
-//               </div>
-//               <div className="bg-secondary p-4 rounded">
-//                 <p className="text-secondary-foreground text-sm font-medium">
-//                   This PDF will be split into
-//                   {Math.round(selectedFiles[selectedIndex]?.numPages / range)}
-//                   different files
-//                 </p>
-//               </div>
-//             </div>
-//           ) : (
-//             <>
-//               <Reorder.Group
-//                 axis="y"
-//                 values={Ranges}
-//                 onReorder={reOrderRange}
-//                 className=""
-//               >
-//                 {Ranges.map((range, index) => (
-//                   <Reorder.Item
-//                     key={range.name}
-//                     value={range}
-//                     className="flex-shrink-0"
-//                     whileDrag={{
-//                       scale: 1.05,
-//                       // rotate: 2,
-//                       zIndex: 10,
-//                       boxShadow: "0 10px 25px rgba(0,0,0,0.15)",
-//                     }}
-//                     transition={{ type: "spring", stiffness: 300, damping: 30 }}
-//                   >
-//                     <div
-//                       key={index}
-//                       className="space-y-1.5 border-y pb-2 px-4 py-2 group hover:bg-secondary/30 cursor-move"
-//                     >
-//                       <div className="flex items-center justify-between py-1 px-2 rounded">
-//                         <div className="flex items-center gap-1 text-secondary-foreground justify-start">
-//                           <Move className="text-secondary-foreground w-4" />
-//                           <p className="font-medium">{range.name}</p>
-//                         </div>
-//                         <span>
-//                           <XIcon className="bg-white  group-hover:opacity-100 duration-700 x-20 opacity-0 rounded-full w-7 h-7 p-1" />
-//                         </span>
-//                       </div>
-//                       <div className="space-y-3">
-//                         <div className="flex pl-2 gap-3 items-center justify-center ">
-//                           <span className="whitespace-nowrap flex text-secondary-foreground font-medium">
-//                             From
-//                           </span>
-//                           <ArrowRightLeftIcon className="text-secondary-foreground h-6" />
-//                           <Input
-//                             onChange={(e) =>
-//                               handleUpdateRange(
-//                                 range.name,
-//                                 e.target.value,
-//                                 range.to.toString()
-//                               )
-//                             }
-//                             // min={1}
-//                             // value={range.from}
-//                             defaultValue={range.from}
-//                             className="outline-none"
-//                           />
-//                         </div>
+  return (
+    <ConverterLayout
+      children={<ExtractPdfChildrenSection />}
+      actionButtonText="Extract Pdf"
+      label="Extract PDF Files"
+      desc="Separate one page or a whole set for easy conversion into independent PDF files."
+      disabled={selectedFiles.length <= 1}
+      convertingStateText="Extracting PDF files"
+      actionMenuSideBar={
+        <div>
+          
+      </div>
+      }
+      //   buttonDisabled={}
+    />
+  );
+};
 
-//                         <div className="flex pl-2 min-w-10 gap-3 items-center justify-center ">
-//                           <span className="whitespace-now gap flex text-secondary-foreground font-medium">
-//                             To
-//                           </span>
-//                           <ArrowRightLeftIcon className="text-secondary-foreground h-6" />
-//                           <Input
-//                             // value={range.to}
-//                             onChange={(e) =>
-//                               parseInt(e.target.value) <=
-//                                 selectedFiles[selectedIndex]?.numPages &&
-//                               handleUpdateRange(
-//                                 range.name,
-//                                 range.from.toString(),
-//                                 e.target.value
-//                               )
-//                             }
-//                             // min={range.to}
-//                             max={selectedFiles[selectedIndex]?.numPages}
-//                             defaultValue={
-//                               selectedFiles[selectedIndex]?.numPages
-//                             }
-//                             className="outline-none"
-//                           />
-//                         </div>
-//                       </div>
-//                     </div>
-//                   </Reorder.Item>
-//                 ))}
-//               </Reorder.Group>
-
-//               <div className="flex py-4 itens-center justify-center">
-//                 <Button
-//                   onClick={handleAddRange}
-//                   variant="outline"
-//                   className="border-accent w-full text-accent mx-4"
-//                   size="sm"
-//                 >
-//                   <Plus /> Add Range
-//                 </Button>
-//               </div>
-//             </>
-//           )}
-//         </div>
-//       }
-//       //   buttonDisabled={}
-//     />
-//   );
-// };
-
-// export default ExtractPdf;
+export default ExtractPdf;

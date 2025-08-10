@@ -24,6 +24,7 @@ import {
   UnlockPdf,
   WordToPdf,
 } from "@/assets/svg/export";
+import { NavLink } from "react-router-dom";
 
 const SidemenuLyout = () => {
   const { sideMenuOpen } = useLandingStore();
@@ -154,12 +155,19 @@ const SidemenuLyout = () => {
                 {tool.label}
               </AccordionTrigger>
               {tool.tools.map((tool, toolIndex) => (
-                <AccordionContent
-                  key={toolIndex}
-                  className="flex text-base text-secondary-foreground font-medium items-start justify-start px-8 gap-2"
-                >
-                  <tool.icon size="sm" />
-                  {tool.label}
+                <AccordionContent key={toolIndex} className="flex text-base font-medium px-8">
+                  <NavLink
+                    className={({ isActive }) =>
+                      isActive
+                        ? " dark:bg-secondary bg-gray-100 flex my-2 py-2 duration-500 w-full items-start rounded gap-2 justify-start px-8"
+                        : "text-secondary-foreground hover:bg-secondary duration-500 flex py-2 w-full items-start rounded gap-2 justify-start px-8"
+                    }
+                    key={toolIndex}
+                    to={`/${tool.label.toLowerCase().replace(/\s+/g, "_")}`}
+                  >
+                    <tool.icon size="sm" />
+                    {tool.label}
+                  </NavLink>
                 </AccordionContent>
               ))}
             </AccordionItem>

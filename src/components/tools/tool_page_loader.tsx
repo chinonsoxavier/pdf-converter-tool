@@ -1,21 +1,27 @@
-import {  TailChase } from "ldrs/react";
-import "ldrs/react/TailChase.css";
+import { Progress } from "../ui/progress";
 
-// Default values shown
 const ToolPageLoader = ({
   convertingStateText,
+  progress,
 }: {
-  convertingStateText: string;
-}) => {
-  return (
-    <div className="h-full w-full py-20 flex itex items-center flex-col">
-      <h1 className="text-2xl text-primary-foreground text-center ">Logo</h1>
-      <h1 className="pb-10 pt-10 text-center text-3xl sm:text-[40px] text-secondary-foreground font-semibold">
-        {convertingStateText}
-      </h1>
-      <TailChase size="50" speed="1.75" color="#ce1c1c" />
-    </div>
-  );
-};
+    convertingStateText: string;
+    progress: number;
+    setProgress: (progress: number) => void;
+  }) => {
+
+  
+
+    return (
+      <div className="h-full w-full py-20 flex itex max-w-lg px-8 mx-auto items-center flex-col">
+        <h1 className="text-2xl text-primary-foreground text-center ">
+          PDFNest
+        </h1>
+        <h1 className="pb-10 pt-10 text-center text-3xl sm:text-[40px] text-secondary-foreground font-semibold">
+          {convertingStateText}
+        </h1>
+        <Progress value={progress} />
+      </div>
+    );
+  };
 
 export default ToolPageLoader;

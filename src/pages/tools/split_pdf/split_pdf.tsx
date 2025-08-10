@@ -18,7 +18,7 @@ const SplitPdf = () => {
     updateRange,
     setFixedRange,
   } = useSplitPdfStore();
-  const [range, setRange] = useState<number>(2);
+  const [range, setRange] = useState<number>(1);
   const handleUpdateRange = (name: string, from: string, to: string) => {
     const fromNum = parseInt(
       from,
@@ -124,10 +124,10 @@ const SplitPdf = () => {
               </div>
               <div className="bg-secondary p-4 rounded">
                 <p className="text-secondary-foreground text-sm font-medium">
-                  This PDF will be split into
+                  This PDF will be split into{" "}
                   {Math.round(
                     selectedFiles[selectedIndex]?.numPages ?? 0 / range
-                  )}
+                  )}{" "}
                   different files
                 </p>
               </div>
@@ -169,7 +169,7 @@ const SplitPdf = () => {
                       <div className="space-y-3">
                         <div className="flex pl-2 gap-3 items-center justify-center ">
                           <span className="whitespace-nowrap flex text-secondary-foreground font-medium">
-                            From {range.from}
+                            From
                           </span>
                           <ArrowRightLeftIcon className="text-secondary-foreground h-6" />
                           {range.name}
@@ -191,7 +191,7 @@ const SplitPdf = () => {
 
                         <div className="flex pl-2 min-w-10 gap-3 items-center justify-center ">
                           <span className="whitespace-now gap flex text-secondary-foreground font-medium">
-                            To {range.to}
+                            To
                           </span>
                           <ArrowRightLeftIcon className="text-secondary-foreground h-6" />
                           <Input
@@ -233,7 +233,6 @@ const SplitPdf = () => {
           )}
         </div>
       }
-      //   buttonDisabled={}
     />
   );
 };

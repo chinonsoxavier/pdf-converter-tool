@@ -93,7 +93,8 @@ const GetPremiumSection = () => {
         variants={variants4}
         initial={"inactive"}
         whileInView={"active"}
-        viewport={{ once: true }}
+          viewport={{ once: true }}
+          className="hidden sm:block"
         >
         <svg
           className="sm:w-96 sm:h-72"
