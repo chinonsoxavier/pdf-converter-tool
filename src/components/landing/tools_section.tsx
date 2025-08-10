@@ -4,6 +4,7 @@ import {
   CloudUpload,
   EditPdf,
   ExtractPages,
+  ISvgIconComponent,
   JPGTOPDF,
   LockPdf,
   MergePdf,
@@ -76,6 +77,226 @@ const ToolsSection = () => {
     },
   };
  
+interface Tool {
+  label: string;
+  icon: React.FC<Partial<ISvgIconComponent>>; // Define icon as a functional component
+  isFree: boolean;
+  info: string;
+  category: string;
+  color: string; 
+}
+  const Tools: Tool[] = [
+    {
+      label: "PDF to Word",
+      icon: PdfToWord,
+      isFree: true,
+      info: "Convert PDFs to editable Word documents",
+      category: "convert",
+      color: "#f2f9fe",
+    },
+    {
+      label: "Word to PDF",
+      icon: WordToPdf,
+      isFree: true,
+      info: "Convert Word documents to PDF",
+      color: "#f2f9fe",
+      category: "convert",
+    },
+    {
+      label: "Merge PDF",
+      icon: MergePdf,
+      isFree: true,
+      info: "Combine multiple PDF files",
+      color: "#f2f9fe",
+      category: "organize",
+    },
+    {
+      label: "Split PDF",
+      icon: SplitPdf,
+      isFree: true,
+      info: "Split multiple PDF files",
+      color: "#f2f9fe",
+      category: "organize",
+    },
+    {
+      label: "Compress PDF",
+      icon: PdfToWord,
+      isFree: true,
+      info: "Reduce file size without losing quality",
+      color: "#f2f9fe",
+      category: "enhance",
+    },
+    {
+      label: "PDF to Jpg",
+      icon: PdfToJpg,
+      isFree: true,
+      info: "Convert PDFs to Jpg images",
+      color: "#f2f9fe",
+      category: "convert",
+    },
+    {
+      label: "Jpg to Pdf",
+      icon: JPGTOPDF,
+      isFree: true,
+      info: "Convert images to PDFs",
+      color: "#f2f9fe",
+      category: "convert",
+    },
+    {
+      label: "Rotate PDF",
+      icon: RotatePdf,
+      isFree: true,
+      info: "Rotate one or more pages",
+      color: "#f2f9fe",
+      category: "edit",
+    },
+    {
+      label: "Organise Pdf",
+      icon: OrganisePdf,
+      isFree: true,
+      info: "Drag & drop rearrangement of pdf pages",
+      color: "#f2f9fe",
+      category: "organize",
+    },
+    {
+      label: "Extract Pages",
+      icon: ExtractPages,
+      isFree: true,
+      info: "Drag & drop rearrangement of pages",
+      color: "#f2f9fe",
+      category: "organize",
+    },
+    {
+      label: "Delete Pages",
+      icon: RemovePages,
+      isFree: true,
+      info: "Remove unwanted pages from PDF",
+      color: "#f2f9fe",
+      category: "organize",
+    },
+    {
+      label: "Add Page Numbers",
+      icon: AddPagesToPdf,
+      isFree: true,
+      info: "Insert page numbers automatically",
+      color: "#f2f9fe",
+      category: "edit",
+    },
+    {
+      label: "Add Header/Footer",
+      icon: AddHeaderFooter,
+      isFree: true,
+      info: "Insert simple text headers or footers",
+      color: "#f2f9fe",
+      category: "edit",
+    },
+    {
+      label: "Preview PDF",
+      icon: PreviewPdf,
+      isFree: true,
+      info: "Built-in viewer for PDF file previews",
+      color: "#f2f9fe",
+      category: "edit",
+    },
+    {
+      label: "OCR",
+      icon: OcrPdf,
+      isFree: false,
+      info: "Turn scanned PDFs/images into editable text",
+      color: "#f2f9fe",
+      category: "edit",
+    },
+    {
+      label: "PDF",
+      icon: EditPdf,
+      isFree: false,
+      info: "Modify text, images, or layout directly",
+      color: "#f2f9fe",
+      category: "edit",
+    },
+    {
+      label: "Password Protect PDF",
+      icon: LockPdf,
+      isFree: false,
+      info: "Encrypt PDFs with user-defined password",
+      color: "#f2f9fe",
+      category: "secure",
+    },
+    {
+      label: "Unlock PDF",
+      icon: UnlockPdf,
+      isFree: false,
+      info: "Remove passwords (if permitted)",
+      color: "#f2f9fe",
+      category: "secure",
+    },
+    {
+      label: "E-Signature Workflow",
+      icon: SignPdf,
+      isFree: false,
+      info: "Add or request signatures from others",
+      color: "#f2f9fe",
+      category: "secure",
+    },
+    {
+      label: "Create Fillable Forms",
+      icon: SignPdf,
+      isFree: false,
+      info: "Add form fields: checkboxes, dropdowns, etc",
+      color: "#f2f9fe",
+      category: "edit",
+    },
+    {
+      label: "Batch Tools",
+      icon: SignPdf,
+      isFree: false,
+      info: "Apply merge, compress, etc. to many files at once",
+      category: "all-tools", // Optional: can be removed or changed
+      color: "#f2f9fe",
+    },
+    {
+      label: "Redact PDF",
+      icon: RedactPdf,
+      isFree: false,
+      info: "Permanently remove sensitive information",
+      category: "secure",
+      color: "#f2f9fe",
+    },
+    {
+      label: "Convert PDF to Excel",
+      icon: PdfToExcell,
+      isFree: false,
+      info: "Accurate table extraction",
+      category: "convert",
+      color: "#f2f9fe",
+    },
+    {
+      label: "Convert PDF to PowerPoint",
+      icon: PdfToPowerpoint,
+      isFree: false,
+      info: "Slide-based conversion",
+      color: "#f2f9fe",
+      category: "convert",
+    },
+    {
+      label: "High-Resolution PDF to Image",
+      icon: PdfToImage,
+      isFree: false,
+      info: "Convert High-Resolution PDF to Image(300–600 DPI export)",
+      category: "convert",
+      color: "#f2f9fe",
+    },
+    {
+      label: "Cloud Integration",
+      icon: CloudUpload,
+      isFree: false,
+      info: "Upload/Save directly from Google Drive, Dropbox, OneDrive",
+      category: "all-tools", // Optional: can be removed or changed
+      color: "#f2f9fe",
+    },
+  ];
+
+
   const variants3 = {
     inactive: {
       y: 120,
@@ -223,198 +444,11 @@ const ToolsSection = () => {
         </div>
       </motion.div>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-1.5 sm:gap-3 pb-12 sm:pb-20 w-full mt-4">
-        {[
-          {
-            label: "PDF to Word",
-            icon: PdfToWord,
-            isFree: true,
-            info: "Convert PDFs to editable Word documents",
-            category: "convert",
-          },
-          {
-            label: "Word to PDF",
-            icon: WordToPdf,
-            isFree: true,
-            info: "Convert Word documents to PDF",
-            category: "convert",
-          },
-          {
-            label: "Merge PDF",
-            icon: MergePdf,
-            isFree: true,
-            info: "Combine multiple PDF files",
-            category: "organize",
-          },
-          {
-            label: "Split PDF",
-            icon: SplitPdf,
-            isFree: true,
-            info: "Split multiple PDF files",
-            category: "organize",
-          },
-          {
-            label: "Compress PDF",
-            icon: PdfToWord,
-            isFree: true,
-            info: "Reduce file size without losing quality",
-            category: "enhance",
-          },
-          {
-            label: "PDF to Jpg",
-            icon: PdfToJpg,
-            isFree: true,
-            info: "Convert PDFs to Jpg images",
-            category: "convert",
-          },
-          {
-            label: "Jpg to Pdf",
-            icon: JPGTOPDF,
-            isFree: true,
-            info: "Convert images to PDFs",
-            category: "convert",
-          },
-          {
-            label: "Rotate PDF",
-            icon: RotatePdf,
-            isFree: true,
-            info: "Rotate one or more pages",
-            category: "edit",
-          },
-          {
-            label: "Organise Pages",
-            icon: OrganisePdf,
-            isFree: true,
-            info: "Drag & drop rearrangement of pages",
-            category: "organize",
-          },
-          {
-            label: "Extract Pages",
-            icon: ExtractPages,
-            isFree: true,
-            info: "Drag & drop rearrangement of pages",
-            category: "organize",
-          },
-          {
-            label: "Delete Pages",
-            icon: RemovePages,
-            isFree: true,
-            info: "Remove unwanted pages from PDF",
-            category: "organize",
-          },
-          {
-            label: "Add Page Numbers",
-            icon: AddPagesToPdf,
-            isFree: true,
-            info: "Insert page numbers automatically",
-            category: "edit",
-          },
-          {
-            label: "Add Header/Footer",
-            icon: AddHeaderFooter,
-            isFree: true,
-            info: "Insert simple text headers or footers",
-            category: "edit",
-          },
-          {
-            label: "Preview PDF",
-            icon: PreviewPdf,
-            isFree: true,
-            info: "Built-in viewer for PDF file previews",
-            category: "edit",
-          },
-          {
-            label: "OCR",
-            icon: OcrPdf,
-            isFree: false,
-            info: "Turn scanned PDFs/images into editable text",
-            category: "edit",
-          },
-          {
-            label: "PDF",
-            icon: EditPdf,
-            isFree: false,
-            info: "Modify text, images, or layout directly",
-            category: "edit",
-          },
-          {
-            label: "Password Protect PDF",
-            icon: LockPdf,
-            isFree: false,
-            info: "Encrypt PDFs with user-defined password",
-            category: "secure",
-          },
-          {
-            label: "Unlock PDF",
-            icon: UnlockPdf,
-            isFree: false,
-            info: "Remove passwords (if permitted)",
-            category: "secure",
-          },
-          {
-            label: "E-Signature Workflow",
-            icon: SignPdf,
-            isFree: false,
-            info: "Add or request signatures from others",
-            category: "secure",
-          },
-          {
-            label: "Create Fillable Forms",
-            icon: SignPdf,
-            isFree: false,
-            info: "Add form fields: checkboxes, dropdowns, etc",
-            category: "edit",
-          },
-          {
-            label: "Batch Tools",
-            icon: SignPdf,
-            isFree: false,
-            info: "Apply merge, compress, etc. to many files at once",
-            category: "all-tools", // Optional: can be removed or changed
-          },
-          {
-            label: "Redact PDF",
-            icon: RedactPdf,
-            isFree: false,
-            info: "Permanently remove sensitive information",
-            category: "secure",
-          },
-          {
-            label: "Convert PDF to Excel",
-            icon: PdfToExcell,
-            isFree: false,
-            info: "Accurate table extraction",
-            category: "convert",
-          },
-          {
-            label: "Convert PDF to PowerPoint",
-            icon: PdfToPowerpoint,
-            isFree: false,
-            info: "Slide-based conversion",
-            category: "convert",
-          },
-          {
-            label: "High-Resolution PDF to Image",
-            icon: PdfToImage,
-            isFree: false,
-            info: "Convert High-Resolution PDF to Image(300–600 DPI export)",
-            category: "convert",
-          },
-          {
-            label: "Cloud Integration",
-            icon: CloudUpload,
-            isFree: false,
-            info: "Upload/Save directly from Google Drive, Dropbox, OneDrive",
-            category: "all-tools", // Optional: can be removed or changed
-          },
-          {
-            category: "more", // Optional: can be removed or changed
-          },
-        ]
-
+        {Tools
           .slice(0, -1) // Ensure you don't include the last empty object
           .filter(
             (tool) =>
-              tool.label && tool.label.toLowerCase().includes(searchQuery)
+              tool.label && tool.label?.toLowerCase()?.includes(searchQuery)
           ) // Ensure label exists
           .filter(
             (tool) =>
@@ -436,7 +470,7 @@ const ToolsSection = () => {
                 data-color={randomColor}
                 className={cn(
                   `w-full relative center tools flex-col border rounded-lg`,
-                  `theme-${randomIndex}`
+                  `bg-[${tool.color}]`
                 )}
               >
                 <Tooltip key={index}>

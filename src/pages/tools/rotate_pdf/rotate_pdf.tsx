@@ -71,7 +71,7 @@ const RotatePdf = () => {
                   onClick={() =>
                     setRotateLeft(
                       selectedIndex,
-                      selectedFiles[selectedIndex]?.numPages
+                      selectedFiles[selectedIndex]?.numPages ?? 0
                     )
                   }
                   variant="secondary"
@@ -85,7 +85,7 @@ const RotatePdf = () => {
                   onClick={() =>
                     setRotateRight(
                       selectedIndex,
-                      selectedFiles[selectedIndex]?.numPages
+                      selectedFiles[selectedIndex]?.numPages ?? 0
                     )
                   }
                   variant="secondary"

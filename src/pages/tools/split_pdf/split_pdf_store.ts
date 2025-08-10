@@ -29,7 +29,7 @@ const useSplitPdfStore = create<SplitPdfStore>((set) => ({
     set(() => ({ selectedRange: newRange })),
   addRange: (newRange: IRanges) =>
     set((state) => ({ Ranges: [...state.Ranges, newRange] })),
-  
+
   // setFixedRange: (numPages: number, range: number) =>
   //   set(() => {
   //     // Calculate max ranges: each range covers 2 pages (e.g., 1-2, 3-4)
@@ -51,28 +51,50 @@ const useSplitPdfStore = create<SplitPdfStore>((set) => ({
   //           : [],
   //     };
   //   }),
+  // setFixedRange: (numPages: number, rangeSize: number) =>
+  //   set(() => {
+  //     if (numPages <= 0 || rangeSize <= 0) {
+  //       return { fixedRange: [] };
+  //     }
+  //     const maxRanges = Math.ceil(numPages / rangeSize);
+  //     return  {
+  //       fixedRange: rangeSize -1 *rangeSize < numPages && Array.from({ length: maxRanges }, (_, index) => {
+  //         const from = index * rangeSize + 1;
+  //         const to = from + rangeSize >= numPages ? numPages : Math.min(from + rangeSize - 1, numPages);
+  //         // if (from + rangeSize <= numPages) {
+  //           return {
+  //             name: `Range ${index + 1}`,
+  //             from,
+  //             to,
+
+  //           };
+  //         // };
+  //         // return ;
+  //       // from + rangeSize <= numPages ?
+  //       }),
+  //     };
+  //   }),
   setFixedRange: (numPages: number, rangeSize: number) =>
     set(() => {
       if (numPages <= 0 || rangeSize <= 0) {
-        return { fixedRange: [] };
+        return { fixedRange: [] }; // Return empty array for invalid inputs
       }
+
       const maxRanges = Math.ceil(numPages / rangeSize);
-      return  {
-        fixedRange: rangeSize -1 *rangeSize < numPages && Array.from({ length: maxRanges }, (_, index) => {
+      const fixedRange: IRanges[] = Array.from(
+        { length: maxRanges },
+        (_, index) => {
           const from = index * rangeSize + 1;
-          const to = from + rangeSize >= numPages ? numPages : Math.min(from + rangeSize - 1, numPages);
-          // if (from + rangeSize <= numPages) {
-            return {
-              name: `Range ${index + 1}`,
-              from,
-              to,
-              
-            };
-          // };
-          // return ;
-        // from + rangeSize <= numPages ? 
-        }),
-      };
+          const to = Math.min(from + rangeSize - 1, numPages);
+          return {
+            name: `Range ${index + 1}`,
+            from,
+            to,
+          };
+        }
+      );
+
+      return { fixedRange };
     }),
   updateRange: (newRange: IRanges, name: string) =>
     set((state) => ({

@@ -1,5 +1,5 @@
 import ConverterLayout from "@/components/tools/layout_types/converter_layout";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import useSplitPdfStore from "./split_pdf_store";
 import SplitPdfChildrenSection from "../../../components/tools/split_pdf/split_pdf_children_section";
 import { Button } from "@/components/ui/button";
@@ -20,39 +20,53 @@ const SplitPdf = () => {
   } = useSplitPdfStore();
   const [range, setRange] = useState<number>(2);
   const handleUpdateRange = (name: string, from: string, to: string) => {
-    const fromNum = parseInt(from, 10);
-    const toNum = parseInt(to, 10);
+    const fromNum = parseInt(
+      from,
+      selectedFiles[selectedIndex ?? 0].numPages ?? 1
+    );
+    const toNum = parseInt(to, selectedFiles[selectedIndex ?? 0].numPages ?? 1);
 
-    // Validate inputs to prevent NaN or invalid ranges
-    if (isNaN(fromNum) || isNaN(toNum) || fromNum < 1 || toNum < fromNum) {
-      console.warn("Invalid range input:", { from, to });
-      return; // Or set default values, e.g., fromNum = 1, toNum = 1
-    }
+    // // Validate inputs to prevent NaN or invalid ranges
+    // if (isNaN(fromNum) || isNaN(toNum) || fromNum < 1 || toNum >= ( selectedFiles[selectedIndex ??0]?.numPages || 0)) {
+    //   // console.warn("Invalid range input:", { from, to });
+    //   return; // Or set default values, e.g., fromNum = 1, toNum = 1
+    // }
 
     updateRange({ name, from: fromNum, to: toNum }, name);
   };
   const { selectedFiles, selectedIndex } = useToolsStore();
   const { reOrderRange } = useSplitPdfStore();
-
-  window.addEventListener("DOMContentLoaded", () => {
+  useEffect(() => {
     updateRange(
-      { name: "Range 1", from: 1, to: selectedFiles[selectedIndex]?.numPages },
+      {
+        name: "Range 1",
+        from: 1,
+        to: selectedFiles[selectedIndex]?.numPages ?? 1,
+      },
       "Range 1"
     );
-  });
+    console.log(selectedFiles[selectedIndex]?.fileName);
+  }, [selectedIndex, selectedFiles[selectedIndex ?? 0]?.numPages]);
+
+  // window.addEventListener("DOMContentLoaded", () => {
+  //   updateRange(
+  //     { name: "Range 1", from: 1, to: selectedFiles[selectedIndex]?.numPages ?? 1 },
+  //     "Range 1"
+  //   );
+  // });
 
   const handleAddRange = () => {
     addRange({
       name: `Range ${Ranges.length + 1}`,
       from: 1,
-      to: selectedFiles[selectedIndex]?.numPages,
+      to: selectedFiles[selectedIndex]?.numPages ?? 1,
     });
   };
 
   const handleRangeChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     setRange(parseInt(e.target.value));
     setFixedRange(
-      selectedFiles[selectedIndex]?.numPages,
+      selectedFiles[selectedIndex]?.numPages ?? 0,
       parseInt(e.target.value)
     );
   };
@@ -79,7 +93,10 @@ const SplitPdf = () => {
             <Button
               onClick={() => {
                 setSelectedRange("fixed");
-                setFixedRange(selectedFiles[selectedIndex]?.numPages, range);
+                setFixedRange(
+                  selectedFiles[selectedIndex]?.numPages ?? 0,
+                  range
+                );
               }}
               size="sm"
               className="w-full"
@@ -108,7 +125,9 @@ const SplitPdf = () => {
               <div className="bg-secondary p-4 rounded">
                 <p className="text-secondary-foreground text-sm font-medium">
                   This PDF will be split into
-                  {Math.round(selectedFiles[selectedIndex]?.numPages / range)}
+                  {Math.round(
+                    selectedFiles[selectedIndex]?.numPages ?? 0 / range
+                  )}
                   different files
                 </p>
               </div>
@@ -150,11 +169,13 @@ const SplitPdf = () => {
                       <div className="space-y-3">
                         <div className="flex pl-2 gap-3 items-center justify-center ">
                           <span className="whitespace-nowrap flex text-secondary-foreground font-medium">
-                            From
+                            From {range.from}
                           </span>
                           <ArrowRightLeftIcon className="text-secondary-foreground h-6" />
+                          {range.name}
                           <Input
                             onChange={(e) =>
+                              parseInt(e.target.value) > 0 &&
                               handleUpdateRange(
                                 range.name,
                                 e.target.value,
@@ -170,14 +191,14 @@ const SplitPdf = () => {
 
                         <div className="flex pl-2 min-w-10 gap-3 items-center justify-center ">
                           <span className="whitespace-now gap flex text-secondary-foreground font-medium">
-                            To
+                            To {range.to}
                           </span>
                           <ArrowRightLeftIcon className="text-secondary-foreground h-6" />
                           <Input
                             // value={range.to}
                             onChange={(e) =>
-                              parseInt(e.target.value) <=
-                                selectedFiles[selectedIndex]?.numPages &&
+                              parseInt(e.target.value) <
+                                (selectedFiles[selectedIndex]?.numPages ?? 0) &&
                               handleUpdateRange(
                                 range.name,
                                 range.from.toString(),
@@ -185,8 +206,10 @@ const SplitPdf = () => {
                               )
                             }
                             // min={range.to}
-                            max={selectedFiles[selectedIndex]?.numPages}
-                            defaultValue={selectedFiles[selectedIndex]?.numPages}
+                            // max={selectedFiles[selectedIndex]?.numPages+1}
+                            defaultValue={
+                              selectedFiles[selectedIndex]?.numPages
+                            }
                             className="outline-none"
                           />
                         </div>

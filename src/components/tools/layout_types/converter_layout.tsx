@@ -34,7 +34,7 @@ import PdfRenderer from "@/components/pdf_renderer";
 //   onFileSelect?: (file: File) => void;
 // }
 const ConverterLayout = ({
-  disabled,
+  disabled=false,
   children,
   actionButtonText,
   actionMenuSideBar,
@@ -100,7 +100,10 @@ const ConverterLayout = ({
     const file = event.target.files?.[0];
     const allowedFileTypes = fileType;
     if (file) {
-      const FileType = file.name.split(".").pop().toString();
+const FileType =
+  file && file.name
+    ? file.name.split(".").pop()?.toString() ?? "unknown"
+          : "unknown";
       if (!fileType || !allowedFileTypes.includes(FileType)) {
            if (fileInputRef.current) {
           fileInputRef.current.value = ""; // Clear the input value
@@ -135,19 +138,12 @@ const ConverterLayout = ({
                   initial={"inactive"}
                   whileInView={"active"}
                   viewport={{ once: true }}
-                >
-                  <h1 className="text-3xl sm:text-4xl sm:text-left text-center text-primary-foreground font-medium">
-                    {label}
-                  </h1>
-                </motion.div>
-                <motion.div
-                  variants={variants1}
-                  initial={"inactive"}
-                  whileInView={"active"}
-                  viewport={{ once: true }}
                   className="w-full mx-auto center"
                 >
-                  <Card className="sm:p-10 p-6 bg-secondary/30 dark:border-primary border-dashed border-accent border-2 w-full center gap-3 sm:gap-5 max-w-xl my-10">
+                  <Card className="sm:p-10 p-6 bg-secondary/30 dark:border-primary border-dashed border-accent border-2 w-full center gap-3 sm:gap-5 max-w-3xl my-0">
+                  <h1 className="text-3xl sm:text-4xl sm:text-left text-center text-secondary-foreground font-semibold">
+                    {label}
+                  </h1>
                     <h1 className="text-secondary-foreground dark:text-secondary-foreground text-center text-lg sm:text-xl sm:mb-5">
                       {desc}
                     </h1>

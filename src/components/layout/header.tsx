@@ -31,10 +31,11 @@ import {
   WaterMarkPdf,
   WordToPdf,
 } from "@/assets/svg/export";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { ModeToggle } from "../mode_toggle";
 import { motion } from "motion/react";
 import useLandingStore from "@/pages/landing/store/landing_store";
+import { cn } from "@/lib/utils";
 
 const Header: React.FC = () => {
   const variants1 = {
@@ -92,16 +93,35 @@ const Header: React.FC = () => {
         className=""
       >
         <ul className="gap-3 hidden md:flex dark:text-white text-light-text">
-          <li className="cursor-pointer hidden lg:block font-semibold text-[15px]">
-            MERGE PDF
+          <li
+            className={cn(
+              "cursor-pointer hidden lg:block font-bold text-[15px]"
+            )}
+          >
+            <NavLink
+              to="/merge_pdf"
+              className={({ isActive }) => (isActive ? "text-accent" : "")}
+            >
+              MERGE PDF
+            </NavLink>
           </li>
-          <li className="cursor-pointer hidden large:block font-semibold text-[15px]">
-            SPLIT PDF
+          <li className="cursor-pointer hidden large:block font-bold text-[15px]">
+            <NavLink
+              to="/split_pdf"
+              className={({ isActive }) => (isActive ? "text-accent" : "")}
+            >
+              SPLIT PDF
+            </NavLink>
           </li>
-          <li className="cursor-pointer hidden medium:block font-semibold text-[15px]">
-            COMPRESS PDF
+          <li className="cursor-pointer hidden medium:block font-bold text-[15px]">
+            <NavLink
+              to="/compress_pdf"
+              className={({ isActive }) => (isActive ? "text-accent" : "")}
+            >
+              COMPRESS PDF
+            </NavLink>
           </li>
-          <li className="cursor-pointer font-semibold text-[15px]">
+          <li className="cursor-pointer font-bold text-[15px]">
             <HoverCard>
               <HoverCardTrigger className="flex items-center justify-center">
                 CONVERT PDF
@@ -113,7 +133,7 @@ const Header: React.FC = () => {
               <HoverCardContent className="mt-10 w-full px-8 before:border-input before:border relative after:rounded-lg z-30 after:-z-10 after:absolute after:bg-white after:inset-0 flex items-center justify-center before:top-0 before:-z-50 before:rotate-45 before:absolute before:bg-white before:w-12 before:h-12 before:">
                 <div className="flex gap-8 space-y-3 w-full items-start justify-between">
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-light-text text-[15px] whitespace-nowrap">
                       CONVERT TO PDF
                     </h3>
                     {[
@@ -134,19 +154,26 @@ const Header: React.FC = () => {
                         icon: ExcelToPdf,
                       },
                     ].map((tool, index) => (
-                      <div
+                      <NavLink
                         key={index}
-                        className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
+                        to={`/${tool.label.toLowerCase().replace(/\s+/g, "_")}`}
+                        className={({ isActive }) =>
+                          isActive
+                            ? "text-accent dark:bg-gray-700 bg-gray-100"
+                            : "text-secondary-foreground"
+                        }
                       >
-                        <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
-                          {tool.label}
-                        </p>
-                      </div>
+                        <div className="flex text-inherit cursor-pointer items-center justify-start gap-3 py-2 rounded px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none">
+                          <tool.icon size="sm" />
+                          <p className="whitespace-nowrap text-sm font-bold text-inherit">
+                            {tool.label}
+                          </p>
+                        </div>
+                      </NavLink>
                     ))}
                   </div>
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-light-text text-[15px] whitespace-nowrap">
                       CONVERT FROM PDF
                     </h3>
                     {[
@@ -167,22 +194,29 @@ const Header: React.FC = () => {
                         icon: PdfToExcell,
                       },
                     ].map((tool, index) => (
-                      <div
+                      <NavLink
                         key={index}
-                        className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
+                        to={`/${tool.label.toLowerCase().replace(/\s+/g, "_")}`}
+                        className={({ isActive }) =>
+                          isActive
+                            ? "text-accent dark:bg-gray-700 bg-gray-100"
+                            : "text-secondary-foreground"
+                        }
                       >
-                        <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
-                          {tool.label}
-                        </p>
-                      </div>
+                        <div className="flex text-inherit cursor-pointer items-center justify-start gap-3 py-2 rounded px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none">
+                          <tool.icon size="sm" />
+                          <p className="whitespace-nowrap text-sm font-bold text-inherit">
+                            {tool.label}
+                          </p>
+                        </div>
+                      </NavLink>
                     ))}
                   </div>
                 </div>
               </HoverCardContent>
             </HoverCard>
           </li>
-          <li className="cursor-pointer font-semibold text-[15px]">
+          <li className="cursor-pointer font-bold text-[15px]">
             <HoverCard>
               <HoverCardTrigger className="flex items-center justify-center">
                 ALL PDF TOOLS
@@ -194,7 +228,7 @@ const Header: React.FC = () => {
               <HoverCardContent className="mt-10 w-full px-8 before:border-input before:border relative after:rounded-lg z-30 after:-z-10 after:absolute after:bg-white after:inset-0 flex items-center justify-center before:top-0 before:-z-50 before:rotate-45 before:absolute before:bg-white before:w-12 before:h-12 before:">
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] max-w-4xl gap-8 flex-wrap  space-y-3 w-full items-start text-dark-text justify-between">
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-light-text text-[15px] whitespace-nowrap">
                       ORGANISE PDF
                     </h3>
                     {[
@@ -219,19 +253,26 @@ const Header: React.FC = () => {
                         icon: OrganisePdf,
                       },
                     ].map((tool, index) => (
-                      <div
+                     <NavLink
                         key={index}
-                        className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
+                        to={`/${tool.label.toLowerCase().replace(/\s+/g, "_")}`}
+                        className={({ isActive }) =>
+                          isActive
+                            ? "text-accent dark:bg-gray-700 bg-gray-100"
+                            : "text-secondary-foreground"
+                        }
                       >
-                        <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-[13px] text-dark-text font-semibold">
-                          {tool.label}
-                        </p>
-                      </div>
+                        <div className="flex text-inherit cursor-pointer items-center justify-start gap-3 py-2 rounded px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none">
+                          <tool.icon size="sm" />
+                          <p className="whitespace-nowrap text-sm font-bold text-inherit">
+                            {tool.label}
+                          </p>
+                        </div>
+                      </NavLink>
                     ))}
                   </div>
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-light-text text-[15px] whitespace-nowrap">
                       OPTIMIZE PDF
                     </h3>
                     {[
@@ -248,19 +289,26 @@ const Header: React.FC = () => {
                         icon: OcrPdf,
                       },
                     ].map((tool, index) => (
-                      <div
+                     <NavLink
                         key={index}
-                        className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
+                        to={`/${tool.label.toLowerCase().replace(/\s+/g, "_")}`}
+                        className={({ isActive }) =>
+                          isActive
+                            ? "text-accent dark:bg-gray-700 bg-gray-100"
+                            : "text-secondary-foreground"
+                        }
                       >
-                        <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-[13px] text-dark-text font-semibold">
-                          {tool.label}
-                        </p>
-                      </div>
+                        <div className="flex text-inherit cursor-pointer items-center justify-start gap-3 py-2 rounded px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none">
+                          <tool.icon size="sm" />
+                          <p className="whitespace-nowrap text-sm font-bold text-inherit">
+                            {tool.label}
+                          </p>
+                        </div>
+                      </NavLink>
                     ))}
                   </div>
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-light-text text-[15px] whitespace-nowrap">
                       CONVERT TO PDF
                     </h3>
 
@@ -287,7 +335,7 @@ const Header: React.FC = () => {
                         className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
                       >
                         <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
+                        <p className="whitespace-nowrap text-sm font-bold text-light-text">
                           {tool.label}
                         </p>
                       </div>
@@ -295,7 +343,7 @@ const Header: React.FC = () => {
                   </div>
 
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-light-text text-[15px] whitespace-nowrap">
                       CONVERT FROM PDF
                     </h3>
                     {[
@@ -321,7 +369,7 @@ const Header: React.FC = () => {
                         className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
                       >
                         <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
+                        <p className="whitespace-nowrap text-sm font-bold text-light-text">
                           {tool.label}
                         </p>
                       </div>
@@ -329,7 +377,7 @@ const Header: React.FC = () => {
                   </div>
 
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-light-text text-[15px] whitespace-nowrap">
                       Edit PDF
                     </h3>
                     {[
@@ -355,14 +403,14 @@ const Header: React.FC = () => {
                         className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
                       >
                         <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
+                        <p className="whitespace-nowrap text-sm font-bold text-light-text">
                           {tool.label}
                         </p>
                       </div>
                     ))}
                   </div>
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-light-text text-[15px] whitespace-nowrap">
                       PDF SECURITY
                     </h3>
                     {[
@@ -388,7 +436,7 @@ const Header: React.FC = () => {
                         className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
                       >
                         <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
+                        <p className="whitespace-nowrap text-sm font-bold text-light-text">
                           {tool.label}
                         </p>
                       </div>

@@ -78,7 +78,7 @@ const PdfRenderer = ({
               <TooltipTrigger
                 asChild
                 onClick={() =>
-                  setRotateRight(0, selectedFiles[selectedIndex]?.numPages)
+                  setRotateRight(0, selectedFiles[selectedIndex]?.numPages ?? 0)
                 }
                 className="absolute text-white opacity-80 hover:opacity-100 duration-700 bg-accent center top-4 right-10 z-10 rounded-full w-4 h-4 p-2"
               >
@@ -98,7 +98,7 @@ const PdfRenderer = ({
               className="items-center flex-col justify-evenly flex-wrap flex gap-5 hover:border-black/40 duration-500 p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-white"
             >
               {Array.from(
-                new Array(selectedFiles[index]?.numPages),
+                new Array(selectedFiles[index ?? 0]?.numPages || 0),
                 (_, index) => (
                   <div key={index} className="relative">
                     {/* {selected[0]} */}
@@ -120,7 +120,7 @@ const PdfRenderer = ({
                       </Tooltip>
                     )}
                     <Page
-                      rotate={selectedFiles[selectedIndex]?.rotate[index+1]} // Use the specific rotation for each page
+                      rotate={selectedFiles[selectedIndex]?.rotate?.[index+1]} // Use the specific rotation for each page
                       className="pdf_shadow flex-1 w-full rounded border"
                       pageNumber={index + 1} // Pages are 1-indexed
                       width={150} // Reduced for better performance
@@ -147,7 +147,7 @@ const PdfRenderer = ({
             >
               <Page
                 key={pageNumber} // Use the specific page number here
-                rotate={selectedFiles[selectedIndex]?.rotate[0]}
+                rotate={selectedFiles[selectedIndex]?.rotate?.[0]}
                 className="pdf_shadow rounded border"
                 pageNumber={1}
                 width={150} // Reduced for better performance
@@ -177,7 +177,7 @@ const PdfRenderer = ({
             selectedFiles[selectedIndex]?.fileType[0] === "png"
               ? ""
               : (selectedFiles[selectedIndex]?.numPages  ||
-                selectedFiles[index]?.numPages) + " pages"
+                selectedFiles[index ?? 0]?.numPages) + " pages"
           }`}
         </p>
       </TooltipContent>

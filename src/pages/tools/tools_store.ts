@@ -90,7 +90,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
           rotate: Array.from(
             { length: pageLength },
             (_, pageIndex) =>
-              ((newSelectedFiles[fileIndex].rotate[pageIndex] || 0) + 90) % 360
+              ((newSelectedFiles[fileIndex].rotate?.[pageIndex] ?? 0) + 90) % 360
           ),
         };
         console.log(
@@ -109,7 +109,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
           rotate: Array.from(
             { length: pageLength },
             (_, pageIndex) =>
-              ((newSelectedFiles[fileIndex].rotate[pageIndex] || 0) -
+              ((newSelectedFiles[fileIndex]?.rotate?.[pageIndex] ?? 0) -
                 90 +
                 360) %
               360
@@ -126,37 +126,98 @@ const useToolsStore = create<ToolsStore>((set) => ({
     set((state) => {
       const newSelectedFiles = [...state.selectedFiles];
       if (fileIndex >= 0 && fileIndex < newSelectedFiles.length) {
-        newSelectedFiles[fileIndex] = {
-          ...newSelectedFiles[fileIndex],
-          rotate: newSelectedFiles[fileIndex].rotate.map(() => 0),
-        };
-        console.log(
-          `Reset rotate for file ${fileIndex}:`,
-          newSelectedFiles[fileIndex].rotate
-        );
+        const file = newSelectedFiles[fileIndex];
+        // Ensure 'rotate' array exists before attempting to map over it
+        if (file?.rotate) {
+          newSelectedFiles[fileIndex] = {
+            ...file,
+            rotate: file.rotate.map(() => 0),
+          };
+          console.log(
+            `Reset rotate for file ${fileIndex}:`,
+            newSelectedFiles[fileIndex].rotate
+          );
+        } else {
+          console.warn(
+            `Rotate array not found for file ${fileIndex}. Cannot reset.`
+          );
+        }
       }
       return { selectedFiles: newSelectedFiles };
     }),
+  // resetRotate: (fileIndex: number) =>
+  //   set((state) => {
+  //     const newSelectedFiles = [...state.selectedFiles];
+  //     if (fileIndex >= 0 && fileIndex < newSelectedFiles.length) {
+  //       newSelectedFiles[fileIndex] = {
+  //         ...newSelectedFiles[fileIndex],
+  //         rotate: newSelectedFiles[fileIndex].rotate.map(() => 0),
+  //       };
+  //       console.log(
+  //         `Reset rotate for file ${fileIndex}:`,
+  //         newSelectedFiles[fileIndex].rotate
+  //       );
+  //     }
+  //     return { selectedFiles: newSelectedFiles };
+  //   }),
+  // rotateIndividualPage: (fileIndex: number, pageIndex: number) =>
+  //   set((state) => {
+  //     const newSelectedFiles:ISelectedFile[]  =  [...state.selectedFiles];
+  //     if (
+  //       fileIndex >= 0 &&
+  //       fileIndex < newSelectedFiles.length &&
+  //       pageIndex >= 0 &&
+  //       pageIndex < newSelectedFiles[fileIndex].rotate.length
+  //     ) {
+  //       newSelectedFiles[fileIndex] = {
+  //         ...newSelectedFiles[fileIndex],
+  //         rotate: [
+  //           ...newSelectedFiles[fileIndex].rotate.slice(0, pageIndex),
+  //           ((newSelectedFiles[fileIndex].rotate[pageIndex] ?? 0) + 90) % 360,
+  //           ...newSelectedFiles[fileIndex].rotate.slice(pageIndex + 1) ?? 0,
+  //         ],
+  //       };
+  //       console.log(
+  //         `Rotate page ${pageIndex} of file ${fileIndex}:`,
+  //         newSelectedFiles[fileIndex].rotate?.[pageIndex]
+  //       );
+  //     }
+  //     return { selectedFiles: newSelectedFiles };
+  //   }),
   rotateIndividualPage: (fileIndex: number, pageIndex: number) =>
     set((state) => {
-      const newSelectedFiles = [...state.selectedFiles];
-      if (
-        fileIndex >= 0 &&
-        fileIndex < newSelectedFiles.length &&
-        pageIndex >= 0 &&
-        pageIndex < newSelectedFiles[fileIndex].rotate.length
-      ) {
-        newSelectedFiles[fileIndex] = {
-          ...newSelectedFiles[fileIndex],
-          rotate: [
-            ...newSelectedFiles[fileIndex].rotate.slice(0, pageIndex),
-            (newSelectedFiles[fileIndex].rotate[pageIndex] + 90) % 360,
-            ...newSelectedFiles[fileIndex].rotate.slice(pageIndex + 1),
-          ],
-        };
-        console.log(
-          `Rotate page ${pageIndex} of file ${fileIndex}:`,
-          newSelectedFiles[fileIndex].rotate[pageIndex]
+      const newSelectedFiles: ISelectedFile[] = [...state.selectedFiles];
+      const file = newSelectedFiles[fileIndex]; // Get the file once
+
+      // Add a check to ensure 'file' and 'file.rotate' exist
+      if (file && file.rotate !== undefined && file.rotate !== null) {
+        const currentRotations = file.rotate;
+
+        if (pageIndex >= 0 && pageIndex < currentRotations.length) {
+          // Calculate the new rotation for the specific page
+          const newRotationValue =
+            ((currentRotations[pageIndex] ?? 0) + 90) % 360;
+
+          newSelectedFiles[fileIndex] = {
+            ...file,
+            rotate: [
+              ...currentRotations.slice(0, pageIndex), // Elements before the target page
+              newRotationValue, // The new rotation for the target page
+              ...currentRotations.slice(pageIndex + 1), // Elements after the target page
+            ],
+          };
+          console.log(
+            `Rotate page ${pageIndex} of file ${fileIndex}:`,
+            newSelectedFiles[fileIndex].rotate?.[pageIndex]
+          );
+        } else {
+          console.warn(
+            `Page index ${pageIndex} out of bounds for file ${fileIndex}.`
+          );
+        }
+      } else {
+        console.warn(
+          `File ${fileIndex} or its rotate array is undefined/null. Cannot rotate individual page.`
         );
       }
       return { selectedFiles: newSelectedFiles };

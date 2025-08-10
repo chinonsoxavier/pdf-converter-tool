@@ -21,7 +21,7 @@ const sizeClasses: Record<string, string> = {
   xl: "h-16 w-16", // Extra large size for the icon
 };
 
-type ISvgIconComponent = {
+export type ISvgIconComponent = {
   children: React.ReactNode;
   size?: "default" | "sm" | "lg" | "xl" | "md";
   className?: string;
@@ -695,7 +695,7 @@ export const ExtractPages: React.FC<Partial<ISvgIconComponent>> = (props) => {
   return (
     <div
       className={cn(
-        sizeClasses[props.size],
+        sizeClasses[props.size ?? "default"],
         "bg-[rgb(93.333333%,42.352941%,30.196078%)] flex rounded-md text-white items-center justify-center"
       )}
     >
@@ -708,7 +708,7 @@ export const RemovePages: React.FC<Partial<ISvgIconComponent>> = (props) => {
   return (
     <div
       className={cn(
-        sizeClasses[props.size],
+        sizeClasses[props.size ?? 'default'],
         "bg-[rgb(93.333333%,42.352941%,30.196078%)] flex rounded-md text-white items-center justify-center"
       )}
     >
@@ -720,7 +720,7 @@ export const PreviewPdf: React.FC<Partial<ISvgIconComponent>> = (props) => {
   return (
     <div
       className={cn(
-        sizeClasses[props.size],
+        sizeClasses[props.size ?? "default"],
         "bg-[rgb(93.333333%,42.352941%,30.196078%)] flex rounded-md text-white items-center justify-center"
       )}
     >
@@ -732,7 +732,7 @@ export const CloudUpload: React.FC<Partial<ISvgIconComponent>> = (props) => {
   return (
     <div
       className={cn(
-        sizeClasses[props.size],
+        sizeClasses[props.size ?? "default"],
         "bg-[rgb(93.333333%,42.352941%,30.196078%)] flex rounded-md text-white items-center justify-center"
       )}
     >
@@ -744,7 +744,7 @@ export const PdfToImage: React.FC<Partial<ISvgIconComponent>> = (props) => {
   return (
     <div
       className={cn(
-        sizeClasses[props.size],
+        sizeClasses[props.size ?? "default"],
         "bg-[rgb(93.333333%,42.352941%,30.196078%)] flex rounded-md text-white items-center justify-center"
       )}
     >
@@ -756,7 +756,7 @@ export const MoreHoriz: React.FC<Partial<ISvgIconComponent>> = (props) => {
   return (
     <div
       className={cn(
-        sizeClasses[props.size],
+        sizeClasses[props.size ?? "default"],
         "bg-[rgb(93.333333%,42.352941%,30.196078%)] flex rounded-md text-white items-center justify-center"
       )}
     >

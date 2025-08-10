@@ -36,7 +36,7 @@ const SplitPdfRangeLayout = () => {
                       renderAnnotationLayer={false}
                     />
                     <p className="text-xs leading text-secondary-foreground">
-                      {selectedFiles[selectedIndex]?.numPages}
+                      {range.from || range.to}
                     </p>
                   </Document>
                 ) : (
@@ -122,7 +122,7 @@ const SplitPdfRangeLayout = () => {
                         renderAnnotationLayer={false}
                       />
                       <p className="text-xs leading text-secondary-foreground">
-                        {range.from}
+                        {range.to}
                       </p>
                     </Document>
                     <p className="text-3xl mx-3 text-secondary-foreground">

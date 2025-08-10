@@ -55,7 +55,7 @@ const HeroSection = () => {
           whileInView={"active"}
           viewport={{ once: true }}
         >
-          <h1 className="text-center sm:text-5xl text-primary-foreground text-4xl font-semibold">
+          <h1 className="text-center sm:text-5xl text-secondary-foreground text-4xl font-bold">
             Free & Premium PDF Tool
           </h1>
         </motion.div>
@@ -65,7 +65,7 @@ const HeroSection = () => {
           whileInView={"active"}
           viewport={{ once: true }}
         >
-          <p className="text-lg max-w-2xl text-primary-foreground sm:text-xl">
+          <p className="text-lg max-w-2xl  font-semibold text-secondary-foreground sm:text-xl">
             Merge, split, convert, compress — all in one platform. Professional
             PDF tools for everyone.
           </p>
