@@ -39,7 +39,7 @@ export default function SignInPage() {
       // For demo purposes, show success
       alert("Login successful!");
     } catch (err) {
-      setError("Invalid email or password. Please try again.");
+      setError("Invalid email or password. Please try again." + err);
     } finally {
       setIsLoading(false);
     }
@@ -62,7 +62,7 @@ export default function SignInPage() {
       console.log("Google sign-in initiated");
       alert("Google sign-in successful!");
     } catch (err) {
-      setError("Google sign-in failed. Please try again.");
+      setError("Google sign-in failed. Please try again."+err);
     } finally {
       setIsGoogleLoading(false);
     }

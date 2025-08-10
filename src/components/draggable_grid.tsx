@@ -32,7 +32,7 @@ interface DraggableGridProps {
   scale?: number; // Optional scale for PDF rendering
   selectedIndex: number; // Index of the selected file
   setNumPages: (fileIndex: number, numPages: number) => void; // Function to set number of pages
-  rotateIndividualPage?: (fileIndex: number, pageIndex: number) => void; // Function to rotate a page
+  rotateIndividualPage: (fileIndex: number, pageIndex: number) => void; // Function to rotate a page
   pagerotable?: boolean; // Whether pages can be rotated
 }
 
@@ -140,7 +140,7 @@ export default function DraggableGrid({
               <TooltipTrigger
                 asChild
                 onClick={() =>
-                  setRotateRight(0, selectedFiles[selectedIndex]?.numPages)
+                  setRotateRight(0, selectedFiles[selectedIndex]?.numPages ?? 0)
                 }
                 className="absolute text-white opacity-80 hover:opacity-100 duration-700 bg-accent center top-4 right-10 z-10 rounded-full w-4 h-4 p-2"
               >
@@ -225,7 +225,7 @@ export default function DraggableGrid({
             >
               <Page
                 key={pageNumber} // Use the specific page number here
-                rotate={selectedFiles[selectedIndex]?.rotate[0]}
+                rotate={selectedFiles[selectedIndex]?.rotate?.[0] ?? 0}
                 className="pdf_shadow rounded border"
                 pageNumber={1}
                 width={10} // Reduced for better performance

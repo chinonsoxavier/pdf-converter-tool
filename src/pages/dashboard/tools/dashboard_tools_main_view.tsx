@@ -1,5 +1,4 @@
 import ContainerLayout from "@/components/layout/container_layout";
-import DashboardHeaderLayout from "@/components/layout/dashboard_header_layout";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/components/ui/card";
@@ -19,7 +18,7 @@ import {
 import { useState } from "react";
 
 const DashboardToolsMainView = () => {
-      const [tools, _] = useState([
+      const [tools] = useState([
         {
           id: 1,
           name: "AI Content Generator",

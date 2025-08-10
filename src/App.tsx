@@ -22,7 +22,7 @@ import PdfToJpg from "@/pages/tools/pdf_to_jpg/pdf_to_jpg";
 import JpgToPdf from "@/pages/tools/jpg_to_pdf/jpg_to_pdf";
 import RotatePdf from "@/pages/tools/rotate_pdf/rotate_pdf";
 import OrganisePdf from "./pages/tools/organise_pdf/organise_pdf";
-import ExtractPdf from "./pages/tools/extract_pdf/extract_pdf";
+// import ExtractPdf from "./pages/tools/extract_pdf/extract_pdf";
 
 const App = () => {
   return (
@@ -132,7 +132,7 @@ const App = () => {
         {/* end of organise pages */}
 
         {/* extract pages */}
-        <Route path="/extract_pdf" element={<ExtractPdf />} />
+        {/* <Route path="/extract_pdf" element={<ExtractPdf />} /> */}
         <Route
           path="/extract_pdf/download/:id"
           element={

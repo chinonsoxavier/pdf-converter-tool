@@ -186,6 +186,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
   //   }),
   rotateIndividualPage: (fileIndex: number, pageIndex: number) =>
     set((state) => {
+      
       const newSelectedFiles: ISelectedFile[] = [...state.selectedFiles];
       const file = newSelectedFiles[fileIndex]; // Get the file once
 

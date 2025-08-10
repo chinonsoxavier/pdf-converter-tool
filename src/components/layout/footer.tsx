@@ -22,28 +22,7 @@ const Footer = () => {
       transition: { duration: 1.5 },
     },
   };
-  const variants2 = {
-    inactive: {
-      y: 120,
-      opacity: 0,
-    },
-    active: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 1.5 },
-    },
-  };
-  const variants3 = {
-    inactive: {
-      y: 130,
-      opacity: 0,
-    },
-    active: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 1.5 },
-    },
-  };
+
   const variants4 = {
     inactive: {
       y: 140,

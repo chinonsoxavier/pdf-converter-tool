@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import useToolsStore from "@/pages/tools/tools_store";
 import { Button } from "../ui/button";
-import { ArrowRightCircleIcon } from "lucide-react";
 
 const ConverterLayoutSidebar = ({ label, setProcessingTool, fileType, disabled, contents }: { label: string; setProcessingTool: (arg0: boolean) => void; fileType: string; disabled: boolean; contents:React.ReactNode}) => {
     const { sideMenuOpen } = useToolsStore();
