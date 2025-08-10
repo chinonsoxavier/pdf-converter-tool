@@ -26,6 +26,8 @@ interface ToolsStore {
   selectedFiles: ISelectedFile[];
   selectedIndex: number;
   sideMenuOpen: boolean;
+  pdfPages: PageItem[];
+  resetStore: () => void;
   setItems?: (pageIndex: number, pages: PageItem[]) => void;
   rotateIndividualPage: (fileIndex: number, pageIndex: number) => void;
   initRotate: (fileIndex: number, pageLength: number) => void;
@@ -42,6 +44,8 @@ const useToolsStore = create<ToolsStore>((set) => ({
   selectedFiles: [], // Initialize as empty to avoid default object issues
   sideMenuOpen: false,
   pdfPages: [],
+  resetStore: () =>
+    set({ selectedFiles: [], sideMenuOpen: false, selectedIndex: 0, pdfPages: [] }),
   // setItems: (pageIndex: number, newPdfPages: PageItem[]) =>
   //   set((state) => {
   //     const PdfPages = [...state.selectedFiles];

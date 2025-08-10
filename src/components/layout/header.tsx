@@ -46,7 +46,7 @@ const Header: React.FC = () => {
     active: {
       x: 0,
       opacity: 1,
-      transition: { duration: 1.5 },
+      transition: { duration: .5 },
     },
   };
   const variants2 = {
@@ -57,7 +57,7 @@ const Header: React.FC = () => {
     active: {
       y: 0,
       opacity: 1,
-      transition: { duration: 1.5 },
+      transition: { duration: .5 },
     },
   };
   const variants3 = {
@@ -68,7 +68,7 @@ const Header: React.FC = () => {
     active: {
       x: 0,
       opacity: 1,
-      transition: { duration: 1.5 },
+      transition: { duration: .5 },
     },
   };
 
@@ -76,7 +76,7 @@ const Header: React.FC = () => {
   const { toggleSideMenuOpen } = useLandingStore();
 
   return (
-    <header className="flex overflow-hidden items-center bg-white dark:bg-primary px-4 border-y sm:px-8 sm:py-5 h-full py-3 justify-between">
+    <header className="flex sticky top-0 overflow-hidden items-center bg-white dark:bg-primary px-4 border-y sm:px-8 sm:py-5 h-full py-3 justify-between">
       <motion.div
         variants={variants1}
         initial={"inactive"}
@@ -476,16 +476,16 @@ const Header: React.FC = () => {
           <ModeToggle />
           {sideMenuOpen ? (
             <div
-              className="w-8 h-8 cursor-pointer text-secondary-foreground items-center justify-center flex md:hidden"
+              className="w-10 h-10 cursor-pointer dark:text-white text-secondary-foreground items-center justify-center flex md:hidden"
               onClick={toggleSideMenuOpen}
             >
-              <XCircle className="w-8 h-8 cursor-pointer" />
+              <XCircle className="w-10 h-10 cursor-pointer" />
             </div>
           ) : (
-            <div className="w-8 h-8 p-0 cursor-pointer text-secondary-foreground items-center justify-center flex md:hidden">
+            <div className="w-10 h-10 p-0 cursor-pointer dark:text-white text-secondary-foreground items-center justify-center flex md:hidden">
               <Menu
                 onClick={toggleSideMenuOpen}
-                className="w-8 h-8 cursor-pointer"
+                className="w-10 h-10 cursor-pointer"
               />
             </div>
           )}

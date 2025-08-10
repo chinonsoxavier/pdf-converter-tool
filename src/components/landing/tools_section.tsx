@@ -509,7 +509,7 @@ interface Tool {
                       <div className="flex items-center ease-linear scale-95 duration-100 group-hover:scale-110 justify-center rounded-xl w-12 h-12 sm:w-22 sm:h-22">
                         <tool.icon size="lg" />
                       </div>
-                      <p className="font-medium text-ellipsis max-w-[150px] overflow-hidden text-sm whitespace-nowrap text-secondary-foreground">
+                      <p className="font-medium text-ellipsis max-w-[150px] overflow-hidden text-sm whitespace-nowrap dark:text-white text-secondary-foreground">
                         {tool.label}
                       </p>
                     </div>

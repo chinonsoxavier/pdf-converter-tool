@@ -172,7 +172,6 @@ const SplitPdf = () => {
                             From
                           </span>
                           <ArrowRightLeftIcon className="text-secondary-foreground h-6" />
-                          {range.name}
                           <Input
                             onChange={(e) =>
                               parseInt(e.target.value) > 0 &&

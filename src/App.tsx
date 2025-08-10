@@ -24,8 +24,19 @@ import RotatePdf from "@/pages/tools/rotate_pdf/rotate_pdf";
 import OrganisePdf from "./pages/tools/organise_pdf/organise_pdf";
 import AppThemeProvider from "./components/theme_provider";
 import ExtractPdf from "./pages/tools/extract_pdf/extract_pdf";
+import useToolsStore from "./pages/tools/tools_store";
+import { useLocation } from "react-router-dom";
+import { useEffect } from "react";
 
 const App = () => {
+
+  const location = useLocation();
+  const { resetStore } = useToolsStore();
+
+  useEffect(() => {
+resetStore()
+  }, [location.pathname]);
+
   return (
     <AppThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
       <ScrollManager smoothRestore={true} />

@@ -9,6 +9,7 @@ import {
   CloudUpload,
   PlusIcon,
   Settings,
+  XIcon,
 } from "lucide-react";
 import {useEffect, useRef, useState } from "react";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -58,6 +59,7 @@ const ConverterLayout = ({
     setSelectedFile,
     toggleSideMenuOpen,
     selectedIndex,
+    sideMenuOpen
   } = useToolsStore();
 
   const navigate = useNavigate();
@@ -180,14 +182,14 @@ const FileType =
                   className="w-full mx-auto center"
                 >
                   <Card className="sm:p-10 p-6 bg-secondary/30 dark:border-primary border-dashed border-accent border-2 w-full center gap-3 sm:gap-5 max-w-3xl my-0">
-                  <h1 className="text-3xl sm:text-4xl sm:text-left text-center text-secondary-foreground font-semibold">
+                  <h1 className="text-3xl sm:text-4xl sm:text-left text-center dark:text-white text-secondary-foreground font-semibold">
                     {label}
                   </h1>
-                    <h1 className="text-secondary-foreground dark:text-secondary-foreground text-center text-lg sm:text-xl sm:mb-5">
+                    <h1 className="text-secondary-foreground dark:text-white text-center text-lg sm:text-xl sm:mb-5">
                       {desc}
                     </h1>
-                    <CloudUpload className="text-primary sm:w-18 sm:h-18 w-10 h-10" />
-                    <p className="text-[14px] text-secondary-foreground">
+                    <CloudUpload className="text-white sm:w-18 sm:h-18 w-10 h-10" />
+                    <p className="text-[14px] dark:text-white text-secondary-foreground">
                       Or drag and drop here...
                     </p>
                     <Input
@@ -203,7 +205,7 @@ const FileType =
                       className="hidden"
                       aria-label="Choose PDF file"
                     />
-                    <p className="text-secondary-foreground hidden dark:text-secondary-foreground text-xl text-center">
+                    <p className="text-secondary-foreground hidden dark:text-white text-xl text-center">
                       Upload your {fileType} file below and get started.
                     </p>
                     <div className="flex items-center flex-col justify-center gap-3 w-full">
@@ -216,7 +218,7 @@ const FileType =
                       </Button>
                       <div className="center gap-4">
                         <Tooltip>
-                          <TooltipTrigger className="rounded-full bg-accent p-2 w-10 h-10 text-white">
+                          <TooltipTrigger className="rounded-full bg-accent p-2.5 w-11.5 h-11.5 text-white">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 18 16"
@@ -233,7 +235,7 @@ const FileType =
                         </Tooltip>
 
                         <Tooltip>
-                          <TooltipTrigger className="rounded-full bg-accent p-2 w-10 h-10 text-white">
+                          <TooltipTrigger className="rounded-full bg-accent p-2.5 w-11.5 h-11.5 text-white">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 18 16"
@@ -264,7 +266,7 @@ const FileType =
               <Footer />
             </>
           ) : (
-            <div className="h-[88%] to-accent relative flex items-start justify-start w-full">
+            <div className="h-[88%]relative flex items-start justify-start w-full">
               {/* converter layout sidebar */}
               <ConverterLayoutSidebar
                 disabled={disabled}
@@ -274,7 +276,7 @@ const FileType =
                 label={label}
               />
               <div className="h-full overflow-y-scroll flex items-start w-full justify-center ">
-                <div className="flex gradient w-full items-center justify-center relative flex-col p-7 h-full flex-1">
+                <div className="flex w-full items-center justify-center relative flex-col p-7 h-full flex-1">
                   {children ? (
                     children
                   ) : (
@@ -325,8 +327,11 @@ const FileType =
                     className="flex sm:hidden absolute mr-5 sm:mr-0 right-0 shadow drop-shadow-md sm:right-5 sm:top-18 top-36 duration-500 cursor-pointer bg-secondary hover:text-accent text-white p-2 rounded-full"
                   >
                     <Tooltip>
-                      <TooltipTrigger>
-                        <Settings className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
+                          <TooltipTrigger>
+                            {sideMenuOpen ? <XIcon className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
+                            :
+                            <Settings className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
+                          }
                       </TooltipTrigger>
                       <TooltipContent className="text-white">
                         Action Menu

@@ -9,11 +9,11 @@ const ConverterLayoutSidebar = ({ label, setProcessingTool, fileType, disabled, 
     <aside
       className={cn(
         sideMenuOpen ? "translate-x-0" : "-translate-x-full",
-        "absolute z-20 pb-6 ight-0 w-full sm:hidden overflow-clip h-full border-l border-r flex-col flex items-center justify-between max-w-[80%] xs:max-w-sm bg-white dark:bg-secondary duration-1000"
+        "absolute z-20 pb-6 ight-0 w-full sm:hidden overflow-clip h-full border-l border-r flex-col flex items-center justify-between max-w-[80%] xs:max-w-sm bg-white dark:bg-secondary duration-500"
       )}
     >
         <div className="border-b h-[12%] py-6 w-full">
-          <p className="text-xl overflow-ellipsis sm:text-2xl font-medium text-secondary-foreground text-center ">
+          <p className="text-2xl overflow-ellipsis sm:text-2xl font-semibold text-secondary-foreground text-center ">
             {label}
           </p>
         </div>
