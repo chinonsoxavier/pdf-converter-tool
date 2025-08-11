@@ -38,7 +38,7 @@ import useLandingStore from "@/pages/landing/store/landing_store";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
 
-const Header: React.FC = () => {
+const Header = (isLanding:{isLanding?:boolean}) => {
   const variants1 = {
     inactive: {
       x: -50,
@@ -89,7 +89,7 @@ const Header: React.FC = () => {
   return (
     <header
       className={`${
-        scrollPosition < 300
+       !isLanding && scrollPosition < 300
           ? "bg-primary/5 backdrop-blur-2xl dark:bg-[rgb(4,9,30)]"
           : "dark:bg-primary bg-white"
       } flex sticky z-50 top-0 overflow-hidden items-center px-4 border-y sm:px-8 sm:py-5 h-full py-5 justify-between`}

@@ -11,7 +11,7 @@ import {
   Settings,
   XIcon,
 } from "lucide-react";
-import {useEffect, useRef, useState } from "react";
+import { useRef, useState } from "react";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import {
@@ -29,11 +29,6 @@ import ConverterLayoutSidebar from "@/components/layout/converter_layout_sidebar
 import useToolsStore from "@/pages/tools/tools_store";
 import PdfRenderer from "@/components/pdf_renderer";
 import { useNavigate } from "react-router-dom";
-// interface FilePickerCardProps {
-//   desc?: string;
-//   fileType?: string;
-//   onFileSelect?: (file: File) => void;
-// }
 const ConverterLayout = ({
   disabled=false,
   children,
@@ -42,7 +37,7 @@ const ConverterLayout = ({
   label,
   desc,
   convertingStateText,
-  fileType = ["pdf"],
+  fileType=["pdf"],
   
 }: Readonly<{
   disabled?: boolean;
@@ -54,26 +49,20 @@ const ConverterLayout = ({
   fileType?: string[];
   convertingStateText: string;
 }>) => {
-
   const {
     selectedFiles,
     setSelectedFile,
     toggleSideMenuOpen,
     selectedIndex,
-    sideMenuOpen
+    sideMenuOpen,
   } = useToolsStore();
 
   const navigate = useNavigate();
-  const [progress,setProgress] = useState(0);
+  const [progress, setProgress] = useState(0);
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [processingTool, setProcessingTool] = useState(false);
-  useEffect(() => {
-    console.log("changed numPages");
-    // initRotate(0, selectedFiles[selectedIndex]?.numPages);
-    // console.log(selectedFiles[selectedIndex]?.numPages);
-    // console.log(selectedFiles[selectedIndex]?.numPages, "yes");
-  }, [selectedFiles[0]?.numPages]);
+  const [isDragging, setIsDragging] = useState<boolean>(false); // Track drag state
   const variants1 = {
     inactive: {
       y: 20,
@@ -86,18 +75,68 @@ const ConverterLayout = ({
     },
   };
 
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>
+  ) => {
+    let file: File | undefined;
+
+    if ("dataTransfer" in event) {
+      // Drag event
+      file = event.dataTransfer.files?.[0];
+      event.preventDefault();
+      setIsDragging(false);
+    } else {
+      // Input change event
+      file = event.target.files?.[0];
+    }
+
+    const allowedFileTypes = fileType; // Assuming fileType is defined in your component
+    if (file) {
+      const fileType =
+        file && file.name
+          ? file.name.split(".").pop()?.toString() ?? "unknown"
+          : "unknown";
+
+      if (!allowedFileTypes || !allowedFileTypes.includes(fileType)) {
+        alert("Invalid file type. Please upload a valid " + selectedFiles[selectedIndex]?.fileType[0] + ' file.');
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ""; // Clear the input value
+        }
+        return;
+      }
+
+      const fileUrl = URL.createObjectURL(file);
+      setSelectedFile({
+        fileUrl: fileUrl,
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: allowedFileTypes,
+      });
+
+      console.log("Selected file:", file.name, "Size:", file.size, "bytes");
+      return;
+    }
+  };
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(false);
+  };
 
   const handleSubmitFile = () => {
     setProcessingTool(true);
     setProgress(0);
-    // let interval: number;
     const interval: number = setInterval(() => {
       setProgress((prev) => {
         if (prev >= 100) {
           clearInterval(interval);
-             setProgress(100);
-             setProcessingTool(false);
-             navigate("download/hxdbhuabhsahvxas");
+          setProgress(100);
+          setProcessingTool(false);
+          navigate("download/hxdbhuabhsahvxas");
           return 100;
         }
         if (prev > 80) {
@@ -106,62 +145,21 @@ const ConverterLayout = ({
         return prev + Math.random() * 35;
       });
     }, 1500); // Update every 800ms
+  };
 
  
-  }
-
-  // useEffect(() => {
-  //   let interval:number;
-  //   setProgress(0);
-  //   interval = setInterval(() => {
-  //     setProgress((prev) => {
-  //       if (prev >= 100) {
-  //         clearInterval(interval);
-  //         return 100;
-  //       }
-  //       return prev + 10; // Increment progress by 10%
-  //     });
-  //   }
-  //  });
-
-  // //   setTimeout(() => {
-  // //     setProcessingTool(false);
-  // //     if (selectedFiles[selectedIndex]?.fileUrl) {
-  // //       navigate("download/hxdbhuabhsahvxas");
-  // //     }
-  // //   }, 8000); // Simulate a delay for processing
-  // }, [processingTool]);
-
   const handleButtonClick = () => {
     fileInputRef.current?.click();
   };
 
-  const handleFileChange = async (
-    event: React.ChangeEvent<HTMLInputElement>
-  ) => {
-    const file = event.target.files?.[0];
-    const allowedFileTypes = fileType;
-    if (file) {
-const FileType =
-  file && file.name
-    ? file.name.split(".").pop()?.toString() ?? "unknown"
-          : "unknown";
-      if (!fileType || !allowedFileTypes.includes(FileType)) {
-           if (fileInputRef.current) {
-          fileInputRef.current.value = ""; // Clear the input value
-        }
-        return;
-      }
-      const fileUrl = URL.createObjectURL(file);
-      setSelectedFile({fileUrl:fileUrl,fileName:file.name,fileSize:file.size,fileType:fileType});
 
-      console.log("Selected file:", file.name, "Size:", file.size, "bytes");
-      return;
-    }
-  };
   return (
     <div className="h-lvh">
-      {/* side menu */}
+
+      {/* header */}
+      <div className="h-[12%]">
+        <Header />
+      </div>
       <SidemenuLyout />
 
       {/* main content */}
@@ -172,12 +170,9 @@ const FileType =
           convertingStateText={convertingStateText}
         />
       ) : (
-        <main className="w-full  min-h-lvh h-lvh dark:bg-primary">
-          <div className="h-[12%]">
-            <Header />
-          </div>
+        <main className="w-full h-[88%] overflow-scroll dark:bg-primary">
           {!selectedFiles[selectedIndex] ? (
-            <div className="h-[88%">
+            <div className="">
               <div className="w-full flex-col center p-4 py-20 rounded-lg ">
                 <motion.div
                   variants={variants1}
@@ -186,7 +181,14 @@ const FileType =
                   viewport={{ once: true }}
                   className="w-full mx-auto center"
                 >
-                  <Card className="sm:p-10 p-6 bg-secondary/30 dark:border-primary border-dashed border-[#4a4a4a] border-3 w-full center gap-3 sm:gap-5 max-w-3xl my-0">
+                  <Card
+                    onDragOver={handleDragOver}
+                    onDragLeave={handleDragLeave}
+                    onDrop={handleFileChange}
+                    className={`sm:p-10 p-6 bg-secondary dark:border-primary border-dashed border-3 w-full center gap-3 sm:gap-5 max-w-3xl my-0 ${
+                      isDragging ? "border-accent dark:border-accent" : "border-[#4a4a4a] "
+                    }`}
+                  >
                     <h1 className="text-3xl sm:text-4xl sm:text-left text-center dark:text-white text-secondary-foreground font-semibold">
                       {label}
                     </h1>
@@ -271,7 +273,7 @@ const FileType =
               <Footer />
             </div>
           ) : (
-            <div className="h-[88%]  relative flex items-start justify-start w-full">
+            <div className="relative h-full flex items-start justify-start w-full">
               {/* converter layout sidebar */}
               <ConverterLayoutSidebar
                 disabled={disabled}

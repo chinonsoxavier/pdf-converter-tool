@@ -133,7 +133,7 @@
 }
 
 body {
-  @apply bg-secondary/15 dark:bg-primary;
+  @apply bg-secondary/10 dark:bg-primary;
   scroll-behavior: smooth;
 }
 
