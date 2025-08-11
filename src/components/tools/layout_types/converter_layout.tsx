@@ -42,7 +42,8 @@ const ConverterLayout = ({
   label,
   desc,
   convertingStateText,
-  fileType=["pdf"],
+  fileType = ["pdf"],
+  
 }: Readonly<{
   disabled?: boolean;
   actionButtonText:string;
@@ -159,20 +160,24 @@ const FileType =
     }
   };
   return (
-    <div className="overflow-scroll h-lvh">
+    <div className="h-lvh">
       {/* side menu */}
       <SidemenuLyout />
 
       {/* main content */}
       {processingTool ? (
-        <ToolPageLoader setProgress={setProgress} progress={progress} convertingStateText={convertingStateText} />
+        <ToolPageLoader
+          setProgress={setProgress}
+          progress={progress}
+          convertingStateText={convertingStateText}
+        />
       ) : (
-        <main className="w-full  min-h-lvh h-full dark:bg-primary">
+        <main className="w-full  min-h-lvh h-lvh dark:bg-primary">
           <div className="h-[12%]">
             <Header />
           </div>
           {!selectedFiles[selectedIndex] ? (
-            <>
+            <div className="h-[88%">
               <div className="w-full flex-col center p-4 py-20 rounded-lg ">
                 <motion.div
                   variants={variants1}
@@ -181,14 +186,14 @@ const FileType =
                   viewport={{ once: true }}
                   className="w-full mx-auto center"
                 >
-                  <Card className="sm:p-10 p-6 bg-secondary/30 dark:border-primary border-dashed border-accent border-2 w-full center gap-3 sm:gap-5 max-w-3xl my-0">
-                  <h1 className="text-3xl sm:text-4xl sm:text-left text-center dark:text-white text-secondary-foreground font-semibold">
-                    {label}
-                  </h1>
+                  <Card className="sm:p-10 p-6 bg-secondary/30 dark:border-primary border-dashed border-[#4a4a4a] border-3 w-full center gap-3 sm:gap-5 max-w-3xl my-0">
+                    <h1 className="text-3xl sm:text-4xl sm:text-left text-center dark:text-white text-secondary-foreground font-semibold">
+                      {label}
+                    </h1>
                     <h1 className="text-secondary-foreground dark:text-white text-center text-lg sm:text-xl sm:mb-5">
                       {desc}
                     </h1>
-                    <CloudUpload className="text-white sm:w-18 sm:h-18 w-10 h-10" />
+                    <CloudUpload className="dark:text-white text-secondary-foreground sm:w-18 sm:h-18 w-10 h-10" />
                     <p className="text-[14px] dark:text-white text-secondary-foreground">
                       Or drag and drop here...
                     </p>
@@ -264,9 +269,9 @@ const FileType =
 
               {/* Footer */}
               <Footer />
-            </>
+            </div>
           ) : (
-            <div className="h-[88%]relative flex items-start justify-start w-full">
+            <div className="h-[88%]  relative flex items-start justify-start w-full">
               {/* converter layout sidebar */}
               <ConverterLayoutSidebar
                 disabled={disabled}
@@ -327,11 +332,12 @@ const FileType =
                     className="flex sm:hidden absolute mr-5 sm:mr-0 right-0 shadow drop-shadow-md sm:right-5 sm:top-18 top-36 duration-500 cursor-pointer bg-secondary hover:text-accent text-white p-2 rounded-full"
                   >
                     <Tooltip>
-                          <TooltipTrigger>
-                            {sideMenuOpen ? <XIcon className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
-                            :
-                            <Settings className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
-                          }
+                      <TooltipTrigger>
+                        {sideMenuOpen ? (
+                          <XIcon className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
+                        ) : (
+                          <Settings className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
+                        )}
                       </TooltipTrigger>
                       <TooltipContent className="text-white">
                         Action Menu
@@ -341,7 +347,10 @@ const FileType =
                 </div>
                 <Button
                   disabled={disabled}
-                      onClick={() => { handleSubmitFile(); setProcessingTool(true)}}
+                  onClick={() => {
+                    handleSubmitFile();
+                    setProcessingTool(true);
+                  }}
                   className="max-w-sm font-semibold absolute bottom-10 left-10 sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center sm:hidden"
                   type="submit"
                 >

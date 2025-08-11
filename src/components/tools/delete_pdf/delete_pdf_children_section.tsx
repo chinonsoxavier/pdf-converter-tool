@@ -1,9 +1,9 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import ToolsFileExtensionCard from "../tools_file_extension_card";
 import useToolsStore from "@/pages/tools/tools_store";
 import PdfRenderer from "@/components/pdf_renderer";
 
-const ExtractPdfChildrenSection = () => {
+const DeletePdfChildrenSection = () => {
   const { selectedFiles, selectedIndex } = useToolsStore();
 
   useEffect(() => {
@@ -14,8 +14,8 @@ const ExtractPdfChildrenSection = () => {
     <div className="flex flex-wrap h-full sm:items-center justify-start gap-7">
       {selectedFiles[selectedIndex]?.fileType[0] === "pdf" ? (
         <div>
-          <PdfRenderer
-            extractible
+          <PdfRenderer isolatePages showPdfSize={false}
+            deletable
             file={selectedFiles[selectedIndex]?.fileUrl}
             pageNumber="all"
           />
@@ -29,4 +29,4 @@ const ExtractPdfChildrenSection = () => {
   );
 };
 
-export default ExtractPdfChildrenSection;
+export default DeletePdfChildrenSection;

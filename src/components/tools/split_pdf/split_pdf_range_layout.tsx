@@ -1,3 +1,4 @@
+import PdfLoadingComponent from "@/components/pdf_loading_component";
 import { Pdfwidth, useWindowSize } from "@/lib/pdf_size_formatter";
 import useSplitPdfStore from "@/pages/tools/split_pdf/split_pdf_store";
 import useToolsStore from "@/pages/tools/tools_store";
@@ -27,6 +28,7 @@ const SplitPdfRangeLayout = () => {
                   className="w-full gap-5 flex-col center p-0 sm:p-5 rounded-lg shadow-md bg-[red]"
                 >
                   <Page
+                    loading={<PdfLoadingComponent/>}
                     className="drop-shadow-md order rounded"
                     pageNumber={range.from}
                     width={Pdfwidth(width)} // Reduced for better performance
@@ -48,6 +50,7 @@ const SplitPdfRangeLayout = () => {
                     className="w-full gap-5 flex-1 flex-col hover:border-black/40 duration-500 border center p-3 sm:p-5 rounded-lg pdf_shadow2 dark:bg-secondary bg-white"
                   >
                     <Page
+                      loading={PdfLoadingComponent}
                       className="pdf_shadow rounded"
                       pageNumber={range.from}
                       width={Pdfwidth(width)} // Reduced for better performance
@@ -68,6 +71,7 @@ const SplitPdfRangeLayout = () => {
                     className="w-full flex-1 gap-5 flex-col hover:border-black/40 duration-500 center p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-white"
                   >
                     <Page
+                      loading={PdfLoadingComponent}
                       className="pdf_shadow rounded"
                       pageNumber={
                         range.to
@@ -111,6 +115,7 @@ const SplitPdfRangeLayout = () => {
                   className="w-full gap-5 flex-1 flex-col hover:border-black/40 duration-500 border center p-3 sm:p-5 rounded-lg pdf_shadow2 dark:bg-secondary bg-white"
                 >
                   <Page
+                    loading={PdfLoadingComponent}
                     className="pdf_shadow rounded"
                     pageNumber={range.from}
                     width={Pdfwidth(width)} // Reduced for better performance
@@ -135,6 +140,7 @@ const SplitPdfRangeLayout = () => {
                       className="w-full flex-1 gap-5 flex-col hover:border-black/40 duration-500 center p-3 sm:p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-white"
                     >
                       <Page
+                        loading={PdfLoadingComponent}
                         className="pdf_shadow rounded"
                         pageNumber={
                           range.to
@@ -175,6 +181,7 @@ const SplitPdfRangeLayout = () => {
                     className="w-full gap-5 flex-1 flex-col hover:border-black/40 duration-500 border center p-5 rounded-lg pdf_shadow2 dark:bg-secondary bg-white"
                   >
                     <Page
+                      loading={PdfLoadingComponent}
                       className="pdf_shadow rounded"
                       pageNumber={range.from}
                       width={width < 400 ? 60 : width < 600 ? 80 : 150} // Reduced for better performance

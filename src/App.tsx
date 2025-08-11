@@ -27,6 +27,7 @@ import ExtractPdf from "./pages/tools/extract_pdf/extract_pdf";
 import useToolsStore from "./pages/tools/tools_store";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
+import DeletePdfPages from "./pages/tools/extract_pdf/delete_pdf_pages/delete_pdf_pages";
 
 const App = () => {
 
@@ -154,7 +155,7 @@ resetStore()
         {/* end of extract pages */}
 
         {/* delete pages */}
-        <Route path="/delete_pdf_pages" element={<RotatePdf />} />
+        <Route path="/delete_pdf_pages" element={<DeletePdfPages />} />
         <Route
           path="/delete_pdf_pages/download/:id"
           element={

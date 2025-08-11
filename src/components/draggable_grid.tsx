@@ -8,6 +8,7 @@ import {
   TooltipContent,
 } from "@/components/ui/tooltip";
 import useToolsStore from "@/pages/tools/tools_store";
+import PdfLoadingComponent from "./pdf_loading_component";
 
 // Define the structure of a PDF page item
 interface PageItem {
@@ -24,10 +25,10 @@ interface DraggedItem {
 interface DraggableGridProps {
   items: PageItem[];
   className?: string; // Optional className for styling
-  showCloseIcon?:boolean; // Whether to show the close icon
+  showCloseIcon?: boolean; // Whether to show the close icon
   label?: string; // Label for the PDF file
   pageNumber?: "all" | "1"; // Page number to display, "all" for all pages
-  setItems: (pageIndex: number,items: PageItem[]) => void;
+  setItems: (pageIndex: number, items: PageItem[]) => void;
   file: string; // File URL from ISelectedFile.fileUrl
   scale?: number; // Optional scale for PDF rendering
   selectedIndex: number; // Index of the selected file
@@ -43,7 +44,7 @@ export default function DraggableGrid({
   selectedIndex,
   setNumPages,
   rotateIndividualPage,
- file,
+  file,
   className,
   showCloseIcon = true,
   label = "PDF Document",
@@ -53,7 +54,8 @@ export default function DraggableGrid({
   const [draggedItem, setDraggedItem] = useState<DraggedItem | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
 
-  const {selectedFiles,removeSelectedFiles,setRotateRight} = useToolsStore()
+  const { selectedFiles, removeSelectedFiles, setRotateRight } =
+    useToolsStore();
 
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
@@ -77,31 +79,31 @@ export default function DraggableGrid({
     setDragOverIndex(null);
   };
 
-   const handleDrop = (
-     e: React.DragEvent<HTMLDivElement>,
-     dropIndex: number
-   ): void => {
-     e.preventDefault();
+  const handleDrop = (
+    e: React.DragEvent<HTMLDivElement>,
+    dropIndex: number
+  ): void => {
+    e.preventDefault();
 
-     if (draggedItem && draggedItem?.index !== dropIndex) {
-       // Safely create a copy of items
-       const newItems: PageItem[] = [...items]; // Use props.items directly
-       const draggedItemData: PageItem = newItems[draggedItem.index];
+    if (draggedItem && draggedItem?.index !== dropIndex) {
+      // Safely create a copy of items
+      const newItems: PageItem[] = [...items]; // Use props.items directly
+      const draggedItemData: PageItem = newItems[draggedItem.index];
 
-       // Remove the dragged item
-       newItems.splice(draggedItem.index, 1);
+      // Remove the dragged item
+      newItems.splice(draggedItem.index, 1);
 
-       // Insert at the new position
-       const adjustedDropIndex: number =
-         draggedItem.index < dropIndex ? dropIndex - 1 : dropIndex;
-       newItems.splice(adjustedDropIndex, 0, draggedItemData);
+      // Insert at the new position
+      const adjustedDropIndex: number =
+        draggedItem.index < dropIndex ? dropIndex - 1 : dropIndex;
+      newItems.splice(adjustedDropIndex, 0, draggedItemData);
 
-       setItems(selectedIndex,newItems);
-     }
+      setItems(selectedIndex, newItems);
+    }
 
-     setDraggedItem(null);
-     setDragOverIndex(null);
-   };
+    setDraggedItem(null);
+    setDragOverIndex(null);
+  };
 
   const handleDragEnd = (): void => {
     setDraggedItem(null);
@@ -199,6 +201,7 @@ export default function DraggableGrid({
                         </Tooltip>
                       )}
                       <Page
+                        loading={<PdfLoadingComponent/>}
                         rotate={item?.rotate[index]}
                         className="pdf_shadow flex-1 w-full rounded border"
                         pageNumber={item.pageNumber}
@@ -224,6 +227,7 @@ export default function DraggableGrid({
               className="w-full flex-1 gap-5 flex-col hover:border-black/40 duration-500 center p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-white"
             >
               <Page
+                loading={PdfLoadingComponent}
                 key={pageNumber} // Use the specific page number here
                 rotate={selectedFiles[selectedIndex]?.rotate?.[0] ?? 0}
                 className="pdf_shadow rounded border"

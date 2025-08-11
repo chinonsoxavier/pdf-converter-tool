@@ -1,8 +1,9 @@
 import { cn } from "@/lib/utils";
 import { Document, Page } from "react-pdf";
 import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
-import { RotateCwIcon, XIcon } from "lucide-react";
+import { Check, RotateCwIcon, XIcon } from "lucide-react";
 import useToolsStore from "@/pages/tools/tools_store";
+import PdfLoadingComponent from "./pdf_loading_component";
 
 const PdfRenderer = ({
   file,
@@ -14,16 +15,28 @@ const PdfRenderer = ({
   pagerotable,
   showCloseIcon = true,
   label,
+  flexDirection,
+  extractible = false,
+  isolatePages = false,
+  showPdfSize = true, // Whether to show PDF size
+  handlePageClick,
+  deletable
 }: {
   file: string;
   index?: number;
   pageNumber: "all" | "1";
   scale?: number;
   className?: string;
-  pagerotable?: boolean;
+    pagerotable?: boolean;
+  deletable?: boolean; // Whether the PDF pages can be deleted
   pdfrotable?: boolean;
   label?: string;
   showCloseIcon?: boolean;
+  flexDirection?: "col" | "row";
+  extractible?: boolean;
+  isolatePages?: boolean; // Whether to isolate pages
+  showPdfSize?: boolean; // Whether to show PDF size
+  handlePageClick?: (pageIndex: number) => void; // Callback for page click
   // onLoadSuccess: ({ numPages }) => void;
 }) => {
   const {
@@ -38,13 +51,12 @@ const PdfRenderer = ({
   // useEffect(() => {
   //   initRotate(0, numPages[0]);
   //   console.log(numPages[0]);
-  console.log(selectedFiles[selectedIndex]?.numPages + "here");
+  console.log(selectedFiles[selectedIndex]?.numPages);
   // }, [selectedFiles, numPages]);
 
-// useEffect(() => {
-//   console.log('rotate',selectedFiles[0].rotate)
-// }, [selectedFiles[0].rotate ])
-
+  // useEffect(() => {
+  //   console.log('rotate',selectedFiles[0].rotate)
+  // }, [selectedFiles[0].rotate ])
 
   return (
     <Tooltip>
@@ -52,10 +64,13 @@ const PdfRenderer = ({
         <div
           className={cn(
             className,
-            "center bg-white dark:bg-secondary flex-wrap border-2 hover:bg-secondary/70 hover:border-black/40 duration-500 border-dashed rounded-lg relative"
+            isolatePages
+              ? ""
+              : " bg-white dark:bg-secondary p border-2 hover:bg-secondary/70 hover:border-black/40 border-dashed",
+            "center flex-wra duration-500 rounded-lg relative"
           )}
         >
-          {showCloseIcon && (
+          {showCloseIcon && !isolatePages && (
             <Tooltip>
               <TooltipTrigger
                 asChild
@@ -92,24 +107,28 @@ const PdfRenderer = ({
               file={file}
               scale={scale}
               onLoadSuccess={({ numPages }) => {
-                setNumPages(selectedIndex,numPages);
+                setNumPages(selectedIndex, numPages);
               }}
               onLoadError={(error) => console.error("PDF load error:", error)}
-              className="items-center flex-col justify-evenly flex-wrap flex gap-5 hover:border-black/40 duration-500 p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-white"
+              className={`${
+                flexDirection === "col" ? "flex-col" : "flex-row"
+              } ${
+                !isolatePages
+                  ? "bg-white  hover:border-black/40 hover:border border dark:bg-secondary"
+                  : ""
+              } items-center justify-evenly flex-wrap flex gap-5 duration-500 p-5 rounded-lg pdf_shadow2`}
             >
               {Array.from(
                 new Array(selectedFiles[index ?? 0]?.numPages || 0),
                 (_, index) => (
                   <div key={index} className="relative">
-                    {/* {selected[0]} */}
-                    {/* {rotate[0][0]} */}
-                    {/* {rotate[0][index]} */}
-                    {/* {}j */}
                     {pagerotable && (
                       <Tooltip>
                         <TooltipTrigger
                           asChild
-                          onClick={() => rotateIndividualPage(selectedIndex, index)}
+                          onClick={() =>
+                            rotateIndividualPage(selectedIndex, index)
+                          }
                           className="absolute bottom-0 text-white opacity-80 hover:opacity-100 duration-700 bg-[rgba(0,0,0,0.6)] center right-0 z-10 rounded-full w-7 h-7 p-1.5"
                         >
                           <RotateCwIcon />
@@ -119,9 +138,37 @@ const PdfRenderer = ({
                         </TooltipContent>
                       </Tooltip>
                     )}
+
+                    {
+                      extractible &&
+                    <div className="center rounded-full w-6 h-6 bg-[green] absolute z-30 left-2 top-2">
+                      <Check className="w-4 h-4 text-white text-xl" />
+                    </div>
+                    }
+
+                    {deletable && (<div>
+                      <Tooltip>
+                        <TooltipTrigger
+                          asChild
+                       
+                          className="absolute text-white opacity-50 hover:opacity-100 duration-700 bg-red-500 center top-2 right-2 z-10 rounded-full w-6 h-6 p-1"
+                        >
+                          <XIcon />
+                        </TooltipTrigger>
+                        <TooltipContent className="text-white">
+                          Delete Page
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>)}
+
                     <Page
-                      rotate={selectedFiles[selectedIndex]?.rotate?.[index+1]} // Use the specific rotation for each page
-                      className="pdf_shadow flex-1 w-full rounded border"
+                      loading={<PdfLoadingComponent/>}
+                      onClick={() => handlePageClick && handlePageClick(index)}
+                      canvasBackground=""
+                      rotate={selectedFiles[selectedIndex]?.rotate?.[index + 1]} // Use the specific rotation for each page
+                      className={`pdf_shadow flex-1 w-full rounded-md border p-1 ${
+                        extractible ? "rounded-md hover:border-[green]" : ""
+                      }`}
                       pageNumber={index + 1} // Pages are 1-indexed
                       width={150} // Reduced for better performance
                       renderTextLayer={false} // Optimize rendering
@@ -129,7 +176,7 @@ const PdfRenderer = ({
                     />
                     <p className="text-xs mt-2 text-center leading text-secondary-foreground">{`Page ${
                       index + 1
-                      }`}</p>
+                    }`}</p>
                   </div>
                 )
               )}
@@ -146,6 +193,8 @@ const PdfRenderer = ({
               className="w-full flex-1 gap-5 flex-col hover:border-black/40 duration-500 center p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-white"
             >
               <Page
+                loading={PdfLoadingComponent}
+                onClick={() => handlePageClick && handlePageClick(1)}
                 key={pageNumber} // Use the specific page number here
                 rotate={selectedFiles[selectedIndex]?.rotate?.[0]}
                 className="pdf_shadow rounded border"
@@ -161,26 +210,29 @@ const PdfRenderer = ({
           )}
         </div>
       </TooltipTrigger>
-      <TooltipContent className="text-white">
-        <p className="text-[13px]">
-          {`${
-            Math.round(selectedFiles[selectedIndex]?.fileSize / (1024 * 1024)) <
-            1
-              ? Number(selectedFiles[selectedIndex]?.fileSize / 1024).toFixed(
-                  2
-                ) + " KB - "
-              : Number(
-                  selectedFiles[selectedIndex]?.fileSize / (1024 * 1024)
-                ).toFixed(2) + " MB - "
-          }${
-            selectedFiles[selectedIndex]?.fileType[0] === "jpg" ||
-            selectedFiles[selectedIndex]?.fileType[0] === "png"
-              ? ""
-              : (selectedFiles[selectedIndex]?.numPages  ||
-                selectedFiles[index ?? 0]?.numPages) + " pages"
-          }`}
-        </p>
-      </TooltipContent>
+      {showPdfSize && (
+        <TooltipContent className="text-white">
+          <p className="text-[13px]">
+            {`${
+              Math.round(
+                selectedFiles[selectedIndex]?.fileSize / (1024 * 1024)
+              ) < 1
+                ? Number(selectedFiles[selectedIndex]?.fileSize / 1024).toFixed(
+                    2
+                  ) + " KB - "
+                : Number(
+                    selectedFiles[selectedIndex]?.fileSize / (1024 * 1024)
+                  ).toFixed(2) + " MB - "
+            }${
+              selectedFiles[selectedIndex]?.fileType[0] === "jpg" ||
+              selectedFiles[selectedIndex]?.fileType[0] === "png"
+                ? ""
+                : (selectedFiles[selectedIndex]?.numPages ||
+                    selectedFiles[index ?? 0]?.numPages) + " pages"
+            }`}
+          </p>
+        </TooltipContent>
+      )}
     </Tooltip>
   );
 };
