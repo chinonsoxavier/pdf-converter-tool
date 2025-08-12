@@ -196,7 +196,7 @@ const Footer = () => {
                 <FileText className="w-3 h-3 text-white" />
               </div>
               <span className="font-medium whitespace-nowrap text-primary-foreground">
-                PDF Nest
+                PDFPlug
               </span>
             </div>
             <div className=" font-mono text-secondary-foreground text-sm whitespace-nowrap font-medium">
@@ -213,7 +213,7 @@ const Footer = () => {
       <div className="mt-8 pt-4 border-t"></div>
 
       <div className="flex max-width mx-auto items-center pb-10 pt-2 justify-between w-full">
-        <p> © 2025 PDFNest </p>
+        <p> © 2025 PDFPlug </p>
         <Dialog>
           <DialogTrigger className="text-secondary-foreground">
             English
