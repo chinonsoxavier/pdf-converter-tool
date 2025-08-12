@@ -6,7 +6,7 @@ const ContainerLayout = ({
   id,
   className = "", // Default to empty string if no className is provided
 }: Readonly<{
-  style?:Object,
+  style?:object,
   children: React.ReactNode;
   id?:string,
   className?: string; // Optional className prop

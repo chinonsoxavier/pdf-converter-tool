@@ -22,28 +22,7 @@ const Footer = () => {
       transition: { duration: 1.5 },
     },
   };
-  const variants2 = {
-    inactive: {
-      y: 120,
-      opacity: 0,
-    },
-    active: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 1.5 },
-    },
-  };
-  const variants3 = {
-    inactive: {
-      y: 130,
-      opacity: 0,
-    },
-    active: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 1.5 },
-    },
-  };
+
   const variants4 = {
     inactive: {
       y: 140,
@@ -172,36 +151,36 @@ const Footer = () => {
         </motion.div>
 
         {/* Admin  */}
-        <motion.div
+        <motion.nav
           variants={variants4}
           initial={"inactive"}
           whileInView={"active"}
           viewport={{ once: true }}
           className="w-full"
         >
-          <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 mb-2">
+          <ul className="col-span-2 space-y-2 md:col-span-1">
+            <div className="flex items-center gap-2 mb-4">
               <span className="font-medium whitespace-nowrap text-primary-foreground">
                 Admin
               </span>
             </div>
-            <div className="text-secondary-foreground font-mono text-sm whitespace-nowrap ">
+            <li className="text-secondary-foreground font-mono text-sm whitespace-nowrap ">
               <Link to="/dashboard">Dashoard</Link>
-            </div>
-            <div className="text-secondary-foreground font-mono text-sm whitespace-nowrap">
+            </li>
+            <li className="text-secondary-foreground font-mono text-sm whitespace-nowrap">
               <Link to="/dashboard/users">Users</Link>
-            </div>
-            <div className="text-secondary-foreground font-mono text-sm whitespace-nowrap ">
+            </li>
+            <li className="text-secondary-foreground font-mono text-sm whitespace-nowrap ">
               <Link to="/dashboard/tools">Tools</Link>
-            </div>
-            <div className="text-secondary-foreground font-mono text-sm whitespace-nowrap">
+            </li>
+            <li className="text-secondary-foreground font-mono text-sm whitespace-nowrap">
               <Link to="/dashboard/analysis">Analysis</Link>
-            </div>
-            <div className="text-secondary-foreground font-mono text-sm whitespace-nowrap">
+            </li>
+            <li className="text-secondary-foreground font-mono text-sm whitespace-nowrap">
               <Link to="/dashboard/settings">Settings</Link>
-            </div>
-          </div>
-        </motion.div>
+            </li>
+          </ul>
+        </motion.nav>
 
         {/* PDF Converter Brand */}
         <motion.div
@@ -211,8 +190,8 @@ const Footer = () => {
           viewport={{ once: true }}
           className="w-full"
         >
-          <div className="col-span-2 md:col-span-1">
-            <div className="flex items-center gap-2 mb-2">
+          <div className="col-span-2 space-y-2 md:col-span-1">
+            <div className="flex items-center gap-2 mb-4">
               <div className="w-5 h-5 min-w-5 bg-red-500 rounded-sm flex items-center justify-center">
                 <FileText className="w-3 h-3 text-white" />
               </div>
@@ -220,7 +199,9 @@ const Footer = () => {
                 PDF Nest
               </span>
             </div>
-            <div className=" font-mono text-secondary-foreground text-sm whitespace-nowrap font-medium">255792515918</div>
+            <div className=" font-mono text-secondary-foreground text-sm whitespace-nowrap font-medium">
+              255792515918
+            </div>
             <div className="text-secondary-foreground text-sm">
               files converted since 2005
             </div>
@@ -246,10 +227,10 @@ const Footer = () => {
           </DialogTrigger>
           <DialogContent>
             <DialogHeader>
-              <DialogTitle className="text-xl sm:text-2xl text-center font-semibold">
+              <DialogTitle className="text-xl mb-2 text-[#2f2f2f] dark:text-primary-foreground sm:text-2xl text-center font-bold">
                 Select Language
               </DialogTitle>
-              <DialogDescription className="grid grid-cols-[repeat(auto-fit,minmax(110px,1fr))] ">
+              <DialogDescription className="grid gap-1.5 grid-cols-[repeat(auto-fit,minmax(110px,1fr))] ">
                 {[
                   "English",
                   "العربية",
@@ -278,7 +259,7 @@ const Footer = () => {
                 ].map((language, index) => (
                   <button
                     key={index}
-                    className="w-full whitespace-nowrap cursor-pointer text-left py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
+                    className={`${language==='English' && 'bg-primary'} w-full whitespace-nowrap cursor-pointer text-left py-2 px-4 dark:hover:bg-primary/50 rounded hover:bg-primary/40 focus:outline-none`}
                   >
                     {language}
                   </button>

@@ -40,7 +40,7 @@ import { useState } from 'react';
 import { cn } from '@/lib/utils';
 
 const DashboardContentMainView = () => {
-      const [articles, _] = useState([
+      const [articles] = useState([
         {
           id: 1,
           title: "10 Best AI Tools for 2024",

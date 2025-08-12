@@ -197,7 +197,7 @@
 //                    }
 //                    className="w-full center"
 //                  >
-//                    <Page
+//                    <Page loading={<PdfLoadingComponent/>}
 //                      className="border"
 //                      pageNumber={1}
 //                      width={150} // Reduced for better performance
@@ -282,16 +282,6 @@
 
 // export default DraggableContainer;
 
-
-
-
-
-
-
-
-
-
-
 // import ToolsFileExtensionCard from "@/components/tools/tools_file_extension_card";
 // import {
 //   Tooltip,
@@ -367,7 +357,7 @@
 //                               setNumPages(numPages)
 //                             }
 //                           >
-//                             <Page pageNumber={1} width={50} />
+//                             <Page loading={<PdfLoadingComponent/>} pageNumber={1} width={50} />
 //                           </Document>
 //                           <span className="text-sm font-medium">
 //                             {fileNames[index]}

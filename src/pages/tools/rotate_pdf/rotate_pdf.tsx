@@ -22,11 +22,12 @@ const RotatePdf = () => {
   // alert(selectedIndex);
 
   useEffect(() => {
-    console.log("Rotate all page state changed: ", rotateAllPage);
-  }, [rotateAllPage, selectedFiles[0]]);
+    console.log("Rotate all page state changed: ", selectedFiles[selectedIndex]?.rotate);
+    console.log("Rotate all page state : ", rotateAllPage);
+  }, [rotateAllPage, selectedFiles[0], selectedFiles[0]?.rotate]);
 
   return (
-    <div className=" to-primary/5 min-h-lvh from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)]">
+    <div className="">
       <ConverterLayout
         actionButtonText="Rotate Pdf"
         convertingStateText="Rotate Pdf"
@@ -34,7 +35,7 @@ const RotatePdf = () => {
         desc="Rotate one or more pages"
         children={
           <div className="h-full w-full my-10">
-            <div className="flex flex-wrap w-full items-center justify-center h-full">
+            <div className="flex flex-wrap w-full pb-20 items-center justify-center h-full">
               <PdfRenderer
                 pagerotable
                 // showCloseIcon={index === 0}
@@ -68,18 +69,24 @@ const RotatePdf = () => {
               <div className="flex items-center justify-start my-4">
                 <Button
                   onClick={() =>
-                    setRotateLeft(selectedIndex, selectedFiles[0]?.numPages)
+                    setRotateLeft(
+                      selectedIndex,
+                      selectedFiles[selectedIndex]?.numPages ?? 0
+                    )
                   }
                   variant="secondary"
-                  className="mr-2 p-0 relative"
+                  className="mr-2 p-se relative"
                 >
                   <RotateCcw className="w-9" />
                   Left
                 </Button>
-
+                {selectedFiles[0]?.numPages?.toString()}
                 <Button
                   onClick={() =>
-                    setRotateRight(selectedIndex, selectedFiles[0]?.numPages)
+                    setRotateRight(
+                      selectedIndex,
+                      selectedFiles[selectedIndex]?.numPages ?? 0
+                    )
                   }
                   variant="secondary"
                   className="mr-2"
@@ -89,12 +96,12 @@ const RotatePdf = () => {
                 </Button>
               </div>
             </div>
-            <div className="flex items-center justify-start px-4 gap-2">
-              <Checkbox
-                onClick={() => toggleRotateAllPage()}
-                id="rotate"
-                className="w-4 text-white"
-              />
+            <div
+              onClick={() => toggleRotateAllPage()}
+              className="flex items-center justify-start px-4 gap-2"
+              defaultChecked={rotateAllPage}
+            >
+              <Checkbox id="rotate" className="w-4 text-white" />
               <Label htmlFor="rotate">Rotate all pages</Label>
             </div>
           </div>

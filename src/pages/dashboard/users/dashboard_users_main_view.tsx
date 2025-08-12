@@ -1,5 +1,4 @@
 import ContainerLayout from "@/components/layout/container_layout";
-import DashboardHeaderLayout from "@/components/layout/dashboard_header_layout";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -40,7 +39,7 @@ import { useState } from "react";
 import { cn } from "@/lib/utils";
 
 const DashboardUsersMainView = () => {
-  const [users, _] = useState([
+  const [users] = useState([
     {
       id: 1,
       name: "John Doe",

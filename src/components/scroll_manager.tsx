@@ -2,14 +2,18 @@ import { useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 
 const ScrollManager = ({ smoothRestore = false }) => {
+  interface ScrollPositions {
+    [key: string]: number; // Allow string keys with number values
+  }
   const { pathname } = useLocation();
-  const positions = useRef({}); // store scroll positions per route
+  const positions = useRef<ScrollPositions>({});
   const prevPath = useRef(pathname);
 
   useEffect(() => {
     // Save current scroll position for previous route
-    positions.current[prevPath.current] = window.scrollY;
-
+if (prevPath.current) {
+  positions.current[prevPath.current] = window.scrollY; // Safe assignment
+}
     // If we have a saved scroll position for this path (back/forward)
     if (positions.current[pathname] !== undefined) {
       window.scrollTo({

@@ -9,7 +9,7 @@ interface LandingStore {
 const useDashboardStore = create<LandingStore>((set) => ({
   sideMenuOpen: false,
   toggleSideMenuOpen: () =>
-    set((state: any) => ({ sideMenuOpen: !state.sideMenuOpen })),
+    set((state) => ({ sideMenuOpen: !state.sideMenuOpen })),
 }));
 
 export default useDashboardStore;

@@ -34,7 +34,7 @@ export default function ForgotPasswordPage() {
 
       setIsSubmitted(true);
     } catch (err) {
-      setError("Failed to send reset email. Please try again.");
+      setError("Failed to send reset email. Please try again."+err);
     } finally {
       setIsLoading(false);
     }

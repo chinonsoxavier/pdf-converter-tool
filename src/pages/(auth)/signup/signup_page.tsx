@@ -59,7 +59,7 @@ export default function SignUpPage() {
         "Registration successful! Please check your email to verify your account."
       );
     } catch (err) {
-      setError("Registration failed. Please try again.");
+      setError("Registration failed. Please try again."+err);
     } finally {
       setIsLoading(false);
     }
@@ -82,7 +82,7 @@ export default function SignUpPage() {
       console.log("Google sign-up initiated");
       alert("Google sign-up successful!");
     } catch (err) {
-      setError("Google sign-up failed. Please try again.");
+      setError("Google sign-up failed. Please try again."+err);
     } finally {
       setIsGoogleLoading(false);
     }

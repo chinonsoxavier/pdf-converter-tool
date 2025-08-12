@@ -10,7 +10,7 @@ const LandingPage = () => {
   return (
     <>
       {/* Header layout */}
-      <Header />
+      <Header isLanding />
 
       {/* side menu */}
       <SidemenuLyout/>

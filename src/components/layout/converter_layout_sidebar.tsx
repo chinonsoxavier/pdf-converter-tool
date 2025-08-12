@@ -1,7 +1,6 @@
 import { cn } from "@/lib/utils";
 import useToolsStore from "@/pages/tools/tools_store";
 import { Button } from "../ui/button";
-import { ArrowRightCircleIcon } from "lucide-react";
 
 const ConverterLayoutSidebar = ({ label, setProcessingTool, fileType, disabled, contents }: { label: string; setProcessingTool: (arg0: boolean) => void; fileType: string; disabled: boolean; contents:React.ReactNode}) => {
     const { sideMenuOpen } = useToolsStore();
@@ -10,11 +9,11 @@ const ConverterLayoutSidebar = ({ label, setProcessingTool, fileType, disabled, 
     <aside
       className={cn(
         sideMenuOpen ? "translate-x-0" : "-translate-x-full",
-        "absolute z-20 pb-6 ight-0 w-full sm:hidden overflow-clip h-full border-l border-r flex-col flex items-center justify-between max-w-[80%] xs:max-w-sm bg-white dark:bg-secondary duration-1000"
+        "absolute z-20 pb-6 ight-0 w-full sm:hidden overflow-clip h-full border-l border-r flex-col flex items-center justify-between max-w-[80%] xs:max-w-sm bg-white dark:bg-secondary duration-500"
       )}
     >
         <div className="border-b h-[12%] py-6 w-full">
-          <p className="text-xl overflow-ellipsis sm:text-2xl font-medium text-secondary-foreground text-center ">
+          <p className="text-2xl overflow-ellipsis sm:text-2xl font-semibold text-secondary-foreground text-center ">
             {label}
           </p>
         </div>
@@ -65,7 +64,7 @@ const ConverterLayoutSidebar = ({ label, setProcessingTool, fileType, disabled, 
 
         </div>
         
-      <div className="px-6 w-full h-[12%]">
+      <div className="px-6 w-full center border-t h-[12%]">
         <Button disabled={disabled}
           onClick={() => setProcessingTool(true)}
           className="max-w-sm font-semibold text-lg sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center h w-full"

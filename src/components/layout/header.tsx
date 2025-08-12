@@ -31,12 +31,14 @@ import {
   WaterMarkPdf,
   WordToPdf,
 } from "@/assets/svg/export";
-import { Link } from "react-router-dom";
+import { Link, NavLink } from "react-router-dom";
 import { ModeToggle } from "../mode_toggle";
 import { motion } from "motion/react";
 import useLandingStore from "@/pages/landing/store/landing_store";
+import { cn } from "@/lib/utils";
+import { useEffect, useState } from "react";
 
-const Header: React.FC = () => {
+const Header = (isLanding:{isLanding?:boolean}) => {
   const variants1 = {
     inactive: {
       x: -50,
@@ -45,7 +47,7 @@ const Header: React.FC = () => {
     active: {
       x: 0,
       opacity: 1,
-      transition: { duration: 1.5 },
+      transition: { duration: 0.5 },
     },
   };
   const variants2 = {
@@ -56,7 +58,7 @@ const Header: React.FC = () => {
     active: {
       y: 0,
       opacity: 1,
-      transition: { duration: 1.5 },
+      transition: { duration: 0.5 },
     },
   };
   const variants3 = {
@@ -67,15 +69,31 @@ const Header: React.FC = () => {
     active: {
       x: 0,
       opacity: 1,
-      transition: { duration: 1.5 },
+      transition: { duration: 0.5 },
     },
   };
 
   const { sideMenuOpen } = useLandingStore();
   const { toggleSideMenuOpen } = useLandingStore();
+  const [scrollPosition, setScrollPosition] = useState(0);
+
+  useEffect(() => {
+    window.addEventListener("scroll", () => {
+      setScrollPosition(window.scrollY);
+    });
+    return window.removeEventListener("scroll", () =>
+      setScrollPosition(window.screenY)
+    );
+  }, []);
 
   return (
-    <header className="flex overflow-hidden items-center bg-white dark:bg-primary px-4 border-y sm:px-8 sm:py-5 h-full py-3 justify-between">
+    <header
+      className={`${
+       !isLanding && scrollPosition < 300
+          ? "bg-primary/5 backdrop-blur-2xl dark:bg-[rgb(4,9,30)]"
+          : "dark:bg-primary bg-white"
+      } flex sticky z-50 top-0 overflow-hidden items-center px-4 border-y sm:px-8 sm:py-5 h-full py-5 justify-between`}
+    >
       <motion.div
         variants={variants1}
         initial={"inactive"}
@@ -92,16 +110,35 @@ const Header: React.FC = () => {
         className=""
       >
         <ul className="gap-3 hidden md:flex dark:text-white text-light-text">
-          <li className="cursor-pointer hidden lg:block font-semibold text-[15px]">
-            MERGE PDF
+          <li
+            className={cn(
+              "cursor-pointer hidden xlarge:block font-bold text-[15px]"
+            )}
+          >
+            <NavLink
+              to="/merge_pdf"
+              className={({ isActive }) => (isActive ? "text-accent" : "")}
+            >
+              MERGE PDF
+            </NavLink>
           </li>
-          <li className="cursor-pointer hidden large:block font-semibold text-[15px]">
-            SPLIT PDF
+          <li className="cursor-pointer hidden large:block font-bold text-[15px]">
+            <NavLink
+              to="/split_pdf"
+              className={({ isActive }) => (isActive ? "text-accent" : "")}
+            >
+              SPLIT PDF
+            </NavLink>
           </li>
-          <li className="cursor-pointer hidden medium:block font-semibold text-[15px]">
-            COMPRESS PDF
+          <li className="cursor-pointer hidden medium:block font-bold text-[15px]">
+            <NavLink
+              to="/compress_pdf"
+              className={({ isActive }) => (isActive ? "text-accent" : "")}
+            >
+              COMPRESS PDF
+            </NavLink>
           </li>
-          <li className="cursor-pointer font-semibold text-[15px]">
+          <li className="cursor-pointer font-bold text-[15px]">
             <HoverCard>
               <HoverCardTrigger className="flex items-center justify-center">
                 CONVERT PDF
@@ -110,10 +147,10 @@ const Header: React.FC = () => {
                   className="inline-block fill-dark-text dark:fill-white w-5 h-5"
                 />
               </HoverCardTrigger>
-              <HoverCardContent className="mt-10 w-full px-8 before:border-input before:border relative after:rounded-lg z-30 after:-z-10 after:absolute after:bg-white after:inset-0 flex items-center justify-center before:top-0 before:-z-50 before:rotate-45 before:absolute before:bg-white before:w-12 before:h-12 before:">
+              <HoverCardContent className="mt-10 w-full p-8 before:border-input before:border relative after:rounded-lg after:-z-10  flex items-center justify-center">
                 <div className="flex gap-8 space-y-3 w-full items-start justify-between">
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
                       CONVERT TO PDF
                     </h3>
                     {[
@@ -134,19 +171,26 @@ const Header: React.FC = () => {
                         icon: ExcelToPdf,
                       },
                     ].map((tool, index) => (
-                      <div
+                      <NavLink
                         key={index}
-                        className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
+                        to={`/${tool.label.toLowerCase().replace(/\s+/g, "_")}`}
+                        className={({ isActive }) =>
+                          isActive
+                            ? "text-accent dark:bg-gray-700 bg-gray-100"
+                            : "text-secondary-foreground"
+                        }
                       >
-                        <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
-                          {tool.label}
-                        </p>
-                      </div>
+                        <div className="flex text-inherit cursor-pointer items-center justify-start gap-3 py-2 rounded px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none">
+                          <tool.icon size="sm" />
+                          <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
+                            {tool.label}
+                          </p>
+                        </div>
+                      </NavLink>
                     ))}
                   </div>
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
                       CONVERT FROM PDF
                     </h3>
                     {[
@@ -167,22 +211,29 @@ const Header: React.FC = () => {
                         icon: PdfToExcell,
                       },
                     ].map((tool, index) => (
-                      <div
+                      <NavLink
                         key={index}
-                        className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
+                        to={`/${tool.label.toLowerCase().replace(/\s+/g, "_")}`}
+                        className={({ isActive }) =>
+                          isActive
+                            ? "text-accent dark:bg-gray-700 bg-gray-100"
+                            : "text-secondary-foreground"
+                        }
                       >
-                        <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
-                          {tool.label}
-                        </p>
-                      </div>
+                        <div className="flex text-inherit cursor-pointer items-center justify-start gap-3 py-2 rounded px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none">
+                          <tool.icon size="sm" />
+                          <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
+                            {tool.label}
+                          </p>
+                        </div>
+                      </NavLink>
                     ))}
                   </div>
                 </div>
               </HoverCardContent>
             </HoverCard>
           </li>
-          <li className="cursor-pointer font-semibold text-[15px]">
+          <li className="cursor-pointer font-bold text-[15px]">
             <HoverCard>
               <HoverCardTrigger className="flex items-center justify-center">
                 ALL PDF TOOLS
@@ -191,10 +242,10 @@ const Header: React.FC = () => {
                   className="inline-block fill-dark-text dark:fill-white w-5 h-5"
                 />
               </HoverCardTrigger>
-              <HoverCardContent className="mt-10 w-full px-8 before:border-input before:border relative after:rounded-lg z-30 after:-z-10 after:absolute after:bg-white after:inset-0 flex items-center justify-center before:top-0 before:-z-50 before:rotate-45 before:absolute before:bg-white before:w-12 before:h-12 before:">
+              <HoverCardContent className="mt-10 w-full p-8 relative after:rounded-lg z-30 flex items-center justify-center">
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] max-w-4xl gap-8 flex-wrap  space-y-3 w-full items-start text-dark-text justify-between">
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
                       ORGANISE PDF
                     </h3>
                     {[
@@ -219,19 +270,26 @@ const Header: React.FC = () => {
                         icon: OrganisePdf,
                       },
                     ].map((tool, index) => (
-                      <div
+                      <NavLink
                         key={index}
-                        className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
+                        to={`/${tool.label.toLowerCase().replace(/\s+/g, "_")}`}
+                        className={({ isActive }) =>
+                          isActive
+                            ? "text-accent dark:bg-gray-700 bg-gray-100"
+                            : "text-secondary-foreground"
+                        }
                       >
-                        <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-[13px] text-dark-text font-semibold">
-                          {tool.label}
-                        </p>
-                      </div>
+                        <div className="flex text-inherit cursor-pointer items-center justify-start gap-3 py-2 rounded px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none">
+                          <tool.icon size="sm" />
+                          <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
+                            {tool.label}
+                          </p>
+                        </div>
+                      </NavLink>
                     ))}
                   </div>
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
                       OPTIMIZE PDF
                     </h3>
                     {[
@@ -248,19 +306,26 @@ const Header: React.FC = () => {
                         icon: OcrPdf,
                       },
                     ].map((tool, index) => (
-                      <div
+                      <NavLink
                         key={index}
-                        className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
+                        to={`/${tool.label.toLowerCase().replace(/\s+/g, "_")}`}
+                        className={({ isActive }) =>
+                          isActive
+                            ? "text-accent dark:bg-gray-700 bg-gray-100"
+                            : "text-secondary-foreground"
+                        }
                       >
-                        <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-[13px] text-dark-text font-semibold">
-                          {tool.label}
-                        </p>
-                      </div>
+                        <div className="flex text-inherit cursor-pointer items-center justify-start gap-3 py-2 rounded px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none">
+                          <tool.icon size="sm" />
+                          <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
+                            {tool.label}
+                          </p>
+                        </div>
+                      </NavLink>
                     ))}
                   </div>
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
                       CONVERT TO PDF
                     </h3>
 
@@ -287,7 +352,7 @@ const Header: React.FC = () => {
                         className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
                       >
                         <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
+                        <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
                           {tool.label}
                         </p>
                       </div>
@@ -295,7 +360,7 @@ const Header: React.FC = () => {
                   </div>
 
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
                       CONVERT FROM PDF
                     </h3>
                     {[
@@ -321,7 +386,7 @@ const Header: React.FC = () => {
                         className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
                       >
                         <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
+                        <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
                           {tool.label}
                         </p>
                       </div>
@@ -329,7 +394,7 @@ const Header: React.FC = () => {
                   </div>
 
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
                       Edit PDF
                     </h3>
                     {[
@@ -355,14 +420,14 @@ const Header: React.FC = () => {
                         className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
                       >
                         <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
+                        <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
                           {tool.label}
                         </p>
                       </div>
                     ))}
                   </div>
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-semibold text-light-text text-[15px] whitespace-nowrap">
+                    <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
                       PDF SECURITY
                     </h3>
                     {[
@@ -388,7 +453,7 @@ const Header: React.FC = () => {
                         className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
                       >
                         <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-sm font-semibold text-light-text">
+                        <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
                           {tool.label}
                         </p>
                       </div>
@@ -409,17 +474,13 @@ const Header: React.FC = () => {
         <div className="flex items-center justify-end gap-2">
           <nav className="flex items-center justify-end gap-4">
             <Button
-              size="sm"
-              className="dark:bg-transparent dark:px-0 dark:border-none dark:underline"
+              className="h-10 sm:h-full dark:bg-transparent dark:px-0 dark:border-none dark:underline"
               variant="secondary"
             >
               <Link to="/signin">Sign In </Link>
             </Button>
             <span className="bg-gray-400 h-max min-h-8 w-[1px]"></span>
-            <Button
-              size="sm"
-              className="hidden xs:flex dark:bg-[#ce1c1c] dark:text-white"
-            >
+            <Button className="h-10 sm:h-full hidden xs:flex dark:bg-[#ce1c1c] dark:text-white">
               <Coffee />
               Support Us
             </Button>
@@ -428,16 +489,16 @@ const Header: React.FC = () => {
           <ModeToggle />
           {sideMenuOpen ? (
             <div
-              className="w-8 h-8 cursor-pointer text-secondary-foreground items-center justify-center flex md:hidden"
+              className="w-9 h-9 sm:w-10 sm:h-10 cursor-pointer dark:text-white text-secondary-foreground items-center justify-center flex md:hidden"
               onClick={toggleSideMenuOpen}
             >
-              <XCircle className="w-8 h-8 cursor-pointer" />
+              <XCircle className="w-9 h-9 sm:w-10 sm:h-10 cursor-pointer" />
             </div>
           ) : (
-            <div className="w-8 h-8 p-0 cursor-pointer text-secondary-foreground items-center justify-center flex md:hidden">
+            <div className="w-9 h-9 sm:w-10 sm:h-10 p-0 cursor-pointer dark:text-white text-secondary-foreground items-center justify-center flex md:hidden">
               <Menu
                 onClick={toggleSideMenuOpen}
-                className="w-8 h-8 cursor-pointer"
+                className="w-9 h-9 sm:w-10 sm:h-10 cursor-pointer"
               />
             </div>
           )}
