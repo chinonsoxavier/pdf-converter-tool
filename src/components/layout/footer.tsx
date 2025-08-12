@@ -23,7 +23,7 @@ const Footer = () => {
     },
   };
 
-  const variants4 = {
+  const variants2 = {
     inactive: {
       y: 140,
       opacity: 0,
@@ -34,6 +34,18 @@ const Footer = () => {
       transition: { duration: 1.5 },
     },
   };
+
+    const variants3 = {
+      inactive: {
+        y: 30,
+        opacity: 0,
+      },
+      active: {
+        y: 0,
+        opacity: 1,
+        transition: { duration: 1.5 },
+      },
+    };
   return (
     <footer className="px-4 pt-10 sm:pt-20 border-t">
       <div className="grid max-width mx-auto grid-cols-2 md:grid-cols-5 gap-8">
@@ -126,7 +138,7 @@ const Footer = () => {
           </div>
         </motion.div>
         <motion.div
-          variants={variants4}
+          variants={variants2}
           initial={"inactive"}
           whileInView={"active"}
           viewport={{ once: true }}
@@ -152,7 +164,7 @@ const Footer = () => {
 
         {/* Admin  */}
         <motion.nav
-          variants={variants4}
+          variants={variants2}
           initial={"inactive"}
           whileInView={"active"}
           viewport={{ once: true }}
@@ -184,7 +196,7 @@ const Footer = () => {
 
         {/* PDF Converter Brand */}
         <motion.div
-          variants={variants4}
+          variants={variants2}
           initial={"inactive"}
           whileInView={"active"}
           viewport={{ once: true }}
@@ -199,76 +211,84 @@ const Footer = () => {
                 PDFPlug
               </span>
             </div>
-            <div className=" font-mono text-secondary-foreground text-sm whitespace-nowrap font-medium">
-              255792515918
-            </div>
-            <div className="text-secondary-foreground text-sm">
-              files converted since 2005
+            <div className=" font-mono text-secondary-foreground text-sm font-medium">
+              over 250,000 documents converted since creation of pdf plug
             </div>
           </div>
         </motion.div>
       </div>
-
+   <motion.div
+          variants={variants3}
+          initial={"inactive"}
+          whileInView={"active"}
+          viewport={{ once: true }}
+          className="w-full"
+        >
       {/* Bottom border */}
       <div className="mt-8 pt-4 border-t"></div>
 
-      <div className="flex max-width mx-auto items-center pb-10 pt-2 justify-between w-full">
-        <p> © 2025 PDFPlug </p>
-        <Dialog>
-          <DialogTrigger className="text-secondary-foreground">
-            English
-            <span className="border border-secondary-foreground rounded-sm ml-2">
-              <ChevronDown
-                className="inline-block fill-secondary-foreground"
-                fill="#2F2F2F"
-                strokeWidth={0}
-              />
-            </span>
-          </DialogTrigger>
-          <DialogContent>
-            <DialogHeader>
-              <DialogTitle className="text-xl mb-2 text-[#2f2f2f] dark:text-primary-foreground sm:text-2xl text-center font-bold">
-                Select Language
-              </DialogTitle>
-              <DialogDescription className="grid gap-1.5 grid-cols-[repeat(auto-fit,minmax(110px,1fr))] ">
-                {[
-                  "English",
-                  "العربية",
-                  "Dansk",
-                  "Deutsch",
-                  "Español",
-                  "Français",
-                  "עברית",
-                  "हिन्दी",
-                  "Indonesia",
-                  "Italiano",
-                  "日本語",
-                  "한국어",
-                  "Lietuvių",
-                  "Norsk",
-                  "Polski",
-                  "Português",
-                  "Русский",
-                  "Svenska",
-                  "ไทย",
-                  "Türkçe",
-                  "Українська",
-                  "Tiếng Việt",
-                  "中文（中国）",
-                  "中文（台灣）",
-                ].map((language, index) => (
-                  <button
-                    key={index}
-                    className={`${language==='English' && 'bg-primary'} w-full whitespace-nowrap cursor-pointer text-left py-2 px-4 dark:hover:bg-primary/50 rounded hover:bg-primary/40 focus:outline-none`}
-                  >
-                    {language}
-                  </button>
-                ))}
-              </DialogDescription>
-            </DialogHeader>
-          </DialogContent>
-        </Dialog>
+        <div className="flex max-width mx-auto items-center pb-10 pt-2 justify-between w-full">
+          <p className="text-sm">PDFPlug.com © [2025]</p>
+          <p className="text-sm">A product by Amazonia Softech Ltd</p>
+          <Dialog>
+            <DialogTrigger className="text-secondary-foreground cursor-pointer">
+              English
+              <span className="border h-5 border-secondary-foreground rounded-sm ml-2">
+                <ChevronDown
+                  className="inline-block w-5 h-5 fill-secondary-foreground"
+                  fill="#2F2F2F"
+                  strokeWidth={0}
+                />
+              </span>
+            </DialogTrigger>
+            <DialogContent>
+              <DialogHeader>
+                <DialogTitle className="text-xl mb-2 text-[#2f2f2f] dark:text-primary-foreground sm:text-2xl text-center font-bold">
+                  Select Language
+                </DialogTitle>
+                <DialogDescription className="grid gap-1.5 grid-cols-[repeat(auto-fit,minmax(110px,1fr))] ">
+                  {[
+                    "English",
+                    "العربية",
+                    "Dansk",
+                    "Deutsch",
+                    "Español",
+                    "Français",
+                    "עברית",
+                    "हिन्दी",
+                    "Indonesia",
+                    "Italiano",
+                    "日本語",
+                    "한국어",
+                    "Lietuvių",
+                    "Norsk",
+                    "Polski",
+                    "Português",
+                    "Русский",
+                    "Svenska",
+                    "ไทย",
+                    "Türkçe",
+                    "Українська",
+                    "Tiếng Việt",
+                    "中文（中国）",
+                    "中文（台灣）",
+                  ].map((language, index) => (
+                    <button
+                      key={index}
+                      className={`${
+                        language === "English" && "bg-primary"
+                      } w-full whitespace-nowrap cursor-pointer text-left py-2 px-4 dark:hover:bg-primary/50 rounded hover:bg-primary/40 focus:outline-none`}
+                    >
+                      {language}
+                    </button>
+                  ))}
+                </DialogDescription>
+              </DialogHeader>
+            </DialogContent>
+          </Dialog>
       </div>
+        </motion.div>
+      
     </footer>
   );
 };

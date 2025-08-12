@@ -1,5 +1,3 @@
-import { ArrowRightCircleIcon, Crown } from "lucide-react";
-import { Button } from "../ui/button";
 import ContainerLayout from "../layout/container_layout";
 import HowToSection from "./how_to_section";
 import { motion } from "motion/react";
@@ -27,23 +25,12 @@ const HeroSection = () => {
         transition: { duration: 1.5 },
       },
   };
-  const variants3 = {
-      inactive: {
-        y: 200,
-        opacity: 0,
-      },
-      active: {
-        y: 0,
-        opacity: 1,
-        transition: { duration: 1.8 },
-      },
-  };
-  
+
   return (
     <>
       <ContainerLayout
         id="hero_section"
-        className="text-center max-width h-full space-y-7 py-40 flex items-center justify-center flex-col"
+        className="text-center max-width h-full space-y-7 sm:py-40 py-20 flex items-center justify-center flex-col"
       >
         {/* <h1 className="text-center text-5xl font-semibold">
         Every tool you need to work with PDFs in one place
@@ -56,7 +43,7 @@ const HeroSection = () => {
           viewport={{ once: true }}
         >
           <h1 className="text-center sm:text-5xl text-secondary-foreground text-4xl font-bold">
-            Free & Premium PDF Tool
+            Free All In One Pdf Tool For Everyone
           </h1>
         </motion.div>
         <motion.div
@@ -70,25 +57,7 @@ const HeroSection = () => {
             PDF tools for everyone.
           </p>
         </motion.div>
-        <motion.div
-          variants={variants3}
-          initial={"inactive"}
-          whileInView={"active"}
-          viewport={{ once: true }}
-        >
-          <div className="flex items-center justify-center gap-5">
-            <Button variant="outline" className="dark:bg-[#222831]">
-              <ArrowRightCircleIcon className="rotate-90" />
-              Explore tools
-            </Button>
-            {/* </motion.div> */}
-
-            <Button className="bg-primary dark:bg-[#ce1c1c] ">
-              <Crown className="" />
-              Subscribe
-            </Button>
-          </div>
-        </motion.div>
+      
       </ContainerLayout>
 
         {/* How to use pdfnest section */}

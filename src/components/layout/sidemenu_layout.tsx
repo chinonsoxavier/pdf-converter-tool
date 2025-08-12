@@ -61,7 +61,7 @@ const SidemenuLyout = () => {
         <Accordion type="single" collapsible>
           {[
             {
-              label: "CONVERT TO PDF ",
+              label: "CONVERT TO PDF FROM",
               tools: [
                 {
                   label: "Jpg to Pdf",
@@ -82,7 +82,7 @@ const SidemenuLyout = () => {
               ],
             },
             {
-              label: "CONVERT FROM PDF",
+              label: "CONVERT FROM PDF TO",
               tools: [
                 {
                   label: "Pdf to Jpg",
@@ -103,7 +103,7 @@ const SidemenuLyout = () => {
               ],
             },
             {
-              label: "MERGE AND SPLIT",
+              label: "MERGE AND SPLIT PDF",
               tools: [
                 {
                   label: "Merge PDF",
@@ -150,14 +150,14 @@ const SidemenuLyout = () => {
               ],
             },
           ].map((tool, index) => (
-            <AccordionItem key={index} value={(index + 1).toString()}>
+            <AccordionItem className="pb-3" key={index} value={(index + 1).toString()}>
               <AccordionTrigger className="px-8 text-[16px] font-bold text-secondary-foreground">
                 {tool.label}
               </AccordionTrigger>
               {tool.tools.map((tool, toolIndex) => (
                 <AccordionContent
                   key={toolIndex}
-                  className="flex text-base font-medium px-8"
+                  className="flex text-base font-medium px-2"
                 >
                   <NavLink
                     className={({ isActive }) =>
