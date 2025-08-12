@@ -15,8 +15,8 @@ const MergePdf = () => {
 
       convertingStateText="Merging PDF files"
       actionMenuSideBar={
-        <div className="p-3">
-          <div className="bg-secondary rounded-md p-3">
+        <div className="p-4">
+          <div className="bg-secondary rounded-md p-4">
             <p className="font-medium text-secondary-foreground">
               Please, select more PDF files by clicking again on ’Select PDF
               files’.

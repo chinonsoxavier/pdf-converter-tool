@@ -159,7 +159,7 @@ interface Tool {
       category: "organize",
     },
     {
-      label: "Extract Pages",
+      label: "Extract Pdf Pages",
       icon: ExtractPages,
       isFree: true,
       info: "Drag & drop rearrangement of pages",
@@ -167,7 +167,7 @@ interface Tool {
       category: "organize",
     },
     {
-      label: "Delete Pages",
+      label: "Delete Pdf Pages",
       icon: RemovePages,
       isFree: true,
       info: "Remove unwanted pages from PDF",
@@ -175,7 +175,7 @@ interface Tool {
       category: "organize",
     },
     {
-      label: "Add Page Numbers",
+      label: "Add Pdf Page Numbers",
       icon: AddPagesToPdf,
       isFree: true,
       info: "Insert page numbers automatically",

@@ -28,6 +28,9 @@ import useToolsStore from "./pages/tools/tools_store";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import DeletePdfPages from "./pages/tools/extract_pdf/delete_pdf_pages/delete_pdf_pages";
+import AddPdfPageNumber from "./pages/tools/add_pdf_page_number/add_pdf_page_number";
+import AddHeaderFooter from "./pages/tools/add_header_footer/add_header_footer";
+import PreviewPdf from "./pages/tools/preview_pdf/preview_pdf";
 
 const App = () => {
 
@@ -145,9 +148,9 @@ resetStore()
         {/* end of organise pages */}
 
         {/* extract pages */}
-        <Route path="/extract_pdf" element={<ExtractPdf />} />
+        <Route path="/extract_pdf_pages" element={<ExtractPdf />} />
         <Route
-          path="/extract_pdf/download/:id"
+          path="/extract_pdf_pages/download/:id"
           element={
             <ToolDownloadLayout label="Pdf pages has been extracted successfully" />
           }
@@ -165,27 +168,27 @@ resetStore()
         {/* end of delete pages */}
 
         {/* add pages pages */}
-        <Route path="/add_pdf_pages" element={<RotatePdf />} />
+        <Route path="/add_pdf_page_numbers" element={<AddPdfPageNumber />} />
         <Route
-          path="/add_pdf_pages/download/:id"
+          path="/add_pdf_page_numbers/download/:id"
           element={
-            <ToolDownloadLayout label="Pdf pages has been added successfully" />
+            <ToolDownloadLayout label="Pdf pages number has been added successfully" />
           }
         />
         {/* end of add pages pages */}
 
         {/* add headers/footers pages */}
-        <Route path="/add_header_footer" element={<RotatePdf />} />
+        <Route path="/add_header_footer" element={<AddHeaderFooter />} />
         <Route
           path="/add_header_footer/download/:id"
           element={
-            <ToolDownloadLayout label="Pdf pages has been extracted successfully" />
+            <ToolDownloadLayout label="Pdf header and footer has been added successfully" />
           }
         />
         {/* end of add headers/footers pages */}
 
         {/* preview pages */}
-        <Route path="/preview" element={<RotatePdf />} />
+        <Route path="/preview_pdf" element={<PreviewPdf />} />
         {/* end of preview pages */}
 
         {/* end of tools routes */}

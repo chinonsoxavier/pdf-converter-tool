@@ -34,21 +34,15 @@ const RotatePdf = () => {
         label="Rotate Pdf pages"
         desc="Rotate one or more pages"
         children={
-          <div className="h-full w-full my-10">
-            <div className="flex flex-wrap w-full pb-20 items-center justify-center h-full">
-              <PdfRenderer
-                pagerotable
-                // showCloseIcon={index === 0}
-                // file={selectedFiles[0].fileUrl}
-                pageNumber={rotateAllPage ? "all" : "1"}
-                // onLoadSuccess={({ numPages }) => setNumPages(numPages)}
-                label={selectedFiles[selectedIndex]?.fileName}
-                className={`p-3 w-min mx-auto my-auto`}
-                scale={0.8}
-                file={selectedFiles[selectedIndex]?.fileUrl}
-                // pageNumber={"1"}
-              />
-            </div>
+          <div className="h-full center w-full my-10">
+            <PdfRenderer
+              flexDirection="row"
+              pagerotable
+              pageNumber={rotateAllPage ? "all" : "1"}
+              label={selectedFiles[selectedIndex]?.fileName}
+              scale={0.8}
+              file={selectedFiles[selectedIndex]?.fileUrl}
+            />
           </div>
         }
         actionMenuSideBar={
@@ -61,7 +55,7 @@ const RotatePdf = () => {
 
                 <p
                   onClick={() => resetRotate(0)}
-                  className="text-accent text-sm font-medium cursor-pointer"
+                  className="text-accent text-sm font-bold cursor-pointer"
                 >
                   Reset Options
                 </p>
@@ -75,12 +69,11 @@ const RotatePdf = () => {
                     )
                   }
                   variant="secondary"
-                  className="mr-2 p-se relative"
+                  className="mr-2 dark:bg-primary"
                 >
                   <RotateCcw className="w-9" />
                   Left
                 </Button>
-                {selectedFiles[0]?.numPages?.toString()}
                 <Button
                   onClick={() =>
                     setRotateRight(
@@ -89,13 +82,18 @@ const RotatePdf = () => {
                     )
                   }
                   variant="secondary"
-                  className="mr-2"
+                  className="mr-2 dark:bg-primary"
                 >
                   Right
                   <RotateCw className="size-4 mr-2" />
                 </Button>
               </div>
             </div>
+
+            <div className="px-4 mb-4">
+              <p>Pages: {selectedFiles[0]?.numPages?.toString()}</p>
+            </div>
+
             <div
               onClick={() => toggleRotateAllPage()}
               className="flex items-center justify-start px-4 gap-2"
