@@ -73,12 +73,8 @@ const HowToSection = () => {
             <div className="flex items-center justify-center rounded-full bg-accent text-white w-10 h-10 mb-3">
               <p>1</p>
             </div>
-            <p className="text-primary-foreground font-semibold text-lg sm:text-xl pb-2 sm:pb-4">
-              Upload
-            </p>
-            <p className="text-secondary-foreground text-center max-w-xs">
-              Select the Word, Excel, PowerPoint, PDF or other file you wish to
-              convert.
+            <p className="text-primary-foreground font-semibold max-w-xs text-center text-lg sm:text-xl pb-2 sm:pb-4">
+              Select your PDF,Upload it,and choose the desired action
             </p>
           </div>
         </motion.div>
@@ -92,14 +88,10 @@ const HowToSection = () => {
             <div className="flex items-center justify-center rounded-full bg-accent text-white w-10 h-10 mb-3">
               <p>2</p>
             </div>
-            <p className="text-primary-foreground font-semibold text-lg sm:text-xl pb-2 sm:pb-4">
-              Start processing
+            <p className="text-primary-foreground font-semibold max-w-xs text-center text-lg sm:text-xl pb-2 sm:pb-4">
+              Your file will be processed instantly
             </p>
-            <p className="text-secondary-foreground text-center max-w-xs">
-              Our PDF creator will convert your document to PDF or from PDF in
-              seconds.
-            </p>
-          </div>
+                  </div>
         </motion.div>
         <motion.div
           variants={variants3}
@@ -111,11 +103,8 @@ const HowToSection = () => {
             <div className="flex items-center justify-center rounded-full bg-accent text-white w-10 h-10 mb-3">
               <p>3</p>
             </div>
-            <p className="text-primary-foreground font-semibold text-lg sm:text-xl pb-2 sm:pb-4">
-              Download
-            </p>
-            <p className="text-secondary-foreground text-center max-w-xs">
-              Your new document will be ready to download immediately
+            <p className="text-primary-foreground font-semibold max-w-xs text-center text-lg sm:text-xl pb-2 sm:pb-4">
+              Download in Seconds
             </p>
           </div>
         </motion.div>

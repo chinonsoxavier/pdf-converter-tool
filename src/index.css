@@ -117,9 +117,10 @@
 }
 
 @theme {
-  --breakpoint-large: 960px;
-  --breakpoint-xlarge: 1080;
-  --breakpoint-medium: 870px;
+  --breakpoint-large: 1180px;
+  --breakpoint-xlarge: 1080px;
+  --breakpoint-medium: 980px;
+  --breakpoint-smedium: 880px;
   --breakpoint-xs: 470px;
 }
 
