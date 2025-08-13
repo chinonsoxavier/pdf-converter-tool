@@ -89,10 +89,12 @@ const Header = (isLanding:{isLanding?:boolean}) => {
   return (
     <header
       className={`${
-       !isLanding && scrollPosition < 300
-          ? "bg-primary/5 backdrop-blur-2xl dark:bg-[rgb(4,9,30)]"
+        scrollPosition < 350
+          ? `bg-primary/5 backdrop-blur-2xl  ${
+              isLanding ? "dark:bg-[rgb(4,9,30)]" : ""
+            }`
           : "dark:bg-primary bg-white"
-      } flex sticky z-50 top-0 overflow-hidden items-center px-4 border-y sm:px-8 sm:py-5 h-full py-5 justify-between`}
+      } flex w-full sticky z-50 duration-1000 top-0 overflow-hidden items-center px-4 border-y sm:px-8 sm:py-5 h-full py-5 justify-between`}
     >
       <motion.div
         variants={variants1}
@@ -101,12 +103,11 @@ const Header = (isLanding:{isLanding?:boolean}) => {
         viewport={{ once: true }}
       >
         <h1 className="text-4xl font-extrabold tracking-tight flex items-center gap-1">
-  <span className="bg-gradient-to-r from-primary-foreground to-gray-400 text-transparent bg-clip-text">
-    PDF
-  </span>
-  <span className="text-red-500 drop-shadow-md">Plug</span>
-</h1>
-
+          <span className="bg-gradient-to-r from-primary-foreground to-gray-400 text-transparent bg-clip-text">
+            PDF
+          </span>
+          <span className="text-red-500 drop-shadow-md">Plug</span>
+        </h1>
       </motion.div>
       <motion.div
         variants={variants2}
@@ -144,7 +145,7 @@ const Header = (isLanding:{isLanding?:boolean}) => {
               COMPRESS PDF
             </NavLink>
           </li>
-          <li className="cursor-pointer font-bold text-[15px]">
+          <li className="cursor-pointer hidden smedium:block font-bold text-[15px]">
             <HoverCard>
               <HoverCardTrigger className="flex items-center justify-center">
                 CONVERT PDF
@@ -248,223 +249,221 @@ const Header = (isLanding:{isLanding?:boolean}) => {
                   className="inline-block fill-dark-text dark:fill-white w-5 h-5"
                 />
               </HoverCardTrigger>
-              <HoverCardContent className="mt-10 w-full p-8 relative after:rounded-lg z-30 flex items-center justify-center">
-                <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] max-w-4xl gap-8 flex-wrap  space-y-3 w-full items-start text-dark-text justify-between">
-                  <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
-                      ORGANIZE PDF
-                    </h3>
-                    {[
-                      {
-                        label: "Merge Pdf",
-                        icon: MergePdf,
-                      },
-                      {
-                        label: "Split Pdf",
-                        icon: SplitPdf,
-                      },
-                      {
-                        label: "Remove Pages",
-                        icon: RemovePages,
-                      },
-                      {
-                        label: "Extract Pages",
-                        icon: ExtractPages,
-                      },
-                      {
-                        label: "Organise Pdf",
-                        icon: OrganisePdf,
-                      },
-                    ].map((tool, index) => (
-                      <NavLink
-                        key={index}
-                        to={`/${tool.label.toLowerCase().replace(/\s+/g, "_")}`}
-                        className={({ isActive }) =>
-                          isActive
-                            ? "text-accent dark:bg-gray-700 bg-gray-100"
-                            : "text-secondary-foreground"
-                        }
-                      >
-                        <div className="flex text-inherit cursor-pointer items-center justify-start gap-3 py-2 rounded px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none">
-                          <tool.icon size="sm" />
-                          <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
-                            {tool.label}
-                          </p>
-                        </div>
-                      </NavLink>
-                    ))}
-                  </div>
-                  <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
-                      OPTIMIZE PDF
-                    </h3>
-                    {[
-                      {
-                        label: "Compress Pdf",
-                        icon: CompressPdf,
-                      },
-                      {
-                        label: "Repair Pdf",
-                        icon: RepairPdf,
-                      },
-                      {
-                        label: "OCR Pdf",
-                        icon: OcrPdf,
-                      },
-                    ].map((tool, index) => (
-                      <NavLink
-                        key={index}
-                        to={`/${tool.label.toLowerCase().replace(/\s+/g, "_")}`}
-                        className={({ isActive }) =>
-                          isActive
-                            ? "text-accent dark:bg-gray-700 bg-gray-100"
-                            : "text-secondary-foreground"
-                        }
-                      >
-                        <div className="flex text-inherit cursor-pointer items-center justify-start gap-3 py-2 rounded px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none">
-                          <tool.icon size="sm" />
-                          <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
-                            {tool.label}
-                          </p>
-                        </div>
-                      </NavLink>
-                    ))}
-                  </div>
-                  <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
-                      CONVERT TO PDF
-                    </h3>
+              <HoverCardContent className="mt-10 w-full flex-wrap max-w-3xl p-8 relative after:rounded-lg z-30 flex items-start gap-6 justify-start">
+                <div className="flex space-y-1 items-start justify-start flex-col">
+                  <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
+                    ORGANIZE PDF
+                  </h3>
+                  {[
+                    {
+                      label: "Merge Pdf",
+                      icon: MergePdf,
+                    },
+                    {
+                      label: "Split Pdf",
+                      icon: SplitPdf,
+                    },
+                    {
+                      label: "Remove Pages",
+                      icon: RemovePages,
+                    },
+                    {
+                      label: "Extract Pages",
+                      icon: ExtractPages,
+                    },
+                    {
+                      label: "Organise Pdf",
+                      icon: OrganisePdf,
+                    },
+                  ].map((tool, index) => (
+                    <NavLink
+                      key={index}
+                      to={`/${tool.label.toLowerCase().replace(/\s+/g, "_")}`}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "text-accent dark:bg-gray-700 bg-gray-100"
+                          : "text-secondary-foreground"
+                      }
+                    >
+                      <div className="flex text-inherit cursor-pointer items-center justify-start gap-3 py-2 rounded px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none">
+                        <tool.icon size="sm" />
+                        <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
+                          {tool.label}
+                        </p>
+                      </div>
+                    </NavLink>
+                  ))}
+                </div>
+                <div className="flex space-y-1 items-start justify-start flex-col">
+                  <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
+                    OPTIMIZE PDF
+                  </h3>
+                  {[
+                    {
+                      label: "Compress Pdf",
+                      icon: CompressPdf,
+                    },
+                    {
+                      label: "Repair Pdf",
+                      icon: RepairPdf,
+                    },
+                    {
+                      label: "OCR Pdf",
+                      icon: OcrPdf,
+                    },
+                  ].map((tool, index) => (
+                    <NavLink
+                      key={index}
+                      to={`/${tool.label.toLowerCase().replace(/\s+/g, "_")}`}
+                      className={({ isActive }) =>
+                        isActive
+                          ? "text-accent dark:bg-gray-700 bg-gray-100"
+                          : "text-secondary-foreground"
+                      }
+                    >
+                      <div className="flex text-inherit cursor-pointer items-center justify-start gap-3 py-2 rounded px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none">
+                        <tool.icon size="sm" />
+                        <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
+                          {tool.label}
+                        </p>
+                      </div>
+                    </NavLink>
+                  ))}
+                </div>
+                <div className="flex space-y-1 items-start justify-start flex-col">
+                  <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
+                    CONVERT TO PDF
+                  </h3>
 
-                    {[
-                      {
-                        label: "Jpg to Pdf",
-                        icon: JPGTOPDF,
-                      },
-                      {
-                        label: "Word to Pdf",
-                        icon: WordToPdf,
-                      },
-                      {
-                        label: "Powerpoint to Pdf",
-                        icon: PowerPointToPdf,
-                      },
-                      {
-                        label: "Excel to Pdf",
-                        icon: ExcelToPdf,
-                      },
-                    ].map((tool, index) => (
-                      <div
-                        key={index}
-                        className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
-                      >
-                        <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
-                          {tool.label}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+                  {[
+                    {
+                      label: "Jpg to Pdf",
+                      icon: JPGTOPDF,
+                    },
+                    {
+                      label: "Word to Pdf",
+                      icon: WordToPdf,
+                    },
+                    {
+                      label: "Powerpoint to Pdf",
+                      icon: PowerPointToPdf,
+                    },
+                    {
+                      label: "Excel to Pdf",
+                      icon: ExcelToPdf,
+                    },
+                  ].map((tool, index) => (
+                    <div
+                      key={index}
+                      className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
+                    >
+                      <tool.icon size="sm" />
+                      <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
+                        {tool.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
 
-                  <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
-                      CONVERT FROM PDF
-                    </h3>
-                    {[
-                      {
-                        label: "Pdf to Jpg",
-                        icon: PdfToJpg,
-                      },
-                      {
-                        label: "Pdf to Word",
-                        icon: PdfToWord,
-                      },
-                      {
-                        label: "Pdf to Powerpoint",
-                        icon: PdfToPowerpoint,
-                      },
-                      {
-                        label: "Pdf to Excel",
-                        icon: PdfToExcell,
-                      },
-                    ].map((tool, index) => (
-                      <div
-                        key={index}
-                        className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
-                      >
-                        <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
-                          {tool.label}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+                <div className="flex space-y-1 items-start justify-start flex-col">
+                  <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
+                    CONVERT FROM PDF
+                  </h3>
+                  {[
+                    {
+                      label: "Pdf to Jpg",
+                      icon: PdfToJpg,
+                    },
+                    {
+                      label: "Pdf to Word",
+                      icon: PdfToWord,
+                    },
+                    {
+                      label: "Pdf to Powerpoint",
+                      icon: PdfToPowerpoint,
+                    },
+                    {
+                      label: "Pdf to Excel",
+                      icon: PdfToExcell,
+                    },
+                  ].map((tool, index) => (
+                    <div
+                      key={index}
+                      className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
+                    >
+                      <tool.icon size="sm" />
+                      <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
+                        {tool.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
 
-                  <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
-                      Edit PDF
-                    </h3>
-                    {[
-                      {
-                        label: "Rotate Pdf",
-                        icon: RotatePdf,
-                      },
-                      {
-                        label: "Add page numbers",
-                        icon: AddPagesToPdf,
-                      },
-                      {
-                        label: "Add watermark",
-                        icon: WaterMarkPdf,
-                      },
-                      {
-                        label: "Edit Pdf",
-                        icon: EditPdf,
-                      },
-                    ].map((tool, index) => (
-                      <div
-                        key={index}
-                        className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
-                      >
-                        <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
-                          {tool.label}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
-                  <div className="flex space-y-1 w-full items-start justify-start flex-col">
-                    <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
-                      PDF SECURITY
-                    </h3>
-                    {[
-                      {
-                        label: "Unlock Pdf",
-                        icon: UnlockPdf,
-                      },
-                      {
-                        label: "Protect Pdf",
-                        icon: LockPdf,
-                      },
-                      {
-                        label: "Sign Pdf",
-                        icon: SignPdf,
-                      },
-                      {
-                        label: "Redact Pdf",
-                        icon: RedactPdf,
-                      },
-                    ].map((tool, index) => (
-                      <div
-                        key={index}
-                        className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
-                      >
-                        <tool.icon size="sm" />
-                        <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
-                          {tool.label}
-                        </p>
-                      </div>
-                    ))}
-                  </div>
+                <div className="flex space-y-1  items-start justify-start flex-col">
+                  <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
+                    Edit PDF
+                  </h3>
+                  {[
+                    {
+                      label: "Rotate Pdf",
+                      icon: RotatePdf,
+                    },
+                    {
+                      label: "Add page numbers",
+                      icon: AddPagesToPdf,
+                    },
+                    {
+                      label: "Add watermark",
+                      icon: WaterMarkPdf,
+                    },
+                    {
+                      label: "Edit Pdf",
+                      icon: EditPdf,
+                    },
+                  ].map((tool, index) => (
+                    <div
+                      key={index}
+                      className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
+                    >
+                      <tool.icon size="sm" />
+                      <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
+                        {tool.label}
+                      </p>
+                    </div>
+                  ))}
+                </div>
+                <div className="flex space-y-1 items-start justify-start flex-col">
+                  <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
+                    PDF SECURITY
+                  </h3>
+                  {[
+                    {
+                      label: "Unlock Pdf",
+                      icon: UnlockPdf,
+                    },
+                    {
+                      label: "Protect Pdf",
+                      icon: LockPdf,
+                    },
+                    {
+                      label: "Sign Pdf",
+                      icon: SignPdf,
+                    },
+                    {
+                      label: "Redact Pdf",
+                      icon: RedactPdf,
+                    },
+                  ].map((tool, index) => (
+                    <div
+                      key={index}
+                      className="flex cursor-pointer items-center justify-start gap-3 py-2 px-4 dark:hover:bg-gray-700 hover:bg-gray-100 focus:outline-none"
+                    >
+                      <tool.icon size="sm" />
+                      <p className="whitespace-nowrap text-secondary-foreground dark:text-primary-foreground text-sm font-bold">
+                        {tool.label}
+                      </p>
+                    </div>
+                  ))}
                 </div>
               </HoverCardContent>
             </HoverCard>
