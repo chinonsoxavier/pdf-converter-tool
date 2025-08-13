@@ -8,8 +8,12 @@ import {
   Share2,
   Trash2,
 } from "lucide-react";
+import { useNavigate } from "react-router-dom";
 
 export default function ToolDownload({ label }: { label: string }) {
+
+  const navigate = useNavigate();
+
   return (
     <>
       {/* Header */}
@@ -22,13 +26,13 @@ export default function ToolDownload({ label }: { label: string }) {
       <div className=" to-primary/5 pb-20">
         <div className="mx-auto">
           <div className="text-center px-4 mb-8 py-20 to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)]">
-            <h1 className="text-3xl sm:text-4xl font-semibold text-gray-800 mb-6">
+            <h1 className="text-3xl sm:text-4xl font-semibold text-primary-foreground mb-6">
               {label}
             </h1>
 
             <div className="flex items-center flex-wrap justify-center gap-4">
               {/* Back button */}
-              <Button
+              <Button onClick={()=>navigate(-1)}
                 variant="ghost"
                 size="icon"
                 className="rounded-full bg-gray-600 hover:bg-gray-700 text-white"
@@ -39,7 +43,7 @@ export default function ToolDownload({ label }: { label: string }) {
               {/* Download button */}
               <Button className="text-white px-8 py-3 rounded-lg font-medium">
                 <Download className="w-5 h-5 mr-2" />
-                Download PDF
+                Download File
               </Button>
 
               {/* Action buttons */}

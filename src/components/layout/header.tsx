@@ -96,12 +96,13 @@ const Header = (isLanding:{isLanding?:boolean}) => {
           : "dark:bg-primary bg-white"
       } flex w-full sticky z-50 duration-1000 top-0 overflow-hidden items-center px-4 border-y sm:px-8 sm:py-5 h-full py-5 justify-between`}
     >
+      <NavLink to="/">
       <motion.div
         variants={variants1}
         initial={"inactive"}
         whileInView={"active"}
         viewport={{ once: true }}
-      >
+        >
         <h1 className="text-4xl font-extrabold tracking-tight flex items-center gap-1">
           <span className="bg-gradient-to-r from-primary-foreground to-gray-400 text-transparent bg-clip-text">
             PDF
@@ -109,6 +110,7 @@ const Header = (isLanding:{isLanding?:boolean}) => {
           <span className="text-red-500 drop-shadow-md">Plug</span>
         </h1>
       </motion.div>
+        </NavLink>
       <motion.div
         variants={variants2}
         initial={"inactive"}

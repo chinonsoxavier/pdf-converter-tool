@@ -120,18 +120,37 @@ const Footer = () => {
             <ul className="space-y-2">
               <li>
                 <Link
-                  to="terms-and-privacy"
+                  to="/terms-and-privacy"
                   className="text-secondary-foreground hover:text-primary-foreground text-sm"
                 >
                   Terms and Privacy
                 </Link>
               </li>
+
               <li>
                 <Link
-                  to="/"
+                  to="/about-us"
                   className="text-secondary-foreground hover:text-primary-foreground text-sm"
                 >
-                  Developers API
+                 About Us
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/contact-us"
+                  className="text-secondary-foreground hover:text-primary-foreground text-sm"
+                >
+                  Contact Us
+                </Link>
+              </li>
+
+              <li>
+                <Link
+                  to="/terms-and-privacy"
+                  className="text-secondary-foreground hover:text-primary-foreground text-sm"
+                >
+                  Terms and Privacy
                 </Link>
               </li>
             </ul>
@@ -168,7 +187,7 @@ const Footer = () => {
           initial={"inactive"}
           whileInView={"active"}
           viewport={{ once: true }}
-          className="w-full"
+          className="w-full hidden"
         >
           <ul className="col-span-2 space-y-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
@@ -217,17 +236,17 @@ const Footer = () => {
           </div>
         </motion.div>
       </div>
-   <motion.div
-          variants={variants3}
-          initial={"inactive"}
-          whileInView={"active"}
-          viewport={{ once: true }}
-          className="w-full"
-        >
-      {/* Bottom border */}
-      <div className="mt-8 pt-4 border-t"></div>
+      <motion.div
+        variants={variants3}
+        initial={"inactive"}
+        whileInView={"active"}
+        viewport={{ once: true }}
+        className="w-full"
+      >
+        {/* Bottom border */}
+        <div className="mt-8 pt-4 border-t"></div>
 
-        <div className="flex max-width mx-auto items-center pb-10 pt-2 justify-between w-full">
+        <div className="flex max-width flex-wrap  mx-auto items-center pb-10 pt-2 sm:justify-between justify-center gap-5 w-full">
           <p className="text-sm">PDFPlug.com © [2025]</p>
           <p className="text-sm">A product by Amazonia Softech Ltd</p>
           <Dialog>
@@ -286,9 +305,8 @@ const Footer = () => {
               </DialogHeader>
             </DialogContent>
           </Dialog>
-      </div>
-        </motion.div>
-      
+        </div>
+      </motion.div>
     </footer>
   );
 };

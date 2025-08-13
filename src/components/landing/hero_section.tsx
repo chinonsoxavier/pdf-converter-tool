@@ -1,5 +1,4 @@
 import ContainerLayout from "../layout/container_layout";
-import HowToSection from "./how_to_section";
 import { motion } from "motion/react";
 
 const HeroSection = () => {
@@ -30,7 +29,7 @@ const HeroSection = () => {
     <>
       <ContainerLayout
         id="hero_section"
-        className="text-center max-width h-full space-y-7 sm:py-40 py-20 flex items-center justify-center flex-col"
+        className="text-center max-width h-full space-y-7 sm:py-28 py-20 flex items-center justify-center flex-col"
       >
         {/* <h1 className="text-center text-5xl font-semibold">
         Every tool you need to work with PDFs in one place
@@ -53,15 +52,11 @@ const HeroSection = () => {
           viewport={{ once: true }}
         >
           <p className="text-lg max-w-2xl  font-semibold text-secondary-foreground sm:text-xl">
-            Merge, split, convert, compress — all in one platform. Professional
-            PDF tools for everyone.
+            Select your PDF,Upload it,and choose the desired action, Your file
+            will be processed instantly Download in Seconds.
           </p>
         </motion.div>
-      
       </ContainerLayout>
-
-        {/* How to use pdfnest section */}
-        <HowToSection />
     </>
   );
 };

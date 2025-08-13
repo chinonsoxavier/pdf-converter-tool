@@ -31,6 +31,9 @@ import DeletePdfPages from "./pages/tools/extract_pdf/delete_pdf_pages/delete_pd
 import AddPdfPageNumber from "./pages/tools/add_pdf_page_number/add_pdf_page_number";
 import AddHeaderFooter from "./pages/tools/add_header_footer/add_header_footer";
 import PreviewPdf from "./pages/tools/preview_pdf/preview_pdf";
+import Terms from "./pages/terms/terms";
+import AboutUs from "./pages/about_us/about_us";
+import ContactUs from "./pages/contact-us/contact_us";
 
 const App = () => {
 
@@ -70,6 +73,19 @@ resetStore()
           />
         </Route>
         {/* end of auth routes */}
+
+        {/* terma route */}
+        <Route path="/terms-and-privacy" element={<Terms />} />
+        {/* privacy route */}
+        <Route path="privacy" element={<div>Privacy Policy</div>} />
+        {/* about route */}
+        <Route path="/about-us" element={<AboutUs />} />
+        {/* contact route */}
+        <Route path="/contact-us" element={<ContactUs/>} />
+        {/* blog route */}
+        <Route path="/blog" element={<div>Blog</div>} />
+        {/* end of blog route */}
+
         {/* tools routes */}
         {/* pfd to word routes */}
         <Route path="/pdf_to_word" element={<PdfToWordConverter />} />

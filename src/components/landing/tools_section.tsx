@@ -445,11 +445,11 @@ interface Tool {
       </motion.div>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-1.5 sm:gap-3 pb-12 sm:pb-20 w-full mt-4">
         {Tools
-          .slice(0, -1) // Ensure you don't include the last empty object
+          .slice(0, -1) 
           .filter(
             (tool) =>
               tool.label && tool.label?.toLowerCase()?.includes(searchQuery)
-          ) // Ensure label exists
+          )
           .filter(
             (tool) =>
               selectedTools === "all-tools" || selectedTools === tool.category
