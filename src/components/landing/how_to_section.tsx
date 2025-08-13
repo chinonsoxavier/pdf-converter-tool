@@ -58,7 +58,7 @@ const HowToSection = () => {
       >
         
       <h1 className="text-primary-foreground font-semibold text-2xl sm:text-3xl text-center">
-        How to Use PDFNest
+        How to Use PDFPlug
       </h1>
         </motion.div>
 

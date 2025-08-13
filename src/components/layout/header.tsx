@@ -100,7 +100,13 @@ const Header = (isLanding:{isLanding?:boolean}) => {
         whileInView={"active"}
         viewport={{ once: true }}
       >
-        <h1 className="text-2xl text-primary-foreground">Logo</h1>
+        <h1 className="text-4xl font-extrabold tracking-tight flex items-center gap-1">
+  <span className="bg-gradient-to-r from-primary-foreground to-gray-400 text-transparent bg-clip-text">
+    PDF
+  </span>
+  <span className="text-red-500 drop-shadow-md">Plug</span>
+</h1>
+
       </motion.div>
       <motion.div
         variants={variants2}
@@ -246,7 +252,7 @@ const Header = (isLanding:{isLanding?:boolean}) => {
                 <div className="grid grid-cols-[repeat(auto-fit,minmax(140px,1fr))] max-w-4xl gap-8 flex-wrap  space-y-3 w-full items-start text-dark-text justify-between">
                   <div className="flex space-y-1 w-full items-start justify-start flex-col">
                     <h3 className="font-bold text-primary-foreground text-[15px] whitespace-nowrap">
-                      ORGANISE PDF
+                      ORGANIZE PDF
                     </h3>
                     {[
                       {
