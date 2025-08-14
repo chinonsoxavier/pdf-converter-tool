@@ -1,4 +1,4 @@
-import { Crown } from "lucide-react";
+toimport { Crown } from "lucide-react";
 import ContainerLayout from "../layout/container_layout";
 import { Button } from "../ui/button";
 import { motion } from "motion/react";
@@ -221,7 +221,7 @@ const GetPremiumSection = () => {
           initial={"inactive"}
           whileInView={"active"}
           viewport={{ once: true }}
-          className="hidden sm:block w-full"
+          className="w-full"
         >
           <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-1.5 sm:gap-3 pb-12 sm:pb-20 w-full mt-4">
             {premiumTools.map((tool, index) => {
