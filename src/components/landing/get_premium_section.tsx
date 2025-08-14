@@ -1,4 +1,4 @@
-toimport { Crown } from "lucide-react";
+import { Crown } from "lucide-react";
 import ContainerLayout from "../layout/container_layout";
 import { Button } from "../ui/button";
 import { motion } from "motion/react";
