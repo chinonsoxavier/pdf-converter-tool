@@ -127,7 +127,7 @@ const PdfRenderer = ({
                         <TooltipTrigger
                           asChild
                           onClick={() =>
-                            rotateIndividualPage(selectedIndex, index)
+                            rotateIndividualPage(selectedIndex, index + 1)
                           }
                           className="absolute bottom-0 text-white opacity-80 hover:opacity-100 duration-700 bg-[rgba(0,0,0,0.6)] center right-0 z-10 rounded-full w-7 h-7 p-1.5"
                         >

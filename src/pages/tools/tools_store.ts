@@ -88,11 +88,11 @@ const useToolsStore = create<ToolsStore>((set) => ({
   setRotateRight: (fileIndex: number, pageLength: number) =>
     set((state) => {
       const newSelectedFiles = [...state.selectedFiles];
-      if (fileIndex >= 0 && fileIndex < newSelectedFiles.length) {
+      if (fileIndex >= 0 && fileIndex <= newSelectedFiles.length) {
         newSelectedFiles[fileIndex] = {
           ...newSelectedFiles[fileIndex],
           rotate: Array.from(
-            { length: pageLength },
+            { length: 5 },
             (_, pageIndex) =>
               ((newSelectedFiles[fileIndex].rotate?.[pageIndex] ?? 0) + 90) % 360
           ),
@@ -107,7 +107,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
   setRotateLeft: (fileIndex: number, pageLength: number) =>
     set((state) => {
       const newSelectedFiles = [...state.selectedFiles];
-      if (fileIndex >= 0 && fileIndex < newSelectedFiles.length) {
+      if (fileIndex >= 0 && fileIndex <= newSelectedFiles.length) {
         newSelectedFiles[fileIndex] = {
           ...newSelectedFiles[fileIndex],
           rotate: Array.from(
@@ -198,7 +198,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       if (file && file.rotate !== undefined && file.rotate !== null) {
         const currentRotations = file.rotate;
 
-        if (pageIndex >= 0 && pageIndex < currentRotations.length) {
+        if (pageIndex >= 0 && pageIndex <= currentRotations.length) {
           // Calculate the new rotation for the specific page
           const newRotationValue =
             ((currentRotations[pageIndex] ?? 0) + 90) % 360;
@@ -230,7 +230,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
   initRotate: (fileIndex: number, pageLength: number) =>
     set((state) => {
       const newSelectedFiles = [...state.selectedFiles];
-      if (fileIndex >= 0 && fileIndex < newSelectedFiles.length) {
+      if (fileIndex >= 0 && fileIndex <= newSelectedFiles.length) {
         newSelectedFiles[fileIndex] = {
           ...newSelectedFiles[fileIndex],
           rotate: Array(pageLength).fill(0),

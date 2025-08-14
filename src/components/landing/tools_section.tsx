@@ -159,7 +159,7 @@ interface Tool {
       category: "organize",
     },
     {
-      label: "Extract Pages",
+      label: "Extract Pdf Pages",
       icon: ExtractPages,
       isFree: true,
       info: "Drag & drop rearrangement of pages",
@@ -167,7 +167,7 @@ interface Tool {
       category: "organize",
     },
     {
-      label: "Delete Pages",
+      label: "Delete Pdf Pages",
       icon: RemovePages,
       isFree: true,
       info: "Remove unwanted pages from PDF",
@@ -175,7 +175,7 @@ interface Tool {
       category: "organize",
     },
     {
-      label: "Add Page Numbers",
+      label: "Add Pdf Page Numbers",
       icon: AddPagesToPdf,
       isFree: true,
       info: "Insert page numbers automatically",
@@ -445,11 +445,11 @@ interface Tool {
       </motion.div>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-1.5 sm:gap-3 pb-12 sm:pb-20 w-full mt-4">
         {Tools
-          .slice(0, -1) // Ensure you don't include the last empty object
+          .slice(0, -1) 
           .filter(
             (tool) =>
               tool.label && tool.label?.toLowerCase()?.includes(searchQuery)
-          ) // Ensure label exists
+          )
           .filter(
             (tool) =>
               selectedTools === "all-tools" || selectedTools === tool.category

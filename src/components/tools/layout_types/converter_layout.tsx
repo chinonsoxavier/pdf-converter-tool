@@ -1,4 +1,3 @@
-import HowToSection from "@/components/landing/how_to_section";
 import Footer from "@/components/layout/footer";
 import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
@@ -265,9 +264,6 @@ const ConverterLayout = ({
 
               {/* History Section */}
               <HistorySection />
-
-              {/* How to section */}
-              <HowToSection />
 
               {/* Footer */}
               <Footer />

@@ -28,6 +28,12 @@ import useToolsStore from "./pages/tools/tools_store";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
 import DeletePdfPages from "./pages/tools/extract_pdf/delete_pdf_pages/delete_pdf_pages";
+import AddPdfPageNumber from "./pages/tools/add_pdf_page_number/add_pdf_page_number";
+import AddHeaderFooter from "./pages/tools/add_header_footer/add_header_footer";
+import PreviewPdf from "./pages/tools/preview_pdf/preview_pdf";
+import Terms from "./pages/terms/terms";
+import AboutUs from "./pages/about_us/about_us";
+import ContactUs from "./pages/contact-us/contact_us";
 
 const App = () => {
 
@@ -67,6 +73,19 @@ resetStore()
           />
         </Route>
         {/* end of auth routes */}
+
+        {/* terma route */}
+        <Route path="/terms-and-privacy" element={<Terms />} />
+        {/* privacy route */}
+        <Route path="privacy" element={<div>Privacy Policy</div>} />
+        {/* about route */}
+        <Route path="/about-us" element={<AboutUs />} />
+        {/* contact route */}
+        <Route path="/contact-us" element={<ContactUs/>} />
+        {/* blog route */}
+        <Route path="/blog" element={<div>Blog</div>} />
+        {/* end of blog route */}
+
         {/* tools routes */}
         {/* pfd to word routes */}
         <Route path="/pdf_to_word" element={<PdfToWordConverter />} />
@@ -145,9 +164,9 @@ resetStore()
         {/* end of organise pages */}
 
         {/* extract pages */}
-        <Route path="/extract_pdf" element={<ExtractPdf />} />
+        <Route path="/extract_pdf_pages" element={<ExtractPdf />} />
         <Route
-          path="/extract_pdf/download/:id"
+          path="/extract_pdf_pages/download/:id"
           element={
             <ToolDownloadLayout label="Pdf pages has been extracted successfully" />
           }
@@ -165,27 +184,27 @@ resetStore()
         {/* end of delete pages */}
 
         {/* add pages pages */}
-        <Route path="/add_pdf_pages" element={<RotatePdf />} />
+        <Route path="/add_pdf_page_numbers" element={<AddPdfPageNumber />} />
         <Route
-          path="/add_pdf_pages/download/:id"
+          path="/add_pdf_page_numbers/download/:id"
           element={
-            <ToolDownloadLayout label="Pdf pages has been added successfully" />
+            <ToolDownloadLayout label="Pdf pages number has been added successfully" />
           }
         />
         {/* end of add pages pages */}
 
         {/* add headers/footers pages */}
-        <Route path="/add_header_footer" element={<RotatePdf />} />
+        <Route path="/add_header_footer" element={<AddHeaderFooter />} />
         <Route
           path="/add_header_footer/download/:id"
           element={
-            <ToolDownloadLayout label="Pdf pages has been extracted successfully" />
+            <ToolDownloadLayout label="Pdf header and footer has been added successfully" />
           }
         />
         {/* end of add headers/footers pages */}
 
         {/* preview pages */}
-        <Route path="/preview" element={<RotatePdf />} />
+        <Route path="/preview_pdf" element={<PreviewPdf />} />
         {/* end of preview pages */}
 
         {/* end of tools routes */}

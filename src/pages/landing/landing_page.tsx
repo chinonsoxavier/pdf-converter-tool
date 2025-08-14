@@ -4,6 +4,7 @@ import Header from "@/components/layout/header";
 import Footer from "@/components/layout/footer";
 import { EmailCapture } from "@/components/landing/email_capture";
 import SidemenuLyout from "@/components/layout/sidemenu_layout";
+import GetPremiumSection from "@/components/landing/get_premium_section";
 
 const LandingPage = () => {
   return (
@@ -12,7 +13,7 @@ const LandingPage = () => {
       <Header isLanding />
 
       {/* side menu */}
-      <SidemenuLyout/>
+      <SidemenuLyout />
 
       {/* main content */}
 
@@ -22,6 +23,9 @@ const LandingPage = () => {
 
         {/* tools section */}
         <ToolsSection />
+
+        {/* get premium */}
+        <GetPremiumSection/>
 
         {/* email capture */}
         <EmailCapture />
