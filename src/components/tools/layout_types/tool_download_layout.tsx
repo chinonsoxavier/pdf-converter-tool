@@ -2,16 +2,17 @@ import Footer from "@/components/layout/footer";
 import Header from "@/components/layout/header";
 import SidemenuLyout from "@/components/layout/sidemenu_layout";
 import { Button } from "@/components/ui/button";
+import useToolsStore from "@/pages/tools/tools_store";
 import {
   ArrowLeft,
   Download,
   Share2,
   Trash2,
 } from "lucide-react";
-import { useNavigate } from "react-router-dom";
-
+import { useNavigate,useParams } from "react-router-dom";
 export default function ToolDownload({ label }: { label: string }) {
-
+  const { downloadFile } = useToolsStore();
+const { id } = useParams();
   const navigate = useNavigate();
 
   return (
@@ -23,9 +24,9 @@ export default function ToolDownload({ label }: { label: string }) {
       <SidemenuLyout />
 
       {/* main content */}
-      <div className=" to-primary/5 pb-20">
+      <div className="pb-20">
         <div className="mx-auto">
-          <div className="text-center px-4 mb-8 py-20 to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)]">
+          <div className="text-center px-4 mb-8 py-12">
             <h1 className="text-3xl sm:text-4xl font-semibold text-primary-foreground mb-6">
               {label}
             </h1>
@@ -41,7 +42,7 @@ export default function ToolDownload({ label }: { label: string }) {
               </Button>
 
               {/* Download button */}
-              <Button className="text-white px-8 py-3 rounded-lg font-medium">
+              <Button onClick={()=>downloadFile(id)} className="text-white px-8 py-3 rounded-lg font-medium">
                 <Download className="w-5 h-5 mr-2" />
                 Download File
               </Button>

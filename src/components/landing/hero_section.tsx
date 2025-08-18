@@ -29,7 +29,7 @@ const HeroSection = () => {
     <>
       <ContainerLayout
         id="hero_section"
-        className="text-center max-width h-full space-y-7 sm:py-28 py-20 flex items-center justify-center flex-col"
+        className="text-center max-width h-full space-y-7 sm:py-20 py-12 flex items-center justify-center flex-col"
       >
         {/* <h1 className="text-center text-5xl font-semibold">
         Every tool you need to work with PDFs in one place

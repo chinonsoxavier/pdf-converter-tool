@@ -2,7 +2,7 @@ import { cn } from "@/lib/utils";
 import useToolsStore from "@/pages/tools/tools_store";
 import { Button } from "../ui/button";
 
-const ConverterLayoutSidebar = ({ label, setProcessingTool, fileType, disabled, contents }: { label: string; setProcessingTool: (arg0: boolean) => void; fileType: string; disabled: boolean; contents:React.ReactNode}) => {
+const ConverterLayoutSidebar = ({ label,fileType, disabled, contents }: { label: string;  fileType: string; disabled: boolean; contents:React.ReactNode}) => {
     const { sideMenuOpen } = useToolsStore();
     return (
       
@@ -66,7 +66,7 @@ const ConverterLayoutSidebar = ({ label, setProcessingTool, fileType, disabled, 
         
       <div className="px-6 w-full center border-t h-[12%]">
         <Button disabled={disabled}
-          onClick={() => setProcessingTool(true)}
+          onClick={() => {}}
           className="max-w-sm font-semibold text-lg sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center h w-full"
           type="submit"
         >

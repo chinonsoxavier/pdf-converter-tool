@@ -97,20 +97,20 @@ const Header = (isLanding:{isLanding?:boolean}) => {
       } flex w-full sticky z-50 duration-1000 top-0 overflow-hidden items-center px-4 border-y sm:px-8 sm:py-5 h-full py-5 justify-between`}
     >
       <NavLink to="/">
-      <motion.div
-        variants={variants1}
-        initial={"inactive"}
-        whileInView={"active"}
-        viewport={{ once: true }}
+        <motion.div
+          variants={variants1}
+          initial={"inactive"}
+          whileInView={"active"}
+          viewport={{ once: true }}
         >
-        <h1 className="text-4xl font-extrabold tracking-tight flex items-center gap-1">
-          <span className="bg-gradient-to-r from-primary-foreground to-gray-400 text-transparent bg-clip-text">
-            PDF
-          </span>
-          <span className="text-red-500 drop-shadow-md">Plug</span>
-        </h1>
-      </motion.div>
-        </NavLink>
+          <h1 className="text-4xl font-extrabold tracking-tight flex items-center gap-1">
+            <span className="bg-gradient-to-r from-primary-foreground to-gray-400 text-transparent bg-clip-text">
+              PDF
+            </span>
+            <span className="text-red-500 drop-shadow-md">Plug</span>
+          </h1>
+        </motion.div>
+      </NavLink>
       <motion.div
         variants={variants2}
         initial={"inactive"}
@@ -481,12 +481,12 @@ const Header = (isLanding:{isLanding?:boolean}) => {
         <div className="flex items-center justify-end gap-2">
           <nav className="flex items-center justify-end gap-4">
             <Button
-              className="h-10 sm:h-full dark:bg-transparent dark:px-0 dark:border-none dark:underline"
+              className="h-10 hidden xs:flex sm:h-full dark:bg-transparent dark:px-0 dark:border-none dark:underline"
               variant="secondary"
             >
               <Link to="/signin">Sign In </Link>
             </Button>
-            <span className="bg-gray-400 h-max min-h-8 w-[1px]"></span>
+            <span className="bg-gray-400 hidden xs:flex h-max min-h-8 w-[1px]"></span>
             <Button className="h-10 sm:h-full hidden xs:flex dark:bg-[#ce1c1c] dark:text-white">
               <Coffee />
               Support Us

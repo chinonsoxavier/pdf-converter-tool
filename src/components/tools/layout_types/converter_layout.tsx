@@ -27,7 +27,7 @@ import SidemenuLyout from "@/components/layout/sidemenu_layout";
 import ConverterLayoutSidebar from "@/components/layout/converter_layout_sidebar";
 import useToolsStore from "@/pages/tools/tools_store";
 import PdfRenderer from "@/components/pdf_renderer";
-import { useNavigate } from "react-router-dom";
+// import { useNavigate } from "react-router-dom";
 const ConverterLayout = ({
   disabled=false,
   children,
@@ -36,7 +36,8 @@ const ConverterLayout = ({
   label,
   desc,
   convertingStateText,
-  fileType=["pdf"],
+  fileType = ["pdf"],
+  handleFileUpload,
   
 }: Readonly<{
   disabled?: boolean;
@@ -47,6 +48,7 @@ const ConverterLayout = ({
   desc: string;
   fileType?: string[];
   convertingStateText: string;
+  handleFileUpload?: (pdfFile:File) => Promise<string>;
 }>) => {
   const {
     selectedFiles,
@@ -54,13 +56,13 @@ const ConverterLayout = ({
     toggleSideMenuOpen,
     selectedIndex,
     sideMenuOpen,
+    loadingState
   } = useToolsStore();
 
-  const navigate = useNavigate();
-  const [progress, setProgress] = useState(0);
+  // const navigate = useNavigate();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
-  const [processingTool, setProcessingTool] = useState(false);
+  // const [processingTool, setProcessingTool] = useState(false);
   const [isDragging, setIsDragging] = useState<boolean>(false); // Track drag state
   const variants1 = {
     inactive: {
@@ -110,9 +112,10 @@ const ConverterLayout = ({
         fileName: file.name,
         fileSize: file.size,
         fileType: allowedFileTypes,
+        file:file
       });
 
-      console.log("Selected file:", file.name, "Size:", file.size, "bytes");
+      console.log("Selected file:", file.name, "Size:", file.size, "bytes","file url",fileUrl);
       return;
     }
   };
@@ -126,24 +129,12 @@ const ConverterLayout = ({
     setIsDragging(false);
   };
 
-  const handleSubmitFile = () => {
-    setProcessingTool(true);
-    setProgress(0);
-    const interval: number = setInterval(() => {
-      setProgress((prev) => {
-        if (prev >= 100) {
-          clearInterval(interval);
-          setProgress(100);
-          setProcessingTool(false);
-          navigate("download/hxdbhuabhsahvxas");
-          return 100;
-        }
-        if (prev > 80) {
-          return prev + Math.random() * 15; // Increment progress by 10%
-        }
-        return prev + Math.random() * 35;
-      });
-    }, 1500); // Update every 800ms
+  const handleSubmitFile = async () => {
+  await handleFileUpload(
+    selectedFiles[selectedIndex ?? 0]?.file
+   );
+          // navigate("download/" + );
+         
   };
 
  
@@ -154,7 +145,6 @@ const ConverterLayout = ({
 
   return (
     <div className="h-lvh">
-
       {/* header */}
       <div className="h-[12%]">
         <Header />
@@ -162,13 +152,7 @@ const ConverterLayout = ({
       <SidemenuLyout />
 
       {/* main content */}
-      {processingTool ? (
-        <ToolPageLoader
-          setProgress={setProgress}
-          progress={progress}
-          convertingStateText={convertingStateText}
-        />
-      ) : (
+      {loadingState === "idle" ? (
         <main className="w-full h-[88%] overflow-scroll dark:bg-primary">
           {!selectedFiles[selectedIndex] ? (
             <div className="">
@@ -185,7 +169,9 @@ const ConverterLayout = ({
                     onDragLeave={handleDragLeave}
                     onDrop={handleFileChange}
                     className={`sm:p-10 p-6 bg-secondary dark:border-primary border-dashed border-3 w-full center gap-3 sm:gap-5 max-w-3xl my-0 ${
-                      isDragging ? "border-accent dark:border-accent" : "border-[#4a4a4a] "
+                      isDragging
+                        ? "border-accent dark:border-accent"
+                        : "border-[#4a4a4a] "
                     }`}
                   >
                     <h1 className="text-3xl sm:text-4xl sm:text-left text-center dark:text-white text-secondary-foreground font-semibold">
@@ -275,7 +261,7 @@ const ConverterLayout = ({
                 disabled={disabled}
                 contents={actionMenuSideBar}
                 fileType={fileType[0]}
-                setProcessingTool={setProcessingTool}
+                // setProcessingTool={setProcessingTool}
                 label={label}
               />
               <div className="h-full overflow-y-scroll flex items-start w-full justify-center ">
@@ -346,8 +332,8 @@ const ConverterLayout = ({
                 <Button
                   disabled={disabled}
                   onClick={() => {
-                    handleSubmitFile();
-                    setProcessingTool(true);
+                    // handleSubmitFile();
+                    // setProcessingTool(true);
                   }}
                   className="max-w-sm font-semibold absolute bottom-10 left-10 sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center sm:hidden"
                   type="submit"
@@ -372,7 +358,7 @@ const ConverterLayout = ({
                 <div className="px-6 w-full py-6 -[12%]">
                   <Button
                     disabled={disabled}
-                    onClick={() => setProcessingTool(true)}
+                    onClick={handleSubmitFile}
                     className="max-w-sm font-semibold sm:h-16 text-lg sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center w-full"
                     type="submit"
                   >
@@ -385,6 +371,8 @@ const ConverterLayout = ({
             </div>
           )}
         </main>
+      ) : (
+        <ToolPageLoader convertingStateText={convertingStateText} />
       )}
     </div>
   );

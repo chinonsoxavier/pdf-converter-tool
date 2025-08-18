@@ -162,7 +162,8 @@ const PdfRenderer = ({
                     </div>)}
 
                     <Page
-                      loading={<PdfLoadingComponent/>}
+                      loading={<PdfLoadingComponent />}
+                      
                       onClick={() => handlePageClick && handlePageClick(index)}
                       canvasBackground=""
                       rotate={selectedFiles[selectedIndex]?.rotate?.[index + 1]} // Use the specific rotation for each page

@@ -1,13 +1,16 @@
 import ConverterLayout from "@/components/tools/layout_types/converter_layout";
 import { Check, Crown } from "lucide-react";
 import { useState } from "react";
+import useToolsStore from "../tools_store";
 
 const PdfToWordConverter = () => {
   const [OCR, setOCR] = useState(false);
+  const {convertPdfToWord,selectedFiles,selectedIndex } = useToolsStore();
 
   return (
     <div className="">
       <ConverterLayout
+        handleFileUpload = {()=>convertPdfToWord(selectedFiles[selectedIndex]?.file)}
         actionButtonText="Convert Pdf To Word"
         label="Pdf To Word Converter"
         desc="Convert PDFs to editable Word documents"

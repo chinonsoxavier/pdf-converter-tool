@@ -312,7 +312,7 @@ interface Tool {
   console.log(showAllTools)
 
   return (
-    <ContainerLayout className="space-y-5 w-full border-t pt-12 sm:pt-28 text-center flex-col">
+    <ContainerLayout className="space-y-5 w-full border-t pt-12 sm:pt-20 text-center flex-col">
       <motion.div
         variants={variants1}
         initial={"inactive"}

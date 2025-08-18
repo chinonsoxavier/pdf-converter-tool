@@ -48,14 +48,14 @@ const Footer = () => {
     };
   return (
     <footer className="px-4 pt-10 sm:pt-20 border-t">
-      <div className="grid max-width mx-auto grid-cols-2 md:grid-cols-5 gap-8">
+      <div className="flex flex-wrap  max-width w-full mx-auto grid-cols-2 md:grid-cols-5 gap-8">
         {/* Member area */}
         <motion.div
           variants={variants1}
           initial={"inactive"}
           whileInView={"active"}
           viewport={{ once: true }}
-          className="w-full"
+          className="flex-1"
         >
           <div>
             <h3 className="font-medium text-primary-foreground mb-4">
@@ -81,37 +81,15 @@ const Footer = () => {
             </ul>
           </div>
         </motion.div>
-        {/* PDF Converter */}
-        <motion.div
-          variants={variants1}
-          initial={"inactive"}
-          whileInView={"active"}
-          viewport={{ once: true }}
-          className="w-full"
-        >
-          <div>
-            <h3 className="font-medium text-primary-foreground mb-4">
-              PDF Converter
-            </h3>
-            <ul className="space-y-2">
-              <li>
-                <Link
-                  to="/blog"
-                  className="text-secondary-foreground hover:text-primary-foreground text-sm"
-                >
-                  Blog
-                </Link>
-              </li>
-            </ul>
-          </div>
-        </motion.div>
+     
+        
         {/* Company */}
         <motion.div
           variants={variants1}
           initial={"inactive"}
           whileInView={"active"}
           viewport={{ once: true }}
-          className="w-full"
+          className="flex-1"
         >
           <div>
             <h3 className="font-medium text-primary-foreground mb-4">
@@ -147,10 +125,10 @@ const Footer = () => {
 
               <li>
                 <Link
-                  to="/terms-and-privacy"
+                  to="/blog"
                   className="text-secondary-foreground hover:text-primary-foreground text-sm"
                 >
-                  Terms and Privacy
+                  Blog
                 </Link>
               </li>
             </ul>
@@ -161,7 +139,7 @@ const Footer = () => {
           initial={"inactive"}
           whileInView={"active"}
           viewport={{ once: true }}
-          className="w-full"
+          className="flex-1"
         >
           {/* Support */}
           <div>
@@ -219,7 +197,7 @@ const Footer = () => {
           initial={"inactive"}
           whileInView={"active"}
           viewport={{ once: true }}
-          className="w-full"
+          className="flex-1"
         >
           <div className="col-span-2 space-y-2 md:col-span-1">
             <div className="flex items-center gap-2 mb-4">
@@ -241,7 +219,7 @@ const Footer = () => {
         initial={"inactive"}
         whileInView={"active"}
         viewport={{ once: true }}
-        className="w-full"
+        className="flex-1"
       >
         {/* Bottom border */}
         <div className="mt-8 pt-4 border-t"></div>
