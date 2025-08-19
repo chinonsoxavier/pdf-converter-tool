@@ -27,6 +27,7 @@ import SidemenuLyout from "@/components/layout/sidemenu_layout";
 import ConverterLayoutSidebar from "@/components/layout/converter_layout_sidebar";
 import useToolsStore from "@/pages/tools/tools_store";
 import PdfRenderer from "@/components/pdf_renderer";
+import { enqueueSnackbar } from "notistack";
 // import { useNavigate } from "react-router-dom";
 const ConverterLayout = ({
   disabled=false,
@@ -99,7 +100,9 @@ const ConverterLayout = ({
           : "unknown";
 
       if (!allowedFileTypes || !allowedFileTypes.includes(fileType)) {
-        alert("Invalid file type. Please upload a valid " + selectedFiles[selectedIndex]?.fileType[0] + ' file.');
+        enqueueSnackbar(`Invalid file type. Please upload a valid ${selectedFiles[selectedIndex]?.fileType[0]} file`, {
+          variant: "error",
+        });
         if (fileInputRef.current) {
           fileInputRef.current.value = ""; // Clear the input value
         }
@@ -372,7 +375,7 @@ const ConverterLayout = ({
           )}
         </main>
       ) : (
-        <ToolPageLoader convertingStateText={convertingStateText} />
+        <ToolPageLoader label={label} convertingStateText={convertingStateText} />
       )}
     </div>
   );

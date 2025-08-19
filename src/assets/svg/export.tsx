@@ -806,3 +806,4 @@ export const WordIcon: React.FC<Partial<ISvgIconComponent>> = (props) => {
     </SvgIconComponent>
   );
 };
+

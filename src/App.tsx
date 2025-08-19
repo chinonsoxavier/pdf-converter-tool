@@ -34,7 +34,7 @@ import PreviewPdf from "./pages/tools/preview_pdf/preview_pdf";
 import Terms from "./pages/terms/terms";
 import AboutUs from "./pages/about_us/about_us";
 import ContactUs from "./pages/contact-us/contact_us";
-
+import {SnackbarProvider} from "notistack";
 const App = () => {
 
   const location = useLocation();
@@ -46,6 +46,7 @@ resetStore()
 
   return (
     <AppThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
+      <SnackbarProvider/>
       <ScrollManager smoothRestore={true} />
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -209,7 +210,7 @@ resetStore()
 
         {/* end of tools routes */}
       </Routes>
-    </AppThemeProvider>
+      </AppThemeProvider>
   );
 };
 

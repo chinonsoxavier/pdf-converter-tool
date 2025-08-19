@@ -4,7 +4,7 @@ const PdfLoadingComponent = () => {
   return (
     <div className={`w-20 h-32 bg-white dark:bg-secondary rounded`}>
       <svg xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 240 336">
-        <g clip-path="url(#a)">
+        <g clipPath="url(#a)">
           <path
             fill="#FEEBEB"
             fillRule="evenodd"

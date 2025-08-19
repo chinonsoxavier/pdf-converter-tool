@@ -1,10 +1,10 @@
-
+import {  enqueueSnackbar } from "notistack";
 import { create } from "zustand";
 import axios from "axios";
 interface ISelectedFile {
   rotate?: number[]; // Per-page rotations for this file
   fileName: string;
-  file:File,
+  file: File;
   fileUrl: string;
   fileType: string[];
   fileSize: number;
@@ -311,24 +311,51 @@ const useToolsStore = create<ToolsStore>((set) => ({
         // items: newItems,
       };
     }),
-  downloadFile: async (downloadUrl:string) => {
+  downloadFile: async (downloadUrl: string) => {
     try {
-      const res = await axios.get("http://localhost:5000/api/v1/tools/download/"+downloadUrl);
-      return res.data;
+      const res = await axios.get(
+        "http://localhost:5000/api/v1/tools/download/" + downloadUrl,
+        {
+          responseType: "blob", // Important: get the response as a Blob
+        }
+      );
 
+      // Create a URL for the blob
+      const url = window.URL.createObjectURL(new Blob([res.data]));
+
+      // Create a temporary link element
+      const link = document.createElement("a");
+      link.href =  url;
+      // Set the download attribute with a file name
+      // You should get the correct file extension from your API response
+      link.setAttribute("download", "converted_file.docx");
+      document.body.appendChild(link);
+
+      // Programmatically click the link to trigger the download
+      link.click();
+
+      // Clean up the temporary URL and link element
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      return "success";
     } catch (error) {
-      alert("failed to download file");
-      console.log(error)
+      // alert("Failed to download file");
+      enqueueSnackbar("failed to download file", {
+        variant:"error"
+      });
+      console.log(error);
+      // return "error";
     }
   },
   convertPdfToWord: async (pdfFile: File) => {
     set({ loadingState: "loading", progress: 0, downLoadUrl: null });
     try {
-          const form = new FormData();
-          form.append("pdfFile", pdfFile);
+      const form = new FormData();
+      form.append("pdfFile", pdfFile);
       const res = await axios.post(
         "http://localhost:5000/api/v1/tools/convert-pdf-to-word",
-          form,
+        form,
         {
           onUploadProgress: (progressEvent) => {
             const total = progressEvent.total || 1; // Avoid division by zero
@@ -337,12 +364,19 @@ const useToolsStore = create<ToolsStore>((set) => ({
           },
         }
       );
-      set({ loadingState: "success", downLoadUrl: res.data.fileUrl,downLoadId:res.data.fileId });
+      set({
+        loadingState: "success",
+        downLoadUrl: res.data.fileUrl,
+        downLoadId: res.data.fileId,
+      });
+        // window.location.href = res.data;
       return res.data; // Return the response data (download URL or file path)
     } catch (error) {
       console.error("Error converting PDF to Word:", error);
       set({ loadingState: "error" });
-      alert("failed to convert pdf to word!")
+         enqueueSnackbar("failed to convert pdf to word", {
+           variant: "error",
+         });
       return "error!!";
     }
   },
