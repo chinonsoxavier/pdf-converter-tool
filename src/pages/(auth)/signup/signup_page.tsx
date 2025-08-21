@@ -1,5 +1,5 @@
+import { Link, useNavigate } from "react-router-dom";
 import { useState } from "react";
-import {Link} from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,79 +13,36 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
-
+import useAuthStore from "../auth_store";
+import { enqueueSnackbar } from "notistack";
 export default function SignUpPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [formData, setFormData] = useState({
-    firstName: "",
-    lastName: "",
-    email: "",
-    password: "",
-    confirmPassword: "",
-  });
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
+  const { register,loadingStatus,errorMessage } = useAuthStore();
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const [cpassword, setCPassword] = useState("");
+  const [userName, setUsername] = useState("");
+  const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError("");
-
-    // Validate passwords match
-    if (formData.password !== formData.confirmPassword) {
-      setError("Passwords do not match");
-      setIsLoading(false);
-      return;
-    }
-
-    // Validate password strength
-    if (formData.password.length < 8) {
-      setError("Password must be at least 8 characters long");
-      setIsLoading(false);
-      return;
-    }
-
     try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Here you would typically make an API call to your registration endpoint
-      console.log("Registration attempt:", formData);
-
-      // For demo purposes, show success
-      alert(
-        "Registration successful! Please check your email to verify your account."
-      );
+      await register({ email, password, userName, cpassword });
+      if (loadingStatus === 'success') { 
+        navigate("/signin")
+      }
     } catch (err) {
-      setError("Registration failed. Please try again."+err);
-    } finally {
-      setIsLoading(false);
+      enqueueSnackbar("failed to register user" + err, {
+        variant: "error",
+      });
+      console.log(err);
     }
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
 
   const handleGoogleSignUp = async () => {
-    setIsGoogleLoading(true);
-    try {
-      // Simulate Google OAuth flow
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Here you would typically redirect to Google OAuth or use a library like NextAuth
-      console.log("Google sign-up initiated");
-      alert("Google sign-up successful!");
-    } catch (err) {
-      setError("Google sign-up failed. Please try again."+err);
-    } finally {
-      setIsGoogleLoading(false);
-    }
+   window.open("http://localhost:5000/api/v1/auth/google", "_self");
   };
 
   return (
@@ -101,35 +58,22 @@ export default function SignUpPage() {
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
-            {error && (
+            {loadingStatus==='error' && (
               <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
+                <AlertDescription>{errorMessage}</AlertDescription>
               </Alert>
             )}
 
-            <div className="grid grid-cols-2 gap-4">
               <div className="space-y-2">
-                <Label htmlFor="firstName">First name</Label>
+                <Label htmlFor="userName">Username</Label>
                 <Input
-                  id="firstName"
-                  name="firstName"
-                  placeholder="John"
-                  value={formData.firstName}
-                  onChange={handleChange}
+                  id="userName"
+                  name="userName"
+                  placeholder="John Doe"
+                  value={userName}
+                  onChange={(e)=>setUsername(e.target.value)}
                   required
                 />
-              </div>
-              <div className="space-y-2">
-                <Label htmlFor="lastName">Last name</Label>
-                <Input
-                  id="lastName"
-                  name="lastName"
-                  placeholder="Doe"
-                  value={formData.lastName}
-                  onChange={handleChange}
-                  required
-                />
-              </div>
             </div>
 
             <div className="space-y-2">
@@ -139,8 +83,8 @@ export default function SignUpPage() {
                 name="email"
                 type="email"
                 placeholder="m@example.com"
-                value={formData.email}
-                onChange={handleChange}
+                value={email}
+                onChange={(e)=>setEmail(e.target.value)}
                 required
               />
             </div>
@@ -153,8 +97,8 @@ export default function SignUpPage() {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Create a password"
-                  value={formData.password}
-                  onChange={handleChange}
+                  value={password}
+                  onChange={(e)=>setPassword(e.target.value)}
                   required
                 />
                 <Button
@@ -181,8 +125,8 @@ export default function SignUpPage() {
                   name="confirmPassword"
                   type={showConfirmPassword ? "text" : "password"}
                   placeholder="Confirm your password"
-                  value={formData.confirmPassword}
-                  onChange={handleChange}
+                  value={cpassword}
+                  onChange={(e)=>setCPassword(e.target.value)}
                   required
                 />
                 <Button
@@ -203,8 +147,8 @@ export default function SignUpPage() {
           </CardContent>
 
           <CardFooter className="flex flex-col py-4 space-y-4">
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
+            <Button type="submit" className="w-full" disabled={loadingStatus==='loading'}>
+              {loadingStatus==='loading' ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Creating account...
@@ -230,11 +174,7 @@ export default function SignUpPage() {
               variant="outline"
               className="w-full bg-transparent"
               onClick={handleGoogleSignUp}
-              disabled={isGoogleLoading}
             >
-              {isGoogleLoading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
                 <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                   <path
                     fill="currentColor"
@@ -253,12 +193,11 @@ export default function SignUpPage() {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-              )}
               Continue with Google
             </Button>
 
             <div className="text-center text-sm">
-              Already have an account?{" "}
+              Already have an account?
               <Link to="/signin" className="text-blue-600 hover:underline">
                 Sign in
               </Link>

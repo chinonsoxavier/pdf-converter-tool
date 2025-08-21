@@ -1,0 +1,8 @@
+import axios from "axios";
+// export const baseUrl = "http://localhost:5000/api/v1/";
+export const baseUrl = "https://pdfplug.onrender.com/api/v1";
+
+export const baseAxios = axios.create({
+  baseURL: baseUrl,
+  // withCredentials:true,
+});
