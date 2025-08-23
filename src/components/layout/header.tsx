@@ -1,5 +1,5 @@
 import { Button } from "../ui/button";
-import { ChevronDown, Coffee, Menu, XCircle } from "lucide-react";
+import { ChevronDown, Coffee, LucideExternalLink, Menu, XCircle } from "lucide-react";
 import {
   HoverCard,
   HoverCardContent,
@@ -37,8 +37,15 @@ import { motion } from "motion/react";
 import useLandingStore from "@/pages/landing/store/landing_store";
 import { cn } from "@/lib/utils";
 import { useEffect, useState } from "react";
+import useAuthStore from "@/pages/(auth)/auth_store";
 
-const Header = (isLanding:{isLanding?:boolean}) => {
+const Header = (isLanding: { isLanding?: boolean }) => {
+  const { user, logOut } = useAuthStore();
+  
+  const LogOut = async () => {
+    await logOut();
+  }
+
   const variants1 = {
     inactive: {
       x: -50,
@@ -242,7 +249,7 @@ const Header = (isLanding:{isLanding?:boolean}) => {
               </HoverCardContent>
             </HoverCard>
           </li>
-          <li className="cursor-pointer font-bold text-[15px]">
+          <li className="cursor-pointer hidden font-bold text-[15px]">
             <HoverCard>
               <HoverCardTrigger className="flex items-center justify-center">
                 ALL PDF TOOLS
@@ -480,13 +487,21 @@ const Header = (isLanding:{isLanding?:boolean}) => {
       >
         <div className="flex items-center justify-end gap-2">
           <nav className="flex items-center justify-end gap-4">
-            <Button
-              className="h-10 hidden xs:flex sm:h-full dark:bg-transparent dark:px-0 dark:border-none dark:underline"
-              variant="secondary"
-            >
-              <Link to="/signin">Sign In </Link>
-            </Button>
-            <span className="bg-gray-400 hidden xs:flex h-max min-h-8 w-[1px]"></span>
+            {user===null ? (
+              <>
+                <Button
+                  className="h-10 hidden xs:flex sm:h-full dark:bg-transparent dark:px-0 dark:border-none dark:underline"
+                  variant="secondary"
+                >
+                  <Link to="/signin">Sign In</Link>
+                </Button>
+                <span className="bg-gray-400 hidden xs:flex h-max min-h-8 w-[1px]"></span>
+              </>
+            ) : (
+              <Button size="sm" variant="secondary" onClick={LogOut}>
+                <LucideExternalLink /> Logout
+              </Button>
+            )}
             <Button className="h-10 sm:h-full hidden xs:flex dark:bg-[#ce1c1c] dark:text-white">
               <Coffee />
               Support Us
@@ -494,6 +509,7 @@ const Header = (isLanding:{isLanding?:boolean}) => {
           </nav>
 
           <ModeToggle />
+
           {sideMenuOpen ? (
             <div
               className="w-9 h-9 sm:w-10 sm:h-10 cursor-pointer dark:text-white text-secondary-foreground items-center justify-center flex md:hidden"

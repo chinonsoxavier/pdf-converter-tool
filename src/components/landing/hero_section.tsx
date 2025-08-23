@@ -41,7 +41,7 @@ const HeroSection = () => {
           whileInView={"active"}
           viewport={{ once: true }}
         >
-          <h1 className="text-center sm:text-5xl text-secondary-foreground text-4xl font-bold">
+          <h1 className="text-center sm:text-5xl text-secondary-foreground text-4xl font-semibold">
             Free All In One Pdf Tool For Everyone
           </h1>
         </motion.div>
@@ -51,7 +51,7 @@ const HeroSection = () => {
           whileInView={"active"}
           viewport={{ once: true }}
         >
-          <p className="text-lg max-w-2xl  font-semibold text-secondary-foreground sm:text-xl">
+          <p className="text-lg max-w-2xl  font-medium text-secondary-foreground sm:text-xl">
             Select your PDF,Upload it,and choose the desired action, Your file
             will be processed instantly Download in Seconds.
           </p>

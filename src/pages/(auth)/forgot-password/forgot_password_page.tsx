@@ -1,5 +1,6 @@
-import { useState } from "react";
-import {Link} from "react-router-dom";
+import type React from "react";
+import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -13,31 +14,49 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { ArrowLeft, Loader2, Mail } from "lucide-react";
+import useAuthStore from "../auth_store";
 
 export default function ForgotPasswordPage() {
-  const [isLoading, setIsLoading] = useState(false);
+  const {
+    resetPasswordToken,
+    loadingStatus,
+    errorMessage,
+    resendPasswordResetToken,
+  } = useAuthStore();
   const [isSubmitted, setIsSubmitted] = useState(false);
-  const [error, setError] = useState("");
   const [email, setEmail] = useState("");
+  const [canRequestNewToken, setCanRequestNewToken] = useState(true);
+  const [submittedCountdown, setSubmittedCountdown] = useState(0);
+  useEffect(() => {
+    let interval: number;
+    if (submittedCountdown > 0) {
+      interval = setInterval(() => {
+        setSubmittedCountdown((prev) => {
+          if (prev <= 1) {
+            setCanRequestNewToken(true);
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [submittedCountdown]);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError("");
+    setSubmittedCountdown(60);
+    setCanRequestNewToken(false);
+    await resetPasswordToken({ email });
+    setIsSubmitted(true);
+  };
 
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Here you would typically make an API call to your password reset endpoint
-      console.log("Password reset request for:", email);
-
-      setIsSubmitted(true);
-    } catch (err) {
-      setError("Failed to send reset email. Please try again."+err);
-    } finally {
-      setIsLoading(false);
-    }
+  const handleRequestNewToken = async () => {
+    if (!canRequestNewToken) return;
+    setSubmittedCountdown(60);
+    setCanRequestNewToken(false);
+    setIsSubmitted(true);
+    resendPasswordResetToken({ email: email });
   };
 
   if (isSubmitted) {
@@ -53,18 +72,24 @@ export default function ForgotPasswordPage() {
             </CardTitle>
             <CardDescription>
               We've sent a password reset link to
-              <span className="font-medium">{email}</span>
+              <span className="font-medium"> {email}</span>
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center text-sm text-gray-600">
             <p>
-              Didn't receive the email? Check your spam folder or
-              <button
-                onClick={() => setIsSubmitted(false)}
-                className="text-blue-600 hover:underline pl-0.5"
-              >
-                try again
-              </button>
+              Didn't receive the email? Check your spam folder or{" "}
+              {!canRequestNewToken ? (
+                <span className="text-gray-400">
+                  try again in {submittedCountdown}s
+                </span>
+              ) : (
+                <button
+                  onClick={handleRequestNewToken}
+                  className="text-blue-600 hover:underline pl-0.5"
+                >
+                  try again
+                </button>
+              )}
             </p>
           </CardContent>
           <CardFooter>
@@ -94,9 +119,9 @@ export default function ForgotPasswordPage() {
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
-            {error && (
+            {loadingStatus === "error" && (
               <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
+                <AlertDescription>{errorMessage}</AlertDescription>
               </Alert>
             )}
 
@@ -115,8 +140,12 @@ export default function ForgotPasswordPage() {
           </CardContent>
 
           <CardFooter className="flex flex-col py-4 space-y-4">
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
+            <Button
+              type="submit"
+              className="w-full"
+              disabled={loadingStatus === "loading"}
+            >
+              {loadingStatus === "loading" ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Sending reset link...

@@ -9,8 +9,12 @@ import {
   DialogTrigger,
 } from "@/components/ui/dialog";
 import { motion } from "motion/react";
+import useAuthStore from "@/pages/(auth)/auth_store";
 
 const Footer = () => {
+
+  const { user } = useAuthStore();
+
   const variants1 = {
     inactive: {
       y: 110,
@@ -160,36 +164,38 @@ const Footer = () => {
         </motion.div>
 
         {/* Admin  */}
-        <motion.nav
-          variants={variants2}
-          initial={"inactive"}
-          whileInView={"active"}
-          viewport={{ once: true }}
-          className="w-full hidden"
-        >
-          <ul className="col-span-2 space-y-2 md:col-span-1">
-            <div className="flex items-center gap-2 mb-4">
-              <span className="font-medium whitespace-nowrap text-primary-foreground">
-                Admin
-              </span>
-            </div>
-            <li className="text-secondary-foreground font-mono text-sm whitespace-nowrap ">
-              <Link to="/dashboard">Dashoard</Link>
-            </li>
-            <li className="text-secondary-foreground font-mono text-sm whitespace-nowrap">
-              <Link to="/dashboard/users">Users</Link>
-            </li>
-            <li className="text-secondary-foreground font-mono text-sm whitespace-nowrap ">
-              <Link to="/dashboard/tools">Tools</Link>
-            </li>
-            <li className="text-secondary-foreground font-mono text-sm whitespace-nowrap">
-              <Link to="/dashboard/analysis">Analysis</Link>
-            </li>
-            <li className="text-secondary-foreground font-mono text-sm whitespace-nowrap">
-              <Link to="/dashboard/settings">Settings</Link>
-            </li>
-          </ul>
-        </motion.nav>
+        {user?.isAdmin &&
+          <motion.nav
+            variants={variants2}
+            initial={"inactive"}
+            whileInView={"active"}
+            viewport={{ once: true }}
+            className="w-full hidden"
+          >
+            <ul className="col-span-2 space-y-2 md:col-span-1">
+              <div className="flex items-center gap-2 mb-4">
+                <span className="font-medium whitespace-nowrap text-primary-foreground">
+                  Admin
+                </span>
+              </div>
+              <li className="text-secondary-foreground font-mono text-sm whitespace-nowrap ">
+                <Link to="/dashboard">Dashoard</Link>
+              </li>
+              <li className="text-secondary-foreground font-mono text-sm whitespace-nowrap">
+                <Link to="/dashboard/users">Users</Link>
+              </li>
+              <li className="text-secondary-foreground font-mono text-sm whitespace-nowrap ">
+                <Link to="/dashboard/tools">Tools</Link>
+              </li>
+              <li className="text-secondary-foreground font-mono text-sm whitespace-nowrap">
+                <Link to="/dashboard/analysis">Analysis</Link>
+              </li>
+              <li className="text-secondary-foreground font-mono text-sm whitespace-nowrap">
+                <Link to="/dashboard/settings">Settings</Link>
+              </li>
+            </ul>
+          </motion.nav>
+        }
 
         {/* PDF Converter Brand */}
         <motion.div

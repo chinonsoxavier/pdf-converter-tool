@@ -1,4 +1,4 @@
-import { Route, Routes } from "react-router-dom";
+import { Navigate, Route, Routes } from "react-router-dom";
 import LandingPage from "./pages/landing/landing_page";
 import SignInPage from "./pages/(auth)/signin/signin_page";
 import SignUpPage from "./pages/(auth)/signup/signup_page";
@@ -35,18 +35,21 @@ import Terms from "./pages/terms/terms";
 import AboutUs from "./pages/about_us/about_us";
 import ContactUs from "./pages/contact-us/contact_us";
 import {SnackbarProvider} from "notistack";
+import ResetPasswordPage from "./pages/(auth)/reset_password/reset_password";
+import useAuthStore from "./pages/(auth)/auth_store";
 const App = () => {
 
   const location = useLocation();
   const { resetStore } = useToolsStore();
-
+  const { resetErrorMsg, user } = useAuthStore();
   useEffect(() => {
-resetStore()
+    resetStore();
+    resetErrorMsg({status:''});
   }, [location.pathname]);
 
   return (
     <AppThemeProvider defaultTheme="dark" storageKey="vite-ui-theme">
-      <SnackbarProvider/>
+      <SnackbarProvider />
       <ScrollManager smoothRestore={true} />
       <Routes>
         <Route path="/" element={<LandingPage />} />
@@ -54,9 +57,10 @@ resetStore()
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
         {/* end of auth routes */}
         {/* admin routes */}
-        <Route path="/dashboard" element={<DashboardLayoutView />}>
+        <Route path="/dashboard"  element={ user?.isAdmin ? <DashboardLayoutView /> : <Navigate to="/"  />}>
           <Route index element={<DashboardOverviewMainView />} />
           <Route path="/dashboard/users" element={<DashboardUsersMainView />} />
           <Route path="/dashboard/tools" element={<DashboardToolsMainView />} />
@@ -82,7 +86,7 @@ resetStore()
         {/* about route */}
         <Route path="/about-us" element={<AboutUs />} />
         {/* contact route */}
-        <Route path="/contact-us" element={<ContactUs/>} />
+        <Route path="/contact-us" element={<ContactUs />} />
         {/* blog route */}
         <Route path="/blog" element={<div>Blog</div>} />
         {/* end of blog route */}
@@ -210,7 +214,7 @@ resetStore()
 
         {/* end of tools routes */}
       </Routes>
-      </AppThemeProvider>
+    </AppThemeProvider>
   );
 };
 

@@ -1,5 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
-import { useState } from "react";
+import {  useState } from "react";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -40,6 +40,7 @@ export default function SignUpPage() {
     }
   };
 
+  
 
   const handleGoogleSignUp = async () => {
    window.open("http://localhost:5000/api/v1/auth/google", "_self");
@@ -87,7 +88,7 @@ export default function SignUpPage() {
                 onChange={(e)=>setEmail(e.target.value)}
                 required
               />
-            </div>
+            </div>  
 
             <div className="space-y-2">
               <Label htmlFor="password">Password</Label>
@@ -109,9 +110,9 @@ export default function SignUpPage() {
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
+                                       <EyeOff className="h-4 w-4 text-primary-foreground" />
+                                     ) : (
+                                       <Eye className="h-4 w-4 text-primary-foreground" />
                   )}
                 </Button>
               </div>
@@ -137,9 +138,9 @@ export default function SignUpPage() {
                   onClick={() => setShowConfirmPassword(!showConfirmPassword)}
                 >
                   {showConfirmPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
+                                      <EyeOff className="h-4 w-4 text-primary-foreground" />
+                                    ) : (
+                                      <Eye className="h-4 w-4 text-primary-foreground" />
                   )}
                 </Button>
               </div>

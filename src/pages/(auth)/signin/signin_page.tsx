@@ -13,60 +13,23 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
 import { Eye, EyeOff, Loader2 } from "lucide-react";
+import useAuthStore from "../auth_store";
 
 export default function SignInPage() {
+  const {login,loadingStatus,errorMessage } = useAuthStore();
   const [showPassword, setShowPassword] = useState(false);
-  const [isLoading, setIsLoading] = useState(false);
-  const [isGoogleLoading, setIsGoogleLoading] = useState(false);
-  const [error, setError] = useState("");
-  const [formData, setFormData] = useState({
-    email: "",
-    password: "",
-  });
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsLoading(true);
-    setError("");
-
-    try {
-      // Simulate API call
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Here you would typically make an API call to your authentication endpoint
-      console.log("Login attempt:", formData);
-
-      // For demo purposes, show success
-      alert("Login successful!");
-    } catch (err) {
-      setError("Invalid email or password. Please try again." + err);
-    } finally {
-      setIsLoading(false);
-    }
+    await login({email, password});
   };
 
-  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setFormData((prev) => ({
-      ...prev,
-      [e.target.name]: e.target.value,
-    }));
-  };
 
-  const handleGoogleSignIn = async () => {
-    setIsGoogleLoading(true);
-    try {
-      // Simulate Google OAuth flow
-      await new Promise((resolve) => setTimeout(resolve, 1000));
-
-      // Here you would typically redirect to Google OAuth or use a library like NextAuth
-      console.log("Google sign-in initiated");
-      alert("Google sign-in successful!");
-    } catch (err) {
-      setError("Google sign-in failed. Please try again."+err);
-    } finally {
-      setIsGoogleLoading(false);
-    }
-  };
+ const handleGoogleSignIn = async () => {
+   window.open("http://localhost:5000/api/v1/auth/google", "_self");
+ };
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary px-4">
@@ -81,9 +44,9 @@ export default function SignInPage() {
         </CardHeader>
         <form onSubmit={handleSubmit}>
           <CardContent className="space-y-4">
-            {error && (
+            {loadingStatus==='error' && (
               <Alert variant="destructive">
-                <AlertDescription>{error}</AlertDescription>
+                <AlertDescription>{errorMessage}</AlertDescription>
               </Alert>
             )}
 
@@ -94,8 +57,7 @@ export default function SignInPage() {
                 name="email"
                 type="email"
                 placeholder="m@example.com"
-                value={formData.email}
-                onChange={handleChange}
+                onChange={(e)=>setEmail(e.target.value)}
                 required
               />
             </div>
@@ -108,8 +70,7 @@ export default function SignInPage() {
                   name="password"
                   type={showPassword ? "text" : "password"}
                   placeholder="Enter your password"
-                  value={formData.password}
-                  onChange={handleChange}
+                  onChange={(e)=>setPassword(e.target.value)}
                   required
                 />
                 <Button
@@ -120,9 +81,9 @@ export default function SignInPage() {
                   onClick={() => setShowPassword(!showPassword)}
                 >
                   {showPassword ? (
-                    <EyeOff className="h-4 w-4" />
-                  ) : (
-                    <Eye className="h-4 w-4" />
+                                        <EyeOff className="h-4 w-4 text-primary-foreground" />
+                                      ) : (
+                                        <Eye className="h-4 w-4 text-primary-foreground" />
                   )}
                 </Button>
               </div>
@@ -139,8 +100,8 @@ export default function SignInPage() {
           </CardContent>
 
           <CardFooter className="flex flex-col py-4 space-y-4">
-            <Button type="submit" className="w-full" disabled={isLoading}>
-              {isLoading ? (
+            <Button type="submit" className="w-full" disabled={loadingStatus==='loading'}>
+              {loadingStatus==='loading' ? (
                 <>
                   <Loader2 className="mr-2 h-4 w-4 animate-spin" />
                   Signing in...
@@ -166,11 +127,8 @@ export default function SignInPage() {
               variant="outline"
               className="w-full bg-transparent"
               onClick={handleGoogleSignIn}
-              disabled={isGoogleLoading}
             >
-              {isGoogleLoading ? (
-                <Loader2 className="mr-2 h-4 w-4 animate-spin" />
-              ) : (
+           
                 <svg className="mr-2 h-4 w-4" viewBox="0 0 24 24">
                   <path
                     fill="currentColor"
@@ -189,7 +147,6 @@ export default function SignInPage() {
                     d="M12 5.38c1.62 0 3.06.56 4.21 1.64l3.15-3.15C17.45 2.09 14.97 1 12 1 7.7 1 3.99 3.47 2.18 7.07l3.66 2.84c.87-2.6 3.3-4.53 6.16-4.53z"
                   />
                 </svg>
-              )}
               Continue with Google
             </Button>
 
