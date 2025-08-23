@@ -135,11 +135,8 @@ const ConverterLayout = ({
   const handleSubmitFile = async () => {
   await handleFileUpload(
     selectedFiles[selectedIndex ?? 0]?.file
-   );
-          // navigate("download/" + );
-         
+   );         
   };
-
  
   const handleButtonClick = () => {
     fileInputRef.current?.click();
@@ -149,14 +146,14 @@ const ConverterLayout = ({
   return (
     <div className="h-lvh">
       {/* header */}
-      <div className="h-[12%]">
+      <div className="h-[10%]">
         <Header />
       </div>
       <SidemenuLyout />
 
       {/* main content */}
       {loadingState === "idle" ? (
-        <main className="w-full h-[88%] overflow-scroll dark:bg-primary">
+        <main className="w-full h-[90%] overflow-scroll dark:bg-primary">
           {!selectedFiles[selectedIndex] ? (
             <div className="">
               <div className="w-full flex-col center p-4 py-20 rounded-lg ">
@@ -264,6 +261,7 @@ const ConverterLayout = ({
                 disabled={disabled}
                 contents={actionMenuSideBar}
                 fileType={fileType[0]}
+                handleButtonClick={handleSubmitFile}
                 // setProcessingTool={setProcessingTool}
                 label={label}
               />
@@ -334,10 +332,7 @@ const ConverterLayout = ({
                 </div>
                 <Button
                   disabled={disabled}
-                  onClick={() => {
-                    // handleSubmitFile();
-                    // setProcessingTool(true);
-                  }}
+                  onClick={handleSubmitFile}
                   className="max-w-sm font-semibold absolute bottom-10 left-10 sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center sm:hidden"
                   type="submit"
                 >
@@ -375,7 +370,10 @@ const ConverterLayout = ({
           )}
         </main>
       ) : (
-        <ToolPageLoader label={label} convertingStateText={convertingStateText} />
+        <ToolPageLoader
+          label={label}
+          convertingStateText={convertingStateText}
+        />
       )}
     </div>
   );

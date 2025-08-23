@@ -28,7 +28,7 @@ export default function SignInPage() {
 
 
  const handleGoogleSignIn = async () => {
-   window.open("http://localhost:5000/api/v1/auth/google", "_self");
+   window.open("https://pdfplug.onrender.com/api/v1/auth/google", "_self");
  };
 
   return (
