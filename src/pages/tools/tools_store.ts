@@ -1,6 +1,5 @@
 import {  enqueueSnackbar } from "notistack";
 import { create } from "zustand";
-import axios from "axios";
 import { baseAxios } from "@/network/base_urls";
 interface ISelectedFile {
   rotate?: number[]; // Per-page rotations for this file
