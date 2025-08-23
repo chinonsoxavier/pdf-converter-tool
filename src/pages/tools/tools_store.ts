@@ -1,6 +1,7 @@
 import {  enqueueSnackbar } from "notistack";
 import { create } from "zustand";
 import axios from "axios";
+import { baseAxios } from "@/network/base_urls";
 interface ISelectedFile {
   rotate?: number[]; // Per-page rotations for this file
   fileName: string;
@@ -313,12 +314,15 @@ const useToolsStore = create<ToolsStore>((set) => ({
     }),
   downloadFile: async (downloadUrl: string) => {
     try {
-      const res = await axios.get(
-        "http://localhost:5000/api/v1/tools/download/" + downloadUrl,
-        {
-          responseType: "blob", // Important: get the response as a Blob
-        }
-      );
+      const res = await baseAxios.get("/tools/download/" + downloadUrl, {
+        responseType: "blob",
+      });
+      // const res = await axios.get(
+      //   "http://localhost:5000/api/v1/tools/download/" + downloadUrl,
+      //   {
+      //     responseType: "blob", // Important: get the response as a Blob
+      //   }
+      // );
 
       // Create a URL for the blob
       const url = window.URL.createObjectURL(new Blob([res.data]));
@@ -353,8 +357,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
     try {
       const form = new FormData();
       form.append("pdfFile", pdfFile);
-      const res = await axios.post(
-        "http://localhost:5000/api/v1/tools/convert-pdf-to-word",
+      const res = await baseAxios.post("/tools/convert-pdf-to-word",
         form,
         {
           onUploadProgress: (progressEvent) => {
@@ -364,6 +367,17 @@ const useToolsStore = create<ToolsStore>((set) => ({
           },
         }
       );
+      // const res = await axios.post(
+      //   "http://localhost:5000/api/v1/tools/convert-pdf-to-word",
+      //   form,
+      //   {
+      //     onUploadProgress: (progressEvent) => {
+      //       const total = progressEvent.total || 1; // Avoid division by zero
+      //       const progress = Math.round((progressEvent.loaded * 100) / total);
+      //       set({ progress });
+      //     },
+      //   }
+      // );
       set({
         loadingState: "success",
         downLoadUrl: res.data.fileUrl,
