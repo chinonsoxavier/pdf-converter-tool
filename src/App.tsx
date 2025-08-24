@@ -37,6 +37,8 @@ import ContactUs from "./pages/contact-us/contact_us";
 import {SnackbarProvider} from "notistack";
 import ResetPasswordPage from "./pages/(auth)/reset_password/reset_password";
 import useAuthStore from "./pages/(auth)/auth_store";
+import VerifyEmailPage from "./pages/(auth)/verify_email/verify_email";
+import VerifyEmailTokenPage from "./pages/(auth)/verify_email_token/verify_email_token";
 const App = () => {
 
   const location = useLocation();
@@ -57,10 +59,17 @@ const App = () => {
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
+        <Route path="/verify-email" element={<VerifyEmailPage />} />
+        <Route path="/verify-email/:token" element={<VerifyEmailTokenPage />} />
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
         {/* end of auth routes */}
         {/* admin routes */}
-        <Route path="/dashboard"  element={ user?.isAdmin ? <DashboardLayoutView /> : <Navigate to="/"  />}>
+        <Route
+          path="/dashboard"
+          element={
+            user?.isAdmin ? <DashboardLayoutView /> : <Navigate to="/" />
+          }
+        >
           <Route index element={<DashboardOverviewMainView />} />
           <Route path="/dashboard/users" element={<DashboardUsersMainView />} />
           <Route path="/dashboard/tools" element={<DashboardToolsMainView />} />

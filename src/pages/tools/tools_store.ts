@@ -45,7 +45,7 @@ interface ToolsStore {
   setRotateRight: (fileIndex: number, pageLength: number) => void;
   setRotateLeft: (fileIndex: number, pageLength: number) => void;
   resetRotate: (fileIndex: number) => void;
-  removeSelectedFiles: (fileName: string) => void;
+  removeSelectedFiles: (fileUrl: string) => void;
   setNumPages: (fileIndex: number, page: number) => void;
   setSelectedFile: (newSelectedFile: ISelectedFile) => void;
   toggleSideMenuOpen: () => void;

@@ -58,6 +58,19 @@ const PdfRenderer = ({
   //   console.log('rotate',selectedFiles[0].rotate)
   // }, [selectedFiles[0].rotate ])
 
+  const handleRemoveSelectedfile = () => {
+    if (selectedFiles[selectedIndex ?? 0]?.fileUrl) {
+      removeSelectedFiles(selectedFiles[selectedIndex ?? 0].fileUrl);
+      console.log(
+        "Removed file with URL:",
+        selectedFiles[selectedIndex ?? 0].fileUrl
+      );
+      // Optionally revoke the object URL to free memory
+      URL.revokeObjectURL(selectedFiles[selectedIndex ?? 0].fileUrl);
+    }
+  // };
+}
+
   return (
     <Tooltip>
       <TooltipTrigger>
@@ -74,10 +87,7 @@ const PdfRenderer = ({
             <Tooltip>
               <TooltipTrigger
                 asChild
-                onClick={() => {
-                  removeSelectedFiles(file);
-                  setNumPages(0, 0);
-                }}
+                onClick={handleRemoveSelectedfile}
                 className="absolute text-white opacity-80 hover:opacity-100 duration-700 bg-accent center top-4 right-4 z-10 rounded-full w-8 h-8 p-1"
               >
                 <XIcon />
@@ -163,7 +173,6 @@ const PdfRenderer = ({
 
                     <Page
                       loading={<PdfLoadingComponent />}
-                      
                       onClick={() => handlePageClick && handlePageClick(index)}
                       canvasBackground=""
                       rotate={selectedFiles[selectedIndex]?.rotate?.[index + 1]} // Use the specific rotation for each page
@@ -225,12 +234,14 @@ const PdfRenderer = ({
                     selectedFiles[selectedIndex]?.fileSize / (1024 * 1024)
                   ).toFixed(2) + " MB - "
             }${
-              selectedFiles[selectedIndex]?.fileType[0] === "jpg" ||
-              selectedFiles[selectedIndex]?.fileType[0] === "png"
-                ? ""
-                : (selectedFiles[selectedIndex]?.numPages ||
-                    selectedFiles[index ?? 0]?.numPages) + " pages"
-            }`}
+  selectedFiles[selectedIndex] &&
+  selectedFiles[selectedIndex].fileType &&
+  (selectedFiles[selectedIndex].fileType[0] === "jpg" ||
+   selectedFiles[selectedIndex].fileType[0] === "png")
+    ? ""
+    : (selectedFiles[selectedIndex]?.numPages ||
+       selectedFiles[index ?? 0]?.numPages) + " pages"
+}`}
           </p>
         </TooltipContent>
       )}

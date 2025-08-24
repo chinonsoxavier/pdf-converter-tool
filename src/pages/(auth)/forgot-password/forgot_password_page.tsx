@@ -59,7 +59,7 @@ export default function ForgotPasswordPage() {
     resendPasswordResetToken({ email: email });
   };
 
-  if (isSubmitted) {
+  if (isSubmitted && loadingStatus=== 'success') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-secondary px-4">
         <Card className="w-full max-w-md bg-gray-50 dark:bg-primary">

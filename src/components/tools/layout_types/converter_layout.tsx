@@ -4,13 +4,8 @@ import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { motion } from "motion/react";
 
-import {
-  CloudUpload,
-  PlusIcon,
-  Settings,
-  XIcon,
-} from "lucide-react";
-import { useRef, useState } from "react";
+import { CloudUpload, PlusIcon, Settings, XIcon } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
 import {
@@ -28,9 +23,11 @@ import ConverterLayoutSidebar from "@/components/layout/converter_layout_sidebar
 import useToolsStore from "@/pages/tools/tools_store";
 import PdfRenderer from "@/components/pdf_renderer";
 import { enqueueSnackbar } from "notistack";
+import useDrivePicker from "react-google-drive-picker";
+
 // import { useNavigate } from "react-router-dom";
 const ConverterLayout = ({
-  disabled=false,
+  disabled = false,
   children,
   actionButtonText,
   actionMenuSideBar,
@@ -39,17 +36,16 @@ const ConverterLayout = ({
   convertingStateText,
   fileType = ["pdf"],
   handleFileUpload,
-  
 }: Readonly<{
   disabled?: boolean;
-  actionButtonText:string;
+  actionButtonText: string;
   children?: React.ReactNode;
   actionMenuSideBar?: React.ReactNode;
   label: string;
   desc: string;
   fileType?: string[];
   convertingStateText: string;
-  handleFileUpload?: (pdfFile:File) => Promise<string>;
+  handleFileUpload?: (pdfFile: File) => Promise<string>;
 }>) => {
   const {
     selectedFiles,
@@ -57,12 +53,13 @@ const ConverterLayout = ({
     toggleSideMenuOpen,
     selectedIndex,
     sideMenuOpen,
-    loadingState
+    loadingState,
   } = useToolsStore();
 
   // const navigate = useNavigate();
 
   const fileInputRef = useRef<HTMLInputElement>(null);
+  const fileInputRef2 = useRef<HTMLInputElement>(null);
   // const [processingTool, setProcessingTool] = useState(false);
   const [isDragging, setIsDragging] = useState<boolean>(false); // Track drag state
   const variants1 = {
@@ -100,11 +97,15 @@ const ConverterLayout = ({
           : "unknown";
 
       if (!allowedFileTypes || !allowedFileTypes.includes(fileType)) {
-        enqueueSnackbar(`Invalid file type. Please upload a valid ${selectedFiles[selectedIndex]?.fileType[0]} file`, {
-          variant: "error",
-        });
-        if (fileInputRef.current) {
+        enqueueSnackbar(
+          `Invalid file type. Please upload a valid ${selectedFiles[selectedIndex]?.fileType[0]} file`,
+          {
+            variant: "error",
+          }
+        );
+        if (fileInputRef.current || fileInputRef2.current) {
           fileInputRef.current.value = ""; // Clear the input value
+          fileInputRef2.current.value = ""; // Clear the input value
         }
         return;
       }
@@ -115,10 +116,12 @@ const ConverterLayout = ({
         fileName: file.name,
         fileSize: file.size,
         fileType: allowedFileTypes,
-        file:file
+        file: file,
       });
 
-      console.log("Selected file:", file.name, "Size:", file.size, "bytes","file url",fileUrl);
+      console.log(file, "file");
+      console.log(typeof file);
+      console.log(selectedFiles, "selected file");
       return;
     }
   };
@@ -133,15 +136,96 @@ const ConverterLayout = ({
   };
 
   const handleSubmitFile = async () => {
-  await handleFileUpload(
-    selectedFiles[selectedIndex ?? 0]?.file
-   );         
-  };
- 
-  const handleButtonClick = () => {
-    fileInputRef.current?.click();
+    await handleFileUpload(selectedFiles[selectedIndex ?? 0]?.file);
   };
 
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+    fileInputRef2.current?.click();
+  };
+  // ... (your existing code)
+
+  const [openPicker, authResponse] = useDrivePicker();
+  const [pickedData, setPickedData] = useState(null);
+
+  const handleOpenPicker = () => {
+    openPicker({
+      clientId:
+        "198864983257-cgldsp1c563i52jl51c5isr4gagnqdfo.apps.googleusercontent.com",
+      developerKey: "AIzaSyBHxtPyHjePwkwxy7b-hGVrNOMtxr3J98s",
+      // ... other options
+      callbackFunction: (data) => {
+        if (data.action === "picked") {
+          // Save the picker data to a state variable
+          setPickedData(data);
+        }
+      },
+    });
+  };
+
+  // Use a useEffect hook to watch for changes in authResponse and pickedData
+  useEffect(() => {
+    const processFile = async () => {
+      if (!pickedData || !authResponse || !authResponse.access_token) {
+        return;
+      }
+
+      const filePicked = pickedData.docs[0];
+      const fileId = filePicked.id;
+      const fileName = filePicked.name;
+      const mimeType = filePicked.mimeType;
+      const fileSize = filePicked.sizeBytes;
+      const accessToken = authResponse.access_token;
+
+      try {
+        const driveApiUrl = `https://www.googleapis.com/drive/v3/files/${fileId}?alt=media`;
+        const response = await fetch(driveApiUrl, {
+          headers: {
+            Authorization: `Bearer ${accessToken}`,
+          },
+        });
+
+        if (!response.ok) {
+          throw new Error("Failed to fetch file from Google Drive");
+        }
+
+        const blob = await response.blob();
+        const file = new File([blob], fileName, { type: mimeType });
+        const fileUrl = URL.createObjectURL(file);
+        const extractedFileType = mimeType.split("/").pop() || "unknown";
+
+        setSelectedFile({
+          fileUrl: fileUrl,
+          fileName: fileName,
+          fileSize: fileSize,
+          fileType: [extractedFileType],
+          file: file,
+        });
+
+        enqueueSnackbar(
+          `File '${fileName}' loaded successfully from Google Drive.`,
+          { variant: "success" }
+        );
+      } catch (error) {
+        console.error("Error loading file from Google Drive:", error);
+        enqueueSnackbar("Error loading file from Google Drive.", {
+          variant: "error",
+        });
+      }
+    };
+
+    processFile();
+  }, [pickedData, authResponse]);
+
+  
+  useEffect(() => {
+    console.log(authResponse);
+  }, [authResponse]);
+
+  useEffect(() => {
+    console.log(selectedFiles[selectedIndex]);
+    console.log("selectedFiles[selectedIndex]");
+  }, [selectedFiles]);
 
   return (
     <div className="h-lvh">
@@ -210,7 +294,10 @@ const ConverterLayout = ({
                       </Button>
                       <div className="center gap-4">
                         <Tooltip>
-                          <TooltipTrigger className="rounded-full bg-accent p-2.5 w-11.5 h-11.5 text-white">
+                          <TooltipTrigger
+                            onClick={handleOpenPicker}
+                            className="rounded-full cursor-pointer bg-accent p-2.5 w-11.5 h-11.5 text-white"
+                          >
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 18 16"
@@ -227,7 +314,7 @@ const ConverterLayout = ({
                         </Tooltip>
 
                         <Tooltip>
-                          <TooltipTrigger className="rounded-full bg-accent p-2.5 w-11.5 h-11.5 text-white">
+                          <TooltipTrigger className="rounded-full cursor-pointer bg-accent p-2.5 w-11.5 h-11.5 text-white">
                             <svg
                               xmlns="http://www.w3.org/2000/svg"
                               viewBox="0 0 18 16"
@@ -289,7 +376,7 @@ const ConverterLayout = ({
                   )}
                   <div className="center absolute mr-5 sm:mr-0 right-0 shadow drop-shadow-md sm:right-5 sm:top-5 top-20 duration-500 cursor-pointer bg-accent text-white p-2 rounded-full">
                     <Input
-                      ref={fileInputRef}
+                      ref={fileInputRef2}
                       type="file"
                       accept={fileType
                         .map(
@@ -297,7 +384,6 @@ const ConverterLayout = ({
                             `.${file.toLowerCase()},application/${file.toLowerCase()}`
                         )
                         .join(",")}
-                      // accept=".pdf,application/pdf"
                       onChange={handleFileChange}
                       className="hidden"
                       aria-label="Choose PDF file"
@@ -373,6 +459,7 @@ const ConverterLayout = ({
         <ToolPageLoader
           label={label}
           convertingStateText={convertingStateText}
+          handleSubmitFile={handleSubmitFile}
         />
       )}
     </div>
