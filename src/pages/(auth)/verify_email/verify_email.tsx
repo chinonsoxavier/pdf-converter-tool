@@ -56,7 +56,7 @@ export default function VerifyEmailPage() {
               Check your email
             </CardTitle>
             <CardDescription className="text-muted-foreground mt-2">
-              We've sent a verification link to{" "}
+              We've sent a verification link to
               <span className="font-medium text-foreground">{email}</span>
             </CardDescription>
           </div>

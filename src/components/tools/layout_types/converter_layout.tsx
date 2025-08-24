@@ -217,7 +217,6 @@ const ConverterLayout = ({
     processFile();
   }, [pickedData, authResponse]);
 
-  
   useEffect(() => {
     console.log(authResponse);
   }, [authResponse]);
@@ -228,7 +227,7 @@ const ConverterLayout = ({
   }, [selectedFiles]);
 
   return (
-    <div className="h-lvh">
+    <div className="h-lvh overflow-hidden">
       {/* header */}
       <div className="h-[10%]">
         <Header />
@@ -237,7 +236,7 @@ const ConverterLayout = ({
 
       {/* main content */}
       {loadingState === "idle" ? (
-        <main className="w-full h-[90%] overflow-scroll dark:bg-primary">
+        <main className="w-full h-[90%] overflow-y-hiddrn dark:bg-primary">
           {!selectedFiles[selectedIndex] ? (
             <div className="">
               <div className="w-full flex-col center p-4 py-20 rounded-lg ">
@@ -352,7 +351,7 @@ const ConverterLayout = ({
                 // setProcessingTool={setProcessingTool}
                 label={label}
               />
-              <div className="h-full overflow-y-scroll flex items-start w-full justify-center ">
+              <div className="h-full overflow-y-auto  flex items-start w-full justify-center ">
                 <div className="flex w-full items-center justify-center relative flex-col p-7 h-full flex-1">
                   {children ? (
                     children
@@ -436,7 +435,7 @@ const ConverterLayout = ({
                     {label}
                   </p>
                 </div>
-                <div className="h-[76%] w-full overflow-y-scroll">
+                <div className="h-[76%] w-full overflow-y-auto">
                   {actionMenuSideBar}
                 </div>
                 <div className="px-6 w-full py-6 -[12%]">

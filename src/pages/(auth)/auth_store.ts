@@ -10,7 +10,6 @@ interface IRegister {
   userName: string;
 }
 
-
 interface ILogin {
   email: string;
   password: string;
@@ -103,11 +102,12 @@ const useAuthStore = create<IAuthStore>((set) => ({
         cpassword: cpassword,
       });
 
+      window.location.href = '/verify-email'
       enqueueSnackbar("Please check your email for the activation link", {
         variant: "success",
       });
-
       set({ authStatus: 'email sent', userAuthEmail: email });
+
 
       console.log(res);
       set({ loadingStatus: "success" });
