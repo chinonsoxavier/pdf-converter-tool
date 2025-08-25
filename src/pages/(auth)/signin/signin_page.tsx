@@ -1,5 +1,5 @@
-import { useState } from "react";
-import {Link} from "react-router-dom";
+import { useEffect, useState } from "react";
+import {Link, useNavigate} from "react-router-dom";
 import { Button } from "@/components/ui/button";
 import {
   Card,
@@ -20,16 +20,24 @@ export default function SignInPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-
+  const navigate = useNavigate();
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    await login({email, password});
+    await login({email, password,navigate});
   };
 
 
  const handleGoogleSignIn = async () => {
    window.open("https://pdfplug.onrender.com/api/v1/auth/google", "_self");
  };
+  
+  useEffect(() => {
+    if (errorMessage === 'Email not verified,Check your email for verification link!') {
+      alert("xdhbjsxhj")
+      navigate("/verify-email");
+  }
+  }, [errorMessage])
+  
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary px-4">

@@ -43,7 +43,7 @@ const App = () => {
 
   const location = useLocation();
   const { resetStore } = useToolsStore();
-  const { resetErrorMsg, user } = useAuthStore();
+  const { resetErrorMsg, user,userAuthEmail,authStatus } = useAuthStore();
   useEffect(() => {
     resetStore();
     resetErrorMsg({status:''});
@@ -59,8 +59,26 @@ const App = () => {
         <Route path="/signin" element={<SignInPage />} />
         <Route path="/signup" element={<SignUpPage />} />
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
-        <Route path="/verify-email" element={<VerifyEmailPage />} />
-        <Route path="/verify-email/:token" element={<VerifyEmailTokenPage />} />
+        <Route
+          path="/verify-email"
+          element={
+            authStatus === "email sent" && userAuthEmail ? (
+              <VerifyEmailPage />
+            ) : (
+              <Navigate to="/signin" />
+            )
+          }
+        />
+        <Route
+          path="/verify-email/:token"
+          element={
+            authStatus === "email sent" && userAuthEmail ? (
+              <VerifyEmailTokenPage />
+            ) : (
+              <Navigate to="/signin" />
+            )
+          }
+        />
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
         {/* end of auth routes */}
         {/* admin routes */}

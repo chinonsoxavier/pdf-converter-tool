@@ -56,7 +56,7 @@ export default function ForgotPasswordPage() {
     setSubmittedCountdown(60);
     setCanRequestNewToken(false);
     setIsSubmitted(true);
-    resendPasswordResetToken({ email: email });
+  await resendPasswordResetToken({ email: email });
   };
 
   if (isSubmitted && loadingStatus=== 'success') {
@@ -76,28 +76,25 @@ export default function ForgotPasswordPage() {
             </CardDescription>
           </CardHeader>
           <CardContent className="text-center text-sm text-gray-600">
-            <p>
-              Didn't receive the email? Check your spam folder or{" "}
+            <span>
+              Didn't receive the email? Check your spam folder or
               {!canRequestNewToken ? (
                 <span className="text-gray-400">
                   try again in {submittedCountdown}s
                 </span>
               ) : (
-                <button
+                <Button
                   onClick={handleRequestNewToken}
-                  className="text-blue-600 hover:underline pl-0.5"
+                  className="w-full mt-6 pl-0.5"
                 >
-                  try again
-                </button>
+                  Resend
+                </Button>
               )}
-            </p>
+            </span>
           </CardContent>
           <CardFooter>
-            <Link to="/signin" className="w-full">
-              <Button variant="outline" className="w-full bg-transparent">
-                <ArrowLeft className="mr-2 h-4 w-4" />
+            <Link to="/signin" className="w-full center">
                 Back to sign in
-              </Button>
             </Link>
           </CardFooter>
         </Card>
@@ -156,10 +153,10 @@ export default function ForgotPasswordPage() {
             </Button>
 
             <Link to="/signin" className="w-full">
-              <Button variant="outline" className="w-full bg-transparent">
+              {/* <Button variant="outline" className="w-full bg-transparent"> */}
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to sign in
-              </Button>
+              {/* </Button> */}
             </Link>
           </CardFooter>
         </form>

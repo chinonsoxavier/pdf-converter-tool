@@ -2,17 +2,20 @@ import { create } from "zustand";
 import { enqueueSnackbar } from "notistack";
 import { baseAxios } from "@/network/base_urls";
 import { isAxiosError } from "axios";
+import {  NavigateOptions, To } from "react-router-dom";
 
 interface IRegister {
   email: string;
   password: string;
   cpassword: string;
   userName: string;
+  navigate:(to: To, options?: NavigateOptions) =>void | Promise<void>;
 }
 
 interface ILogin {
   email: string;
   password: string;
+  navigate: (to: To, options?: NavigateOptions) => void | Promise<void>;
 }
 
 interface IUser {
@@ -50,7 +53,7 @@ interface IAuthStore {
   resetErrorMsg: ({ status }: { status: string }) => void;
   loadUser: () => Promise<void>;
   logOut: () => Promise<void>;
-  login: ({ email, password }: ILogin) => Promise<void>;
+  login: ({ email, password,navigate }: ILogin) => Promise<void>;
   resetPasswordToken: ({ email }: IResetPasswordToken) => Promise<void>;
   changePassword: ({
     newPassword,
@@ -61,19 +64,29 @@ interface IAuthStore {
   }: IResendPasswordResetToken) => Promise<void>;
   verifyEmail: ({
     token,
-  }: {token:string}) => Promise<void>;
+  }: { token: string }) => Promise<void>;
+  resendEmailVerificationToken: ({
+    email,
+  }: { email: string }) => Promise<void>;
 }
+
 
 const useAuthStore = create<IAuthStore>((set) => ({
   authStatus: "not authenticated",
   loadingStatus: "idle",
-  userAuthEmail:"",
+  userAuthEmail: "",
   errorMessage: "",
   user: null,
-  resetErrorMsg: ({status=''}) => {
-  set({errorMessage:status,loadingStatus:'idle'})
-},
-  register: async ({ email, password, userName, cpassword }: IRegister) => {
+  resetErrorMsg: ({ status = "" }) => {
+    set({ errorMessage: status, loadingStatus: "idle" });
+  },
+  register: async ({
+    email,
+    password,
+    userName,
+    cpassword,
+    navigate,
+  }: IRegister) => {
     try {
       set({ loadingStatus: "loading" });
       if (password !== cpassword) {
@@ -95,28 +108,36 @@ const useAuthStore = create<IAuthStore>((set) => ({
         return;
       }
 
-      const res = await baseAxios.post("/auth/register", {
+     const res = await baseAxios.post("/auth/register", {
         email: email,
         password: password,
         userName: userName,
         cpassword: cpassword,
       });
 
-      window.location.href = '/verify-email'
-      enqueueSnackbar("Please check your email for the activation link", {
-        variant: "success",
-      });
-      set({ authStatus: 'email sent', userAuthEmail: email });
-
-
-      console.log(res);
+      if (res.data.status === "email not verified") {
+        set({authStatus:"email sent",userAuthEmail:email})
+        navigate("/verify-email");
+        enqueueSnackbar("Please check your email for the activation link");
+        return;
+      }
+      if (res.data.status === "email already exists") {
+        enqueueSnackbar("user with this email already exists,proceed to login", { variant: "error" });
+        navigate("/signin")
+        return;
+      }
+        enqueueSnackbar("Please check your email for the activation link", {
+          variant: "success",
+        });
+      set({ authStatus: "email sent", userAuthEmail: email });
+      navigate("/signin");
       set({ loadingStatus: "success" });
     } catch (error) {
       set({ loadingStatus: "error" });
       if (isAxiosError(error) && error.response) {
         set({ errorMessage: error.response.data });
         console.log(error.response.data);
-        enqueueSnackbar(error.response.data, {
+        enqueueSnackbar(error.response.data || "failed to register user,please try again!", {
           variant: "error",
         });
       } else {
@@ -146,9 +167,8 @@ const useAuthStore = create<IAuthStore>((set) => ({
       await baseAxios.get("/auth/logout", { withCredentials: true });
       set({ user: null });
       enqueueSnackbar("logout successfully", {
-        variant:'success'
+        variant: "success",
       });
-
     } catch (error) {
       if (isAxiosError(error) && error.response) {
         set({ errorMessage: error.response.data });
@@ -164,7 +184,7 @@ const useAuthStore = create<IAuthStore>((set) => ({
       }
     }
   },
-  login: async ({ email, password }: ILogin) => {
+  login: async ({ email, password,navigate }: ILogin) => {
     set({ loadingStatus: "loading" });
     try {
       const res = baseAxios.post(
@@ -177,13 +197,21 @@ const useAuthStore = create<IAuthStore>((set) => ({
           withCredentials: true,
         }
       );
-      enqueueSnackbar((await res).data);
+  
+        enqueueSnackbar((await res).data);
       const { loadUser } = useAuthStore.getState();
       await loadUser();
-      set({loadingStatus:"success"})
+      set({ loadingStatus: "success" });
     } catch (error) {
+      
       if (isAxiosError(error) && error.response) {
-        set({ errorMessage: error.response.data.message });
+        set({ errorMessage: error.response.data.message ,authStatus:"email sent",userAuthEmail:email});
+            if (error.response.data.message ==="Email not verified,Check your email for verification link!"
+            ) {
+              console.log("Redirecting to verify-email page");
+              navigate("/verify-email");
+              // return;
+            }
         console.log(error.response.data.message);
         enqueueSnackbar(error.response.data.message, {
           variant: "error",
@@ -193,15 +221,17 @@ const useAuthStore = create<IAuthStore>((set) => ({
         enqueueSnackbar("An unknown error occurred.", {
           variant: "error",
         });
-      };
-      set({loadingStatus:'error'})
+      }
+      set({ loadingStatus: "error" });
     }
   },
   resetPasswordToken: async ({ email }: IResetPasswordToken) => {
-      set({ loadingStatus: "loading" });
+    set({ loadingStatus: "loading" });
     try {
       await baseAxios.post("/auth/reset-password", { email: email });
-      enqueueSnackbar("check your email to reset your password!",{variant:'success'});
+      enqueueSnackbar("check your email to reset your password!", {
+        variant: "success",
+      });
       set({ loadingStatus: "success" });
     } catch (error) {
       if (isAxiosError(error) && error.response) {
@@ -216,9 +246,8 @@ const useAuthStore = create<IAuthStore>((set) => ({
         enqueueSnackbar("An unknown error occurred.", {
           variant: "error",
         });
-      };
+      }
       set({ loadingStatus: "error" });
-
     }
   },
   changePassword: async ({
@@ -232,26 +261,26 @@ const useAuthStore = create<IAuthStore>((set) => ({
         enqueueSnackbar("passwords do not match", {
           variant: "error",
         });
-         set({ loadingStatus: "error",errorMessage:"passwords do not match" });
+        set({ loadingStatus: "error", errorMessage: "passwords do not match" });
         return;
       }
 
-         if ((newPassword.length && ComfirmNewPassword.length) < 8) {
+      if ((newPassword.length && ComfirmNewPassword.length) < 8) {
         enqueueSnackbar("passwords do not match", {
           variant: "error",
         });
-         set({
-           loadingStatus: "error",
-           errorMessage: "Password must be at least 8 characters long",
-         });
+        set({
+          loadingStatus: "error",
+          errorMessage: "Password must be at least 8 characters long",
+        });
         return;
       }
-     
+
       const res = baseAxios.put("/auth/change-password/" + token, {
         newPassword,
         ComfirmNewPassword,
       });
-      enqueueSnackbar((await res).data,{variant:"success"});
+      enqueueSnackbar((await res).data, { variant: "success" });
       set({ loadingStatus: "success" });
     } catch (error) {
       if (isAxiosError(error) && error.response) {
@@ -265,15 +294,17 @@ const useAuthStore = create<IAuthStore>((set) => ({
         enqueueSnackbar("An unknown error occurred.", {
           variant: "error",
         });
-      };
+      }
       set({ loadingStatus: "error" });
     }
   },
-  resendPasswordResetToken: async ({ email}: IResendPasswordResetToken) => {
-      set({ loadingStatus: "loading" });
+  resendPasswordResetToken: async ({ email }: IResendPasswordResetToken) => {
+    set({ loadingStatus: "loading" });
     try {
-      await baseAxios.post("/auth/resend-password-reset-token",{email:email});
-      enqueueSnackbar("token has been sent to email",{variant:"success"});
+      await baseAxios.post("/auth/resend-password-reset-token", {
+        email: email,
+      });
+      enqueueSnackbar("token has been sent to email", { variant: "success" });
       set({ loadingStatus: "success" });
     } catch (error) {
       if (isAxiosError(error) && error.response) {
@@ -287,32 +318,58 @@ const useAuthStore = create<IAuthStore>((set) => ({
         enqueueSnackbar("An unknown error occurred.", {
           variant: "error",
         });
-      };
+      }
+      set({ loadingStatus: "error" });
+    }
+  },
+  resendEmailVerificationToken: async ({
+    email,
+  }: {email:string}) => {
+    set({ loadingStatus: "loading" });
+    try {
+      await baseAxios.post("/auth/resend-verification-token", {
+        email: email,
+      });
+      enqueueSnackbar("verification token has been sent to email", { variant: "success" });
+      set({ loadingStatus: "success" });
+    } catch (error) {
+      if (isAxiosError(error) && error.response) {
+        set({ errorMessage: error.response.data });
+        console.log(error.response.data);
+        enqueueSnackbar(error.response.data, {
+          variant: "error",
+        });
+      } else {
+        console.error("An unknown error occurred", error);
+        enqueueSnackbar("An unknown error occurred.", {
+          variant: "error",
+        });
+      }
       set({ loadingStatus: "error" });
     }
   },
   verifyEmail: async ({ token }: { token: string }) => {
     try {
       baseAxios.put("/auth/verify" + token);
-   enqueueSnackbar("Email verified successfully", {
-     variant: "success",
-   });
+      enqueueSnackbar("Email verified successfully", {
+        variant: "success",
+      });
     } catch (error) {
-         if (isAxiosError(error) && error.response) {
-           set({ errorMessage: error.response.data });
-           console.log(error.response.data);
-           enqueueSnackbar(error.response.data, {
-             variant: "error",
-           });
-         } else {
-           console.error("An unknown error occurred", error);
-           enqueueSnackbar("An unknown error occurred.", {
-             variant: "error",
-           });
-         }
-         set({ loadingStatus: "error" });
+      if (isAxiosError(error) && error.response) {
+        set({ errorMessage: error.response.data });
+        console.log(error.response.data);
+        enqueueSnackbar(error.response.data, {
+          variant: "error",
+        });
+      } else {
+        console.error("An unknown error occurred", error);
+        enqueueSnackbar("An unknown error occurred.", {
+          variant: "error",
+        });
+      }
+      set({ loadingStatus: "error" });
     }
-  }
+  },
 }));
 
 export default useAuthStore;

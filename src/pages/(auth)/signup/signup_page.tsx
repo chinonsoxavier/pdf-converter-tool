@@ -28,10 +28,11 @@ export default function SignUpPage() {
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      await register({ email, password, userName, cpassword });
-      if (loadingStatus === 'success') { 
-        navigate("/signin")
-      }
+      await register({ email, password, userName, cpassword,navigate });
+       setCPassword("");
+       setEmail("");
+       setPassword("");
+       setUsername("");
     } catch (err) {
       enqueueSnackbar("failed to register user" + err, {
         variant: "error",
@@ -39,7 +40,6 @@ export default function SignUpPage() {
       console.log(err);
     }
   };
-
   
 
   const handleGoogleSignUp = async () => {
