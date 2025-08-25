@@ -45,7 +45,7 @@ export default function ForgotPasswordPage() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setSubmittedCountdown(60);
+    setSubmittedCountdown(160);
     setCanRequestNewToken(false);
     await resetPasswordToken({ email });
     setIsSubmitted(true);
@@ -62,9 +62,9 @@ export default function ForgotPasswordPage() {
   if (isSubmitted && loadingStatus=== 'success') {
     return (
       <div className="min-h-screen flex items-center justify-center bg-secondary px-4">
-        <Card className="w-full max-w-md bg-gray-50 dark:bg-primary">
+        <Card className="w-full gap-2 max-w-md bg-gray-50 dark:bg-primary">
           <CardHeader className="text-center">
-            <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
+            <div className="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
               <Mail className="h-6 w-6 text-green-600" />
             </div>
             <CardTitle className="text-2xl font-bold">
@@ -75,17 +75,17 @@ export default function ForgotPasswordPage() {
               <span className="font-medium"> {email}</span>
             </CardDescription>
           </CardHeader>
-          <CardContent className="text-center text-sm text-gray-600">
-            <span>
-              Didn't receive the email? Check your spam folder or
+          <CardContent className="text-center py-2 text-sm text-gray-600">
+            <span className="" >
+              Didn't receive the email?<br/> Check your spam folder or
               {!canRequestNewToken ? (
                 <span className="text-gray-400">
-                  try again in {submittedCountdown}s
+                  send again in {submittedCountdown}s
                 </span>
               ) : (
                 <Button
                   onClick={handleRequestNewToken}
-                  className="w-full mt-6 pl-0.5"
+                  className="w-full mt-4 pl-0.5"
                 >
                   Resend
                 </Button>
@@ -105,7 +105,7 @@ export default function ForgotPasswordPage() {
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary px-4">
       <Card className="w-full max-w-md bg-gray-50 dark:bg-primary">
-        <CardHeader className="space-y-1">
+        <CardHeader className="">
           <CardTitle className="text-2xl font-bold text-center">
             Forgot password?
           </CardTitle>
@@ -115,7 +115,7 @@ export default function ForgotPasswordPage() {
           </CardDescription>
         </CardHeader>
         <form onSubmit={handleSubmit}>
-          <CardContent className="space-y-4">
+          <CardContent className="space-y-2">
             {loadingStatus === "error" && (
               <Alert variant="destructive">
                 <AlertDescription>{errorMessage}</AlertDescription>
@@ -152,7 +152,7 @@ export default function ForgotPasswordPage() {
               )}
             </Button>
 
-            <Link to="/signin" className="w-full">
+            <Link to="/signin" className="w-full center">
               {/* <Button variant="outline" className="w-full bg-transparent"> */}
                 <ArrowLeft className="mr-2 h-4 w-4" />
                 Back to sign in

@@ -43,6 +43,33 @@ const App = () => {
 
   const location = useLocation();
   const { resetStore } = useToolsStore();
+  function EmailVerificationTokenRouteWrapper() {
+    const { authStatus, userAuthEmail } = useAuthStore();
+  const location = useLocation();
+  const query = new URLSearchParams(location.search);
+  const hasLinkQuery = query.has("link");
+// alert("has link")
+    if (hasLinkQuery || (authStatus === "email sent" || userAuthEmail)) {
+      return <VerifyEmailTokenPage />;
+    }
+
+    return <Navigate to="/signin" />;
+  }
+
+
+    function EmailVerificationRouteWrapper() {
+      const { authStatus, userAuthEmail } = useAuthStore();
+      const location = useLocation();
+      const query = new URLSearchParams(location.search);
+      const hasLinkQuery = query.has("link");
+      // alert("has link")
+      if (hasLinkQuery || authStatus === "email sent" || userAuthEmail) {
+        return <VerifyEmailPage />;
+      }
+
+      return <Navigate to="/signin" />;
+    }
+
   const { resetErrorMsg, user,userAuthEmail,authStatus } = useAuthStore();
   useEffect(() => {
     resetStore();
@@ -61,22 +88,12 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route
           path="/verify-email"
-          element={
-            authStatus === "email sent" && userAuthEmail ? (
-              <VerifyEmailPage />
-            ) : (
-              <Navigate to="/signin" />
-            )
+          element={<EmailVerificationRouteWrapper/>
           }
         />
         <Route
           path="/verify-email/:token"
-          element={
-            authStatus === "email sent" && userAuthEmail ? (
-              <VerifyEmailTokenPage />
-            ) : (
-              <Navigate to="/signin" />
-            )
+          element={<EmailVerificationTokenRouteWrapper/>
           }
         />
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />

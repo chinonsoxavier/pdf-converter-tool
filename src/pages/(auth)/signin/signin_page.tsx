@@ -33,7 +33,6 @@ export default function SignInPage() {
   
   useEffect(() => {
     if (errorMessage === 'Email not verified,Check your email for verification link!') {
-      alert("xdhbjsxhj")
       navigate("/verify-email");
   }
   }, [errorMessage])

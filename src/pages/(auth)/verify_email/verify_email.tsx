@@ -14,47 +14,47 @@ import { cn } from "@/lib/utils";
 
 export default function VerifyEmailPage() {
   const { userAuthEmail, loadingStatus,resendEmailVerificationToken } = useAuthStore();
-  const [isResending, setIsResending] = useState(false);
-      const [canRequestNewToken, setCanRequestNewToken] = useState(true);
+  // const [isResending, setIsResending] = useState(false);
+      const [canRequestNewToken, setCanRequestNewToken] = useState('true');
   const [submittedCountdown, setSubmittedCountdown] = useState(0);
-  useEffect(() => {
-    let interval: number;
-    if (submittedCountdown > 0) {
-      interval = setInterval(() => {
-        setSubmittedCountdown((prev) => {
-          if (prev <= 1) {
-            setCanRequestNewToken(true);
-            return 0;
-          }
-          return prev - 1;
-        });
-      }, 1000);
-    }
-    return () => clearInterval(interval);
-  }, [submittedCountdown]);
+  // useEffect(() => {
+  //   let interval: number;
+  //   if (submittedCountdown > 0) {
+  //     interval = setInterval(() => {
+  //       setSubmittedCountdown((prev) => {
+  //         if (prev <= 1) {
+  //           setCanRequestNewToken(true);
+  //           return 0;
+  //         }
+  //         return prev - 1;
+  //       });
+  //     }, 1000);
+  //   }
+  //   return () => clearInterval(interval);
+  // }, [submittedCountdown]);
 
   const email = userAuthEmail;
 
-    const handleResendToken = async () => {
-        setIsResending(true);
-        if (!canRequestNewToken) return;
-        await resendEmailVerificationToken({ email: email });
-   setSubmittedCountdown(60);
-   setCanRequestNewToken(false);
-        setIsResending(false);
-        alert("hxdbahjx")
-  };
+    const handleResendToken = () => {
+      setSubmittedCountdown(60);
+      ResendEmailVerificationToken();
+    };
+    
+    const ResendEmailVerificationToken =async () => {
+    resendEmailVerificationToken({ email: email });
+    
+  }
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary px-4">
-      <Card className="w-full max-w-md bg-gray-50 dark:bg-primary">
-        <CardHeader className="text-center space-y-4">
+      <Card className="w-full max-w-md gap-1 bg-gray-50 dark:bg-primary">
+        <CardHeader className="text-center space-y2">
           <div className="mx-auto w-16 h-16 bg-primary/10 rounded-full flex items-center justify-center">
             <Mail className="w-8 h-8 text-primary" />
           </div>
           <div>
             <CardTitle className="text-2xl font-semibold">
-              Check your email
+              Check your email {submittedCountdown} {canRequestNewToken}
             </CardTitle>
             <CardDescription className="text-muted-foreground mt-2">
               We've sent a verification link to
@@ -63,7 +63,7 @@ export default function VerifyEmailPage() {
           </div>
         </CardHeader>
 
-        <CardContent className="space-y-6">
+        <CardContent className="space-y-2">
           <div className="bg-muted/50 rounded-lg p-4 space-y-3">
          
             <ul className="text-sm text-muted-foreground space-y-1 ml-6">
@@ -73,30 +73,29 @@ export default function VerifyEmailPage() {
             </ul>
           </div>
 
-          {loadingStatus === "success" && isResending  ? (
+          {loadingStatus === "success" && (
             <div
               className={`p-3 rounded-lg text-sm bg-green-50 text-green-700 border border-green-200"
               }`}
             >
-              Verification email sent successfully!
+              Verification email sent successfully! {submittedCountdown}
             </div>
-                  )
-                      :
+          )}
                       <div className="space-y-3">
                           {submittedCountdown > 0 ? (
                               <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
               <Clock className="w-4 h-4" />
                           <span>Didn't receive the email?</span>
-                          <span onClick={canRequestNewToken ? handleResendToken : undefined} className={cn(canRequestNewToken ? 'text-primary-foreground cursor-pointer' : 'text-red-500 cursor-not-allowed')} > try again {submittedCountdown > 1 && 'in '+ (submittedCountdown === 0 ? '' : submittedCountdown) }</span>
+                          <span onClick={canRequestNewToken ? handleResendToken : undefined} className={cn(canRequestNewToken ? 'text-primary-foreground cursor-pointer' : 'text-red-500 cursor-not-allowed')} > send again {submittedCountdown > 1 && 'in '+ (submittedCountdown === 0 ? '' : submittedCountdown) }</span>
             </div>)
                               :
             <Button
-              onClick={handleResendToken}
+                onClick={() => { setSubmittedCountdown(60); setCanRequestNewToken("false");handleResendToken() }}
               disabled={submittedCountdown > 0 || loadingStatus === 'loading'}
             //   variant="outline"
               className="w-full"
             >
-              {isResending && loadingStatus==='loading' ? (
+              {loadingStatus==='loading' ? (
                 <>
                   <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
                   Sending...
@@ -112,16 +111,16 @@ export default function VerifyEmailPage() {
                           }
                           
 
+          </div>
+        
             <div className="text-center">
               <Link
                 to="/signin"
                 className="text-sm text-muted-foreground hover:text-foreground transition-colors"
               >
-                Back to sign inn
+                Back to sign in
               </Link>
             </div>
-          </div>
-        }
         </CardContent>
       </Card>
     </div>

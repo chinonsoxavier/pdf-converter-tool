@@ -67,7 +67,7 @@ interface IAuthStore {
   }: { token: string }) => Promise<void>;
   resendEmailVerificationToken: ({
     email,
-  }: { email: string }) => Promise<void>;
+  }: { email: string }) => Promise<void> | void;
 }
 
 
@@ -322,31 +322,34 @@ const useAuthStore = create<IAuthStore>((set) => ({
       set({ loadingStatus: "error" });
     }
   },
-  resendEmailVerificationToken: async ({
+  resendEmailVerificationToken: ({
     email,
-  }: {email:string}) => {
-    set({ loadingStatus: "loading" });
-    try {
-      await baseAxios.post("/auth/resend-verification-token", {
-        email: email,
-      });
-      enqueueSnackbar("verification token has been sent to email", { variant: "success" });
-      set({ loadingStatus: "success" });
-    } catch (error) {
-      if (isAxiosError(error) && error.response) {
-        set({ errorMessage: error.response.data });
-        console.log(error.response.data);
-        enqueueSnackbar(error.response.data, {
-          variant: "error",
+  }: { email: string }) => {
+    const ResendEmailVerificationToken = async () => {
+      set({ loadingStatus: "loading" });
+      try {
+        await baseAxios.post("/auth/resend-verification-token", {
+          email: email,
         });
-      } else {
-        console.error("An unknown error occurred", error);
-        enqueueSnackbar("An unknown error occurred.", {
-          variant: "error",
-        });
+        enqueueSnackbar("verification token has been sent to email", { variant: "success" });
+        set({ loadingStatus: "success" });
+      } catch (error) {
+        if (isAxiosError(error) && error.response) {
+          set({ errorMessage: error.response.data });
+          console.log(error.response.data);
+          enqueueSnackbar(error.response.data, {
+            variant: "error",
+          });
+        } else {
+          console.error("An unknown error occurred", error);
+          enqueueSnackbar("An unknown error occurred.", {
+            variant: "error",
+          });
+        }
+        set({ loadingStatus: "error" });
       }
-      set({ loadingStatus: "error" });
-    }
+    };
+     ResendEmailVerificationToken();
   },
   verifyEmail: async ({ token }: { token: string }) => {
     try {

@@ -6,7 +6,6 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import { Alert, AlertDescription } from "@/components/ui/alert";
 
 export default function ToolPageLoaderError({
   label,
@@ -49,15 +48,7 @@ export default function ToolPageLoaderError({
                   </p>
                 </div>
 
-                {/* Error Details */}
-                <Alert className="text-left max-w-md mx-auto">
-                  <AlertCircle className="h-4 w-4" />
-                  <AlertDescription>
-                    The PDF file may be corrupted, password-protected, or
-                    contain unsupported elements that prevent conversion.
-                  </AlertDescription>
-                </Alert>
-
+      
                 {/* Action Buttons */}
                 <div className="flex flex-col sm:flex-row gap-3 justify-center pt-4">
                   <Button
