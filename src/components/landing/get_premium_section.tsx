@@ -176,8 +176,10 @@ const GetPremiumSection = () => {
   };
 
   return (
+    <div className="bg-secondary" >
+
     <ContainerLayout
-      className="items-center flex-wrap bg-secondary py-12 sm:py-20 text-white"
+      className="items-center flex-wrap w-full bg- space-y-6 py-12 sm:py-20 text-white"
       // style={{ background: "#47474f" }}
     >
       <div className="flex gap-3 sm:gap-5 items-start justify-start flex-col">
@@ -285,6 +287,7 @@ const GetPremiumSection = () => {
         </motion.div>
       </div>
     </ContainerLayout>
+      </div>
   );
 };
 

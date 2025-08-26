@@ -208,9 +208,9 @@ const ConverterLayout = ({
         );
       } catch (error) {
         console.error("Error loading file from Google Drive:", error);
-        enqueueSnackbar("Error loading file from Google Drive.", {
-          variant: "error",
-        });
+        // enqueueSnackbar("Error loading file from Google Drive.", {
+        //   variant: "error",
+        // });
       }
     };
 
