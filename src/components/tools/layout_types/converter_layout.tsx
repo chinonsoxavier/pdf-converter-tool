@@ -229,14 +229,14 @@ const ConverterLayout = ({
   return (
     <div className="h-lvh overflow-hidden">
       {/* header */}
-      <div className="h-[10%]">
+      <div className="h-[12%]">
         <Header />
       </div>
       <SidemenuLyout />
 
       {/* main content */}
       {loadingState === "idle" ? (
-        <main className="w-full h-[90%] overflow-y-hiddrn dark:bg-primary">
+        <main className="w-full h-[88%] dark:bg-primary">
           {!selectedFiles[selectedIndex] ? (
             <div className="">
               <div className="w-full flex-col center p-4 py-20 rounded-lg ">
@@ -251,7 +251,7 @@ const ConverterLayout = ({
                     onDragOver={handleDragOver}
                     onDragLeave={handleDragLeave}
                     onDrop={handleFileChange}
-                    className={`sm:p-10 p-6 bg-secondary dark:border-primary border-dashed border-3 w-full center gap-3 sm:gap-5 max-w-3xl my-0 ${
+                    className={`sm:p-10 p-6 bg-accent/5 dark:border-primary border-dashed border-3 w-full center gap-3 sm:gap-5 max-w-3xl my-0 ${
                       isDragging
                         ? "border-accent dark:border-accent"
                         : "border-[#4a4a4a] "

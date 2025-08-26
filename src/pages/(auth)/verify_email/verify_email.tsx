@@ -10,40 +10,54 @@ import { Button } from "@/components/ui/button";
 import { Mail, Clock, RefreshCw } from "lucide-react";
 import { Link } from "react-router-dom";
 import useAuthStore from "../auth_store";
-import { cn } from "@/lib/utils";
 
 export default function VerifyEmailPage() {
-  const { userAuthEmail, loadingStatus,resendEmailVerificationToken } = useAuthStore();
-  // const [isResending, setIsResending] = useState(false);
-      const [canRequestNewToken, setCanRequestNewToken] = useState('true');
-  const [submittedCountdown, setSubmittedCountdown] = useState(0);
-  // useEffect(() => {
-  //   let interval: number;
-  //   if (submittedCountdown > 0) {
-  //     interval = setInterval(() => {
-  //       setSubmittedCountdown((prev) => {
-  //         if (prev <= 1) {
-  //           setCanRequestNewToken(true);
-  //           return 0;
-  //         }
-  //         return prev - 1;
-  //       });
-  //     }, 1000);
-  //   }
-  //   return () => clearInterval(interval);
-  // }, [submittedCountdown]);
+  const { userAuthEmail, resendEmailVerificationToken } = useAuthStore();
+  const [isResending, setIsResending] = useState(false);
+  const [loadingStatus, setLoadingStatus] = useState("idle");
+  const [countdown, setCountdown] = useState(0);
+
+  // Combine countdown and canRequestNewToken logic in a single useEffect
+  useEffect(() => {
+    let interval: number;
+    if (countdown > 0) {
+      interval = setInterval(() => {
+        setCountdown((prev) => prev - 1);
+      }, 1000);
+    }
+    return () => clearInterval(interval);
+  }, [countdown]);
 
   const email = userAuthEmail;
 
-    const handleResendToken = () => {
-      setSubmittedCountdown(60);
-      ResendEmailVerificationToken();
-    };
-    
-    const ResendEmailVerificationToken =async () => {
-    resendEmailVerificationToken({ email: email });
-    
-  }
+  const handleResendToken = async () => {
+    // setIsResending(true); // Indicate that the request is in progress
+    // setLoadingStatus("loading"); // Start loading state
+
+    // try {
+    //   // Call the Zustand store method and await its completion
+      await resendEmailVerificationToken({
+        email: email,
+        setLoadingStatus: setLoadingStatus,
+        setIsResending: setIsResending,
+        setCountdown,
+      });
+
+    //   // If the request is successful, start the countdown
+      
+
+    //   // Reset states
+    //   setIsResending(false);
+    //   setLoadingStatus("success");
+    // } catch (error) {
+    //   console.log(error)
+    //   // Handle error states
+    //   setIsResending(false);
+    //   setLoadingStatus("error");
+    // }
+  };
+
+  const canRequestNewToken = countdown === 0;
 
   return (
     <div className="min-h-screen flex items-center justify-center bg-secondary px-4">
@@ -54,7 +68,7 @@ export default function VerifyEmailPage() {
           </div>
           <div>
             <CardTitle className="text-2xl font-semibold">
-              Check your email {submittedCountdown} {canRequestNewToken}
+              Check your email
             </CardTitle>
             <CardDescription className="text-muted-foreground mt-2">
               We've sent a verification link to
@@ -65,7 +79,6 @@ export default function VerifyEmailPage() {
 
         <CardContent className="space-y-2">
           <div className="bg-muted/50 rounded-lg p-4 space-y-3">
-         
             <ul className="text-sm text-muted-foreground space-y-1 ml-6">
               <li>• Check your spam or junk folder</li>
               <li>• Make sure the email address is correct</li>
@@ -73,54 +86,48 @@ export default function VerifyEmailPage() {
             </ul>
           </div>
 
-          {loadingStatus === "success" && (
+          {loadingStatus === "success" && countdown < 0 && (
             <div
-              className={`p-3 rounded-lg text-sm bg-green-50 text-green-700 border border-green-200"
-              }`}
+              className={`p-3 rounded-lg text-sm bg-green-50 text-green-700 border border-green-200"}`}
             >
-              Verification email sent successfully! {submittedCountdown}
+              Verification email sent successfully!
             </div>
           )}
-                      <div className="space-y-3">
-                          {submittedCountdown > 0 ? (
-                              <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
-              <Clock className="w-4 h-4" />
-                          <span>Didn't receive the email?</span>
-                          <span onClick={canRequestNewToken ? handleResendToken : undefined} className={cn(canRequestNewToken ? 'text-primary-foreground cursor-pointer' : 'text-red-500 cursor-not-allowed')} > send again {submittedCountdown > 1 && 'in '+ (submittedCountdown === 0 ? '' : submittedCountdown) }</span>
-            </div>)
-                              :
-            <Button
-                onClick={() => { setSubmittedCountdown(60); setCanRequestNewToken("false");handleResendToken() }}
-              disabled={submittedCountdown > 0 || loadingStatus === 'loading'}
-            //   variant="outline"
-              className="w-full"
-            >
-              {loadingStatus==='loading' ? (
-                <>
-                  <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
-                  Sending...
-                </>
-              ) : (
-                
-                <>
-                  <RefreshCw className="w-4 h-4 mr-2" />
-                  Resend verification email
-                </>
-              )}
-                          </Button>
-                          }
-                          
-
-          </div>
-        
-            <div className="text-center">
-              <Link
-                to="/signin"
-                className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+          <div className="space-y-3">
+            {!canRequestNewToken ? (
+              <div className="flex items-center justify-center gap-2 text-sm text-muted-foreground">
+                <Clock className="w-4 h-4" />
+                <span>send again in {countdown} seconds</span>
+              </div>
+            ) : (
+              <Button
+                onClick={handleResendToken}
+                disabled={!canRequestNewToken || isResending}
+                className="w-full"
               >
-                Back to sign in
-              </Link>
-            </div>
+                {isResending && loadingStatus==='loading' ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2 animate-spin" />
+                    Sending...
+                  </>
+                ) : (
+                  <>
+                    <RefreshCw className="w-4 h-4 mr-2" />
+                    Resend verification email
+                  </>
+                )}
+              </Button>
+            )}
+          </div>
+
+          <div className="text-center">
+            <Link
+              to="/signin"
+              className="text-sm text-muted-foreground hover:text-foreground transition-colors"
+            >
+              Back to sign in
+            </Link>
+          </div>
         </CardContent>
       </Card>
     </div>

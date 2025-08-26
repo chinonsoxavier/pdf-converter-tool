@@ -2,10 +2,10 @@ import {
   AlertCircle,
   RefreshCw,
   ArrowLeft,
-  HelpCircle,
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
+import useToolsStore from "@/pages/tools/tools_store";
 
 export default function ToolPageLoaderError({
   label,
@@ -15,12 +15,14 @@ export default function ToolPageLoaderError({
   label: string;
         convertingStateText: string;
         handleSubmitFile: () => void;
-    }) {
+  }) {
+  
+  const {setLoadingState} = useToolsStore()
     
   return (
     <div className="w-full">
       {/* Main Content */}
-      <main className=" w-full px-4 my-6 py-2">
+      <main className=" w-full my-6 py-2">
         <div className="w-full">
           {/* Breadcrumb */}
           <div className="flex items-center space-x-2 text-sm text-muted-foreground mb-8">
@@ -54,38 +56,16 @@ export default function ToolPageLoaderError({
                   <Button
                     onClick={handleSubmitFile}
                     className="bg-red-600 hover:bg-red-700 text-white"
-                    size="lg"
                   >
                     <RefreshCw className="h-4 w-4 mr-2" />
                     Try Again
                   </Button>
-                  <Button variant="outline" size="lg">
+                  <Button onClick={()=>{setLoadingState('idle')}} variant="outline">
                     <ArrowLeft className="h-4 w-4 mr-2" />
-                    Choose Different File
+                   Start Over
                   </Button>
                 </div>
 
-                {/* Help Section */}
-                <div className="pt-6 border-t border-border/50">
-                  <div className="flex items-center justify-center space-x-2 text-sm text-muted-foreground mb-3">
-                    <HelpCircle className="h-4 w-4" />
-                    <span>Need help?</span>
-                  </div>
-                  <div className="space-y-2 text-sm">
-                    <p className="text-muted-foreground">Common solutions:</p>
-                    <ul className="text-center space-y-1 text-muted-foreground max-w-md mx-auto">
-                      <li>• Ensure your PDF is not password-protected</li>
-                      <li>• Try a smaller file size (under 10MB)</li>
-                      <li>• Check that the PDF contains selectable text</li>
-                    </ul>
-                  </div>
-                  <Button
-                    variant="link"
-                    className="mt-3 text-red-600 hover:text-red-700"
-                  >
-                    Contact Support
-                  </Button>
-                </div>
               </div>
             </CardContent>
           </Card>

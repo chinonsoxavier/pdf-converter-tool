@@ -502,7 +502,7 @@ const Header = (isLanding: { isLanding?: boolean }) => {
                 <LucideExternalLink /> Logout
               </Button>
             )}
-            <Button className="h-10 sm:h-full hidden xs:flex dark:bg-[#ce1c1c] dark:text-white">
+            <Button className="h-10 sm:h-full hidden sm:flex dark:bg-[#ce1c1c] dark:text-white">
               <Coffee />
               Support Us
             </Button>

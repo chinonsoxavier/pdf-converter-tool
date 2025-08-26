@@ -1,4 +1,4 @@
-import { useEffect } from "react";
+import {  useState } from "react";
 import { useNavigate, useParams } from "react-router-dom";
 import {
   Card,
@@ -12,26 +12,29 @@ import { CheckCircle, XCircle, Clock } from "lucide-react";
 import { Link } from "react-router-dom";
 import useAuthStore from "../auth_store";
 
-// type VerificationState =
-//   | "loading"
-//   | "success"
-//   | "invalid"
-//   | "expired"
-//   | "already-verified";
+type VerificationState =
+  | "loading"
+  | "success"
+  | "invalid"
+  | "expired"
+  | "already-verified"|"error";
 
 export default function VerifyEmailTokenPage() {
   const navigate = useNavigate();
-  //   const [state, setState] = useState<VerificationState>("loading");
+  const [errorMessage,setErrorMessage]= useState("")
+    const [loadingStatus, setLoadingStatus] = useState<VerificationState>("loading");
   const { token } = useParams();
-  const { loadingStatus, errorMessage, verifyEmail } = useAuthStore();
+  const {   verifyEmail } = useAuthStore();
 
-  useEffect(() => {
-    const VerifyEmail = async () => {
-      await verifyEmail({ token: token });
-    };
-
+  const VerifyEmail = async () => {
+    await verifyEmail({ token: token,setErrorMessage:setErrorMessage, setLoadingStatus: setLoadingStatus });
+  };
+  window.onload = function () {
+   
     VerifyEmail();
-  }, [token]);
+  };
+
+
 
   const getStateConfig = () => {
     if (!errorMessage && loadingStatus === "success") {
@@ -83,8 +86,8 @@ export default function VerifyEmailTokenPage() {
   const config = getStateConfig();
 
   return (
-    <div className="min-h-screen bg-background flex items-center justify-center p-4">
-      <Card className="w-full max-w-md">
+    <div className="min-h-screen bg-secondary flex items-center justify-center p-4">
+      <Card className="w-full max-w-md bg-gray-50 dark:bg-primary">
         <CardHeader className="text-center space-y-4">
           <div className="flex justify-center">{config.icon}</div>
           <div className="space-y-2">

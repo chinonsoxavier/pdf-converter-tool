@@ -70,7 +70,7 @@ const App = () => {
       return <Navigate to="/signin" />;
     }
 
-  const { resetErrorMsg, user,userAuthEmail,authStatus } = useAuthStore();
+  const { resetErrorMsg, user } = useAuthStore();
   useEffect(() => {
     resetStore();
     resetErrorMsg({status:''});

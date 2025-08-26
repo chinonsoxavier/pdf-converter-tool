@@ -40,7 +40,7 @@ interface IResendPasswordResetToken {
 
 interface IAuthStore {
   authStatus: "not authenticated" | "authenticated" | "email sent";
-  userAuthEmail:string,
+  userAuthEmail: string;
   errorMessage: string;
   loadingStatus: "idle" | "loading" | "error" | "success";
   user: IUser;
@@ -50,10 +50,15 @@ interface IAuthStore {
     userName,
     password,
   }: IRegister) => Promise<void>;
+  setLoadingStatus: ({
+    status,
+  }: {
+    status: "idle" | "loading" | "error" | "success";
+  }) => void;
   resetErrorMsg: ({ status }: { status: string }) => void;
   loadUser: () => Promise<void>;
   logOut: () => Promise<void>;
-  login: ({ email, password,navigate }: ILogin) => Promise<void>;
+  login: ({ email, password, navigate }: ILogin) => Promise<void>;
   resetPasswordToken: ({ email }: IResetPasswordToken) => Promise<void>;
   changePassword: ({
     newPassword,
@@ -62,12 +67,36 @@ interface IAuthStore {
   resendPasswordResetToken: ({
     email,
   }: IResendPasswordResetToken) => Promise<void>;
+
   verifyEmail: ({
     token,
-  }: { token: string }) => Promise<void>;
+    setLoadingStatus,
+    setErrorMessage,
+  }: {
+    token: string;
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+    setLoadingStatus: React.Dispatch<
+      React.SetStateAction<
+        | "loading"
+        | "success"
+        | "invalid"
+        | "expired"
+        | "already-verified"
+        | "error"
+      >
+    >;
+  }) => Promise<void>;
   resendEmailVerificationToken: ({
     email,
-  }: { email: string }) => Promise<void> | void;
+    setLoadingStatus,
+    setIsResending,
+    setCountdown,
+  }: {
+    email: string;
+    setLoadingStatus: React.Dispatch<React.SetStateAction<string>>;
+    setIsResending: React.Dispatch<React.SetStateAction<boolean>>;
+    setCountdown: React.Dispatch<React.SetStateAction<number>>;
+  }) => Promise<void> | void;
 }
 
 
@@ -79,6 +108,9 @@ const useAuthStore = create<IAuthStore>((set) => ({
   user: null,
   resetErrorMsg: ({ status = "" }) => {
     set({ errorMessage: status, loadingStatus: "idle" });
+  },
+  setLoadingStatus: ({ status = "success" }) => {
+    set({ loadingStatus: status });
   },
   register: async ({
     email,
@@ -108,7 +140,7 @@ const useAuthStore = create<IAuthStore>((set) => ({
         return;
       }
 
-     const res = await baseAxios.post("/auth/register", {
+      const res = await baseAxios.post("/auth/register", {
         email: email,
         password: password,
         userName: userName,
@@ -116,19 +148,22 @@ const useAuthStore = create<IAuthStore>((set) => ({
       });
 
       if (res.data.status === "email not verified") {
-        set({authStatus:"email sent",userAuthEmail:email})
+        set({ authStatus: "email sent", userAuthEmail: email });
         navigate("/verify-email");
         enqueueSnackbar("Please check your email for the activation link");
         return;
       }
       if (res.data.status === "email already exists") {
-        enqueueSnackbar("user with this email already exists,proceed to login", { variant: "error" });
-        navigate("/signin")
+        enqueueSnackbar(
+          "user with this email already exists,proceed to login",
+          { variant: "error" }
+        );
+        navigate("/signin");
         return;
       }
-        enqueueSnackbar("Please check your email for the activation link", {
-          variant: "success",
-        });
+      enqueueSnackbar("Please check your email for the activation link", {
+        variant: "success",
+      });
       set({ authStatus: "email sent", userAuthEmail: email });
       navigate("/signin");
       set({ loadingStatus: "success" });
@@ -137,9 +172,12 @@ const useAuthStore = create<IAuthStore>((set) => ({
       if (isAxiosError(error) && error.response) {
         set({ errorMessage: error.response.data });
         console.log(error.response.data);
-        enqueueSnackbar(error.response.data || "failed to register user,please try again!", {
-          variant: "error",
-        });
+        enqueueSnackbar(
+          error.response.data || "failed to register user,please try again!",
+          {
+            variant: "error",
+          }
+        );
       } else {
         // Handle other types of errors (e.g., network errors, etc.)
         console.error("An unknown error occurred", error);
@@ -184,7 +222,7 @@ const useAuthStore = create<IAuthStore>((set) => ({
       }
     }
   },
-  login: async ({ email, password,navigate }: ILogin) => {
+  login: async ({ email, password, navigate }: ILogin) => {
     set({ loadingStatus: "loading" });
     try {
       const res = baseAxios.post(
@@ -197,21 +235,27 @@ const useAuthStore = create<IAuthStore>((set) => ({
           withCredentials: true,
         }
       );
-  
-        enqueueSnackbar((await res).data);
+
+      enqueueSnackbar((await res).data);
       const { loadUser } = useAuthStore.getState();
       await loadUser();
       set({ loadingStatus: "success" });
     } catch (error) {
-      
       if (isAxiosError(error) && error.response) {
-        set({ errorMessage: error.response.data.message ,authStatus:"email sent",userAuthEmail:email});
-            if (error.response.data.message ==="Email not verified,Check your email for verification link!"
-            ) {
-              console.log("Redirecting to verify-email page");
-              navigate("/verify-email");
-              // return;
-            }
+        set({
+          errorMessage: error.response.data.message,
+          authStatus: "email sent",
+          userAuthEmail: email,
+        });
+        if (
+          error.response.data.message ===
+          "Email not verified,Check your email for verification link!"
+        ) {
+          console.log("Redirecting to verify-email page");
+          enqueueSnackbar(error.response.data.message);
+          navigate("/verify-email");
+          return;
+        }
         console.log(error.response.data.message);
         enqueueSnackbar(error.response.data.message, {
           variant: "error",
@@ -324,15 +368,31 @@ const useAuthStore = create<IAuthStore>((set) => ({
   },
   resendEmailVerificationToken: ({
     email,
-  }: { email: string }) => {
+    setIsResending,
+    setLoadingStatus,
+    setCountdown,
+  }: {
+    email: string;
+    setIsResending: React.Dispatch<React.SetStateAction<boolean>>;
+    setLoadingStatus: React.Dispatch<React.SetStateAction<string>>;
+    setCountdown: React.Dispatch<React.SetStateAction<number>>;
+  }) => {
+    // set({ loadingStatus: "error" });
     const ResendEmailVerificationToken = async () => {
-      set({ loadingStatus: "loading" });
+      setLoadingStatus("loading");
+      setIsResending(true);
       try {
-        await baseAxios.post("/auth/resend-verification-token", {
+        const res = await baseAxios.post("/auth/resend-verification-token", {
           email: email,
         });
-        enqueueSnackbar("verification token has been sent to email", { variant: "success" });
-        set({ loadingStatus: "success" });
+        console.log(res);
+        enqueueSnackbar("verification token has been sent to email", {
+          variant: "success",
+        });
+        setCountdown(60);
+        setIsResending(false);
+        setLoadingStatus("success");
+        // set({ loadingStatus: "success" });
       } catch (error) {
         if (isAxiosError(error) && error.response) {
           set({ errorMessage: error.response.data });
@@ -346,31 +406,57 @@ const useAuthStore = create<IAuthStore>((set) => ({
             variant: "error",
           });
         }
+        setIsResending(false);
         set({ loadingStatus: "error" });
       }
     };
-     ResendEmailVerificationToken();
+    ResendEmailVerificationToken();
   },
-  verifyEmail: async ({ token }: { token: string }) => {
+  verifyEmail: async ({
+    token,
+    setLoadingStatus,
+    setErrorMessage,
+  }: {
+    token: string;
+    setErrorMessage: React.Dispatch<React.SetStateAction<string>>;
+    setLoadingStatus: React.Dispatch<
+      React.SetStateAction<
+        | "loading"
+        | "success"
+        | "invalid"
+        | "expired"
+        | "already-verified"
+        | "error"
+      >
+    >;
+  }) => {
+    // set({ loadingStatus: "loading" });
+    setLoadingStatus("loading");
     try {
-      baseAxios.put("/auth/verify" + token);
+     await baseAxios.put("/auth/verify/" + token);
       enqueueSnackbar("Email verified successfully", {
         variant: "success",
       });
+      // setLoadingStatus("success");
+      // set({ loadingStatus: "success", authStatus: "authenticated" });
+      // console.log(await res);
     } catch (error) {
       if (isAxiosError(error) && error.response) {
-        set({ errorMessage: error.response.data });
+        setErrorMessage(error.response.data);
+        // set({ errorMessage: error.response.data });
         console.log(error.response.data);
         enqueueSnackbar(error.response.data, {
           variant: "error",
         });
       } else {
         console.error("An unknown error occurred", error);
+        setErrorMessage("An unknown error occurred");
         enqueueSnackbar("An unknown error occurred.", {
           variant: "error",
         });
       }
-      set({ loadingStatus: "error" });
+      setLoadingStatus("error");
+      // set({ loadingStatus: "error" });
     }
   },
 }));
