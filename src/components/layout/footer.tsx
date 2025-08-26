@@ -10,6 +10,7 @@ import {
 } from "@/components/ui/dialog";
 import { motion } from "motion/react";
 import useAuthStore from "@/pages/(auth)/auth_store";
+import { ModeToggle } from "../mode_toggle";
 
 const Footer = () => {
 
@@ -85,8 +86,7 @@ const Footer = () => {
             </ul>
           </div>
         </motion.div>
-     
-        
+
         {/* Company */}
         <motion.div
           variants={variants1}
@@ -114,7 +114,7 @@ const Footer = () => {
                   to="/about-us"
                   className="text-secondary-foreground hover:text-primary-foreground text-sm"
                 >
-                 About Us
+                  About Us
                 </Link>
               </li>
 
@@ -164,7 +164,7 @@ const Footer = () => {
         </motion.div>
 
         {/* Admin  */}
-        {user?.isAdmin &&
+        {user?.isAdmin && (
           <motion.nav
             variants={variants2}
             initial={"inactive"}
@@ -195,7 +195,7 @@ const Footer = () => {
               </li>
             </ul>
           </motion.nav>
-        }
+        )}
 
         {/* PDF Converter Brand */}
         <motion.div
@@ -232,6 +232,7 @@ const Footer = () => {
 
         <div className="flex max-width flex-wrap  mx-auto items-center pb-10 pt-2 sm:justify-between justify-center gap-5 w-full">
           <p className="text-sm">PDFPlug.com © [2025]</p>
+          <ModeToggle />
           <p className="text-sm">A product by Amazonia Softech Ltd</p>
           <Dialog>
             <DialogTrigger className="text-secondary-foreground cursor-pointer">

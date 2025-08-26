@@ -382,7 +382,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
         downLoadUrl: res.data.fileUrl,
         downLoadId: res.data.fileId,
       });
-        // window.location.href = res.data;
+        // window.location.href = `download/${await res.data.fileUrl}`;
       return res.data; // Return the response data (download URL or file path)
     } catch (error) {
       console.error("Error converting PDF to Word:", error);

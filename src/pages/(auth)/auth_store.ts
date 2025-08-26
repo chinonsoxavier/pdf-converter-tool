@@ -431,15 +431,14 @@ const useAuthStore = create<IAuthStore>((set) => ({
     >;
   }) => {
     // set({ loadingStatus: "loading" });
-    setLoadingStatus("loading");
+    // setLoadingStatus("loading");
     try {
-     await baseAxios.put("/auth/verify/" + token);
+   const res = await baseAxios.put("/auth/verify/" + token);
       enqueueSnackbar("Email verified successfully", {
         variant: "success",
       });
-      // setLoadingStatus("success");
-      // set({ loadingStatus: "success", authStatus: "authenticated" });
-      // console.log(await res);
+      setLoadingStatus("success");
+      console.log(res);
     } catch (error) {
       if (isAxiosError(error) && error.response) {
         setErrorMessage(error.response.data);

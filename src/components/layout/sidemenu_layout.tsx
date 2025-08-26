@@ -1,4 +1,4 @@
-import { XCircle } from "lucide-react";
+import { Coffee, XCircle } from "lucide-react";
 import { Button } from "../ui/button";
 import useLandingStore from "@/pages/landing/store/landing_store";
 import { cn } from "@/lib/utils";
@@ -39,15 +39,17 @@ const SidemenuLyout = () => {
       <aside
         className={cn(
           sideMenuOpen ? "w-full" : "w-0",
-          "overflow-hidden fixed max-w-sm top-0 bottom-0 shadow duration-500 right-0 py-5 bg-white dark:bg-primary"
+          "overflow-hidden fixed max-w-sm top-0 bottom-0 shadow duration-500 right-0 py-10 bg-white dark:bg-primary"
         )}
       >
         <div className="flex items-center justify-between px-8 mb-10 w-full">
           <div className="flex items-center justify-start gap-5">
-            <Button className="" variant="outline">
-              Sign Up
+            <Button> Sign In</Button>
+            <Button className="">
+              <Coffee />
+              Support Us
             </Button>
-            <Button>Sign In</Button>
+            
           </div>
           <div className="flex items-center justify-end">
             <div className="w-9 h-9 sm:w-10 sm:h-10 p-0 cursor-pointer dark:text-white text-secondary-foreground items-center justify-center flex md:hidden">
@@ -150,7 +152,11 @@ const SidemenuLyout = () => {
               ],
             },
           ].map((tool, index) => (
-            <AccordionItem className="pb-3" key={index} value={(index + 1).toString()}>
+            <AccordionItem
+              className="pb-3"
+              key={index}
+              value={(index + 1).toString()}
+            >
               <AccordionTrigger className="px-8 text-[16px] font-bold text-secondary-foreground">
                 {tool.label}
               </AccordionTrigger>

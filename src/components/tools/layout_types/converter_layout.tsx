@@ -236,7 +236,7 @@ const ConverterLayout = ({
 
       {/* main content */}
       {loadingState === "idle" ? (
-        <main className="w-full h-[88%] dark:bg-primary">
+        <main className="w-full h-[88%] overflow-y-scroll dark:bg-primary">
           {!selectedFiles[selectedIndex] ? (
             <div className="">
               <div className="w-full flex-col center p-4 py-20 rounded-lg ">

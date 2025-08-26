@@ -33,7 +33,7 @@ const { id } = useParams();
 
             <div className="flex items-center flex-wrap justify-center gap-4">
               {/* Back button */}
-              <Button onClick={()=>navigate(-1)}
+              <Button onClick={()=>navigate("/pdf_to_word")}
                 variant="ghost"
                 size="icon"
                 className="rounded-full bg-gray-600 hover:bg-gray-700 text-white"

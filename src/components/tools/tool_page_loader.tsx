@@ -13,11 +13,12 @@ const ToolPageLoader = ({
   handleSubmitFile: () => void;
 }) => {
   const navigate = useNavigate();
-  const { loadingState, downLoadId } = useToolsStore();
+  const { loadingState, downLoadId,setLoadingState } = useToolsStore();
 
   useEffect(() => {
     if (loadingState === "success") {
       navigate("download/" + downLoadId);
+      setLoadingState("idle")
     }
   }, [loadingState]);
 

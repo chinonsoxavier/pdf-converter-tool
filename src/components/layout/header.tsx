@@ -32,7 +32,6 @@ import {
   WordToPdf,
 } from "@/assets/svg/export";
 import { Link, NavLink } from "react-router-dom";
-import { ModeToggle } from "../mode_toggle";
 import { motion } from "motion/react";
 import useLandingStore from "@/pages/landing/store/landing_store";
 import { cn } from "@/lib/utils";
@@ -507,8 +506,6 @@ const Header = (isLanding: { isLanding?: boolean }) => {
               Support Us
             </Button>
           </nav>
-
-          <ModeToggle />
 
           {sideMenuOpen ? (
             <div
