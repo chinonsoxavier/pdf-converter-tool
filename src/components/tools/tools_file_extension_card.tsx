@@ -2,19 +2,23 @@ import { PowerPointIcon, WordIcon } from "@/assets/svg/export";
 import useJpgToPdfStore from "@/pages/tools/jpg_to_pdf/jpg_to_pdf_store";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import useToolsStore from "@/pages/tools/tools_store";
+import { cn } from "@/lib/utils";
 
 const ToolsFileExtensionCard = ({
   fileType,
   src,
+  className
 }: {
   src?:string
-  fileType: string;
+    fileType: string;
+  className?:string
   }) => {
   const { margin, orientation } = useJpgToPdfStore();
   const {selectedFiles,selectedIndex } = useToolsStore();
   const toolsFilesExtensionIcon = [
     { label: "pptt", icon: PowerPointIcon },
     { label: "doc", icon: WordIcon },
+    { label: "docx", icon: WordIcon },
   ];
   return fileType === "jpg" || fileType === "png" ? (
     <Tooltip>
@@ -63,12 +67,42 @@ const ToolsFileExtensionCard = ({
     toolsFilesExtensionIcon.map(
       (ext, index) =>
         ext.label === fileType && (
+              <Tooltip key={index} >
+                <TooltipTrigger>
+                  <div
+                    className={cn(
+                      className,
+                      " bg-white dark:bg-secondary p border-2 hover:bg-secondary/70 hover:border-black/40 border-dashed",
+                      "center flex-wra duration-500 rounded-lg relative"
+                    )}
+              >
+                
           <div
             key={index}
             className="w-full gap-4 center flex-col min-w-[150px] shadow bg-white p-3 min-h-[200px] rounded-lg"
-          >
+            >
             <ext.icon size="xl" />
-          </div>
+            </div>
+              </div>
+              </TooltipTrigger>
+               <TooltipContent className="text-white">
+          <p className="text-[13px]">
+            {`${
+              Math.round(
+                selectedFiles[selectedIndex]?.fileSize / (1024 * 1024)
+              ) < 1
+                ? Number(selectedFiles[selectedIndex]?.fileSize / 1024).toFixed(
+                    2
+                  ) + " KB"
+                : Number(
+                    selectedFiles[selectedIndex]?.fileSize / (1024 * 1024)
+                  ).toFixed(2) + " MB"
+            }`}
+          </p>
+            </TooltipContent>
+            <p className="py-2 text-primary-foreground" >{selectedFiles[selectedIndex]?.fileName}</p>
+            
+    </Tooltip>
         )
     )
   );

@@ -201,7 +201,7 @@ export default function DraggableGrid({
                         </Tooltip>
                       )}
                       <Page
-                        loading={<PdfLoadingComponent/>}
+                        loading={<PdfLoadingComponent />}
                         rotate={item?.rotate[index]}
                         className="pdf_shadow flex-1 w-full rounded border"
                         pageNumber={item.pageNumber}
@@ -216,30 +216,32 @@ export default function DraggableGrid({
               </div>
             </Document>
           ) : (
-            <Document
-              file={file}
-              scale={scale}
-              onLoadSuccess={({ numPages }) => {
-                setNumPages(selectedIndex, numPages);
-                // alert(numPages);
-              }}
-              onLoadError={(error) => console.error("PDF load error:", error)}
-              className="w-full flex-1 gap-5 flex-col hover:border-black/40 duration-500 center p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-white"
-            >
-              <Page
-                loading={PdfLoadingComponent}
-                key={pageNumber} // Use the specific page number here
-                rotate={selectedFiles[selectedIndex]?.rotate?.[0] ?? 0}
-                className="pdf_shadow rounded border"
-                pageNumber={1}
-                width={10} // Reduced for better performance
-                renderTextLayer={false} // Optimize rendering
-                renderAnnotationLayer={false}
-              />
-              <p className="text-xs leading text-secondary-foreground">
-                {label}
-              </p>
-            </Document>
+            <div>
+              <Document
+                file={file}
+                scale={10}
+                onLoadSuccess={({ numPages }) => {
+                  setNumPages(selectedIndex, numPages);
+                  // alert(numPages);
+                }}
+                onLoadError={(error) => console.error("PDF load error:", error)}
+                className="w-full flex-1 gap-5 flex-col hover:border-black/40 duration-500 center p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-white"
+              >
+                <Page
+                  loading={PdfLoadingComponent}
+                  key={pageNumber} // Use the specific page number here
+                  rotate={selectedFiles[selectedIndex]?.rotate?.[0] ?? 0}
+                  className="pdf_shadow rounded border"
+                  pageNumber={1}
+                  width={10} // Reduced for better performance
+                  renderTextLayer={false} // Optimize rendering
+                  renderAnnotationLayer={false}
+                />
+                <p className="text-xs leading text-secondary-foreground">
+                  {label}
+                </p>
+              </Document>
+            </div>
           )}
         </div>
       </TooltipTrigger>

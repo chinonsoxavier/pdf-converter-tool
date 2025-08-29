@@ -312,7 +312,7 @@ interface Tool {
   console.log(showAllTools)
 
   return (
-    <ContainerLayout className="space-y-5 w-full border-t pt-12 sm:pt-20 text-center flex-col">
+    <ContainerLayout className="space-y-5 w-full border-t pt-6 sm:pt-10 text-center flex-col">
       <motion.div
         variants={variants1}
         initial={"inactive"}
@@ -443,7 +443,7 @@ interface Tool {
           </div>
         </div>
       </motion.div>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-1.5 sm:gap-3 pb-12 sm:pb-20 w-full mt-4">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-1.5 sm:gap-3 pb-12 sm:pb-20 w-full mt-4">
         {Tools
           .slice(0, -1) 
           .filter(

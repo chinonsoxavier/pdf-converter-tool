@@ -3,7 +3,8 @@ import MergePdfChildrenSection from "../../../components/tools/merge_pdf/merge_p
 import useToolsStore from "../tools_store";
 
 const MergePdf = () => {
-  const { selectedFiles } = useToolsStore();
+  const { selectedFiles ,mergePdfs} = useToolsStore();
+
 
   return (
     <ConverterLayout
@@ -12,6 +13,7 @@ const MergePdf = () => {
       label="Merge PDF Files"
       desc="Combine PDF files online for free in just seconds."
       disabled={selectedFiles.length <= 1}
+      handleFileUpload={()=>mergePdfs(selectedFiles)}
 
       convertingStateText="Merging PDF files"
       actionMenuSideBar={

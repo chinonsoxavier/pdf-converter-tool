@@ -235,5 +235,4 @@ const SplitPdf = () => {
     />
   );
 };
-
 export default SplitPdf;

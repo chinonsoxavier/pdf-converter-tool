@@ -3,7 +3,6 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { motion } from "motion/react";
-
 import { CloudUpload, PlusIcon, Settings, XIcon } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import "react-pdf/dist/Page/TextLayer.css";
@@ -23,6 +22,7 @@ import ConverterLayoutSidebar from "@/components/layout/converter_layout_sidebar
 import useToolsStore from "@/pages/tools/tools_store";
 import PdfRenderer from "@/components/pdf_renderer";
 import { enqueueSnackbar } from "notistack";
+// import DropboxChooser from "react-dropbox-chooser";
 import useDrivePicker from "react-google-drive-picker";
 
 // import { useNavigate } from "react-router-dom";
@@ -312,22 +312,30 @@ const ConverterLayout = ({
                           </TooltipTrigger>
                         </Tooltip>
 
-                        <Tooltip>
-                          <TooltipTrigger className="rounded-full cursor-pointer bg-accent p-2.5 w-11.5 h-11.5 text-white">
-                            <svg
-                              xmlns="http://www.w3.org/2000/svg"
-                              viewBox="0 0 18 16"
-                            >
-                              <path
-                                fill="currentColor"
-                                d="M5.3475,0.7035 L0.096,4.125 L3.708,7.03725 L9.018,3.765 L5.3475,0.7035 Z M17.904,4.14 L12.66525,0.7275 L9.01875,3.7725 L14.29875,7.03875 L17.904,4.14 Z M9.01875,10.305 L12.66525,13.35975 L17.904,9.945 L14.2995,7.0395 L9.01875,10.305 Z M0.096,9.9585 L5.3475,13.35975 L9.01875,10.305 L3.70875,7.0455 L0.096,9.9585 Z M9.01875,10.9635 L5.35575,14.0385 L3.786,13.02 L3.786,14.16 L9.01875,17.30475 L14.271,14.15175 L14.271,13.0125 L12.693,14.031 L9.01875,10.9635 Z"
-                              ></path>
-                            </svg>
-                            <TooltipContent className="text-white hidden border bottom-0">
-                              Select file from Dropbox
-                            </TooltipContent>
-                          </TooltipTrigger>
-                        </Tooltip>
+                        {/* <DropboxChooser
+                          appKey={"qldjo0z7zlvfu1z"}
+                          // success={(files) => this.onSuccess(files)}
+                          // cancel={() => this.onCancel()}
+                          multiselect={true}
+                          extensions={[".mp4"]}
+                        >
+                          <Tooltip>
+                            <TooltipTrigger className="rounded-full cursor-pointer bg-accent p-2.5 w-11.5 h-11.5 text-white">
+                              <svg
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 18 16"
+                              >
+                                <path
+                                  fill="currentColor"
+                                  d="M5.3475,0.7035 L0.096,4.125 L3.708,7.03725 L9.018,3.765 L5.3475,0.7035 Z M17.904,4.14 L12.66525,0.7275 L9.01875,3.7725 L14.29875,7.03875 L17.904,4.14 Z M9.01875,10.305 L12.66525,13.35975 L17.904,9.945 L14.2995,7.0395 L9.01875,10.305 Z M0.096,9.9585 L5.3475,13.35975 L9.01875,10.305 L3.70875,7.0455 L0.096,9.9585 Z M9.01875,10.9635 L5.35575,14.0385 L3.786,13.02 L3.786,14.16 L9.01875,17.30475 L14.271,14.15175 L14.271,13.0125 L12.693,14.031 L9.01875,10.9635 Z"
+                                ></path>
+                              </svg>
+                              <TooltipContent className="text-white hidden border bottom-0">
+                                Select file from Dropbox
+                              </TooltipContent>
+                            </TooltipTrigger>
+                          </Tooltip>
+                        </DropboxChooser> */}
                       </div>
                     </div>
                   </Card>
@@ -341,7 +349,7 @@ const ConverterLayout = ({
               <Footer />
             </div>
           ) : (
-            <div className="relative h-full flex items-start justify-start w-full">
+            <div className="relative flex items-start justify-start w-full">
               {/* converter layout sidebar */}
               <ConverterLayoutSidebar
                 disabled={disabled}
@@ -365,15 +373,17 @@ const ConverterLayout = ({
                           file={selectedFiles[selectedIndex]?.fileUrl}
                           pageNumber={"1"}
                         />
-                      ) : (
+                          ) : (
+                              <>
                         <ToolsFileExtensionCard
                           src={selectedFiles[selectedIndex]?.fileUrl}
                           fileType={selectedFiles[selectedIndex]?.fileType[0]}
-                        />
+                                />
+                                </>
                       )}
                     </>
                   )}
-                  <div className="center absolute mr-5 sm:mr-0 right-0 shadow drop-shadow-md sm:right-5 sm:top-5 top-20 duration-500 cursor-pointer bg-accent text-white p-2 rounded-full">
+                  <div className="center fixed mr-5 sm:mr-0 right-0 shadow drop-shadow-md sm:right-5 sm:top-26 top-30 duration-500 cursor-pointer bg-accent text-white p-2 rounded-full">
                     <Input
                       ref={fileInputRef2}
                       type="file"
@@ -399,7 +409,7 @@ const ConverterLayout = ({
 
                   <div
                     onClick={toggleSideMenuOpen}
-                    className="flex sm:hidden absolute mr-5 sm:mr-0 right-0 shadow drop-shadow-md sm:right-5 sm:top-18 top-36 duration-500 cursor-pointer bg-secondary hover:text-accent text-white p-2 rounded-full"
+                    className="flex sm:hidden fixed mr-5 sm:mr-0 right-0 shadow drop-shadow-md sm:right-5 sm:top0 top-46 duration-500 cursor-pointer bg-secondary hover:text-accent text-white p-2 rounded-full"
                   >
                     <Tooltip>
                       <TooltipTrigger>
@@ -418,7 +428,7 @@ const ConverterLayout = ({
                 <Button
                   disabled={disabled}
                   onClick={handleSubmitFile}
-                  className="max-w-sm font-semibold absolute bottom-10 left-10 sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center sm:hidden"
+                  className="max-w-sm font-semibold fixed bottom-10 right-10 sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center sm:hidden"
                   type="submit"
                 >
                   {actionButtonText}

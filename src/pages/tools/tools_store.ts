@@ -19,10 +19,14 @@ interface PageItem {
   rotate: number[]; // Rotation for the page (synchronized with ISelectedFile.rotate)
 }
 
-// interface DraggedItem {
-//   item: PageItem;
-//   index: number;
-// }
+
+interface IRecentActivities {
+  fileName: string;
+  fileUrl: string;
+  fileSize: string;
+  icon: string;
+  fileType: string;
+}
 
 interface ToolsStore {
   loadingState: "idle" | "loading" | "success" | "error";
@@ -37,10 +41,13 @@ interface ToolsStore {
   selectedIndex: number;
   sideMenuOpen: boolean;
   pdfPages: PageItem[];
+  recentActivities: IRecentActivities[];
   resetStore: () => void;
   setItems?: (pageIndex: number, pages: PageItem[]) => void;
   downloadFile?: (downloadUrl: string) => Promise<string>;
   rotateIndividualPage: (fileIndex: number, pageIndex: number) => void;
+  getRecentActivities: () => Promise<[]>;
+  reorderSelectedFiles: (newFilesOrder: ISelectedFile[]) => void;
   initRotate: (fileIndex: number, pageLength: number) => void;
   setRotateRight: (fileIndex: number, pageLength: number) => void;
   setRotateLeft: (fileIndex: number, pageLength: number) => void;
@@ -50,6 +57,8 @@ interface ToolsStore {
   setSelectedFile: (newSelectedFile: ISelectedFile) => void;
   toggleSideMenuOpen: () => void;
   convertPdfToWord: (pdfFile: File) => Promise<string>;
+  convertWordToPdf: (pdfFile: File) => Promise<string>;
+  mergePdfs: (pdfFile: ISelectedFile[]) => Promise<string>;
 }
 
 const useToolsStore = create<ToolsStore>((set) => ({
@@ -63,31 +72,10 @@ const useToolsStore = create<ToolsStore>((set) => ({
       selectedIndex: 0,
       pdfPages: [],
     }),
-  // setItems: (pageIndex: number, newPdfPages: PageItem[]) =>
-  //   set((state) => {
-  //     const PdfPages = [...state.selectedFiles];
-  //     PdfPages[pageIndex] = {
-  //       ...PdfPages[pageIndex],
-  //       pdfPages: newPdfPages,
-  //     };
-  //     return { selectedFiles: PdfPages };
-  //   }),
-
-  // setItems: (pageIndex:number,newItems: PageItem[]) => {
-  //   useToolsStore.setState((state) => {
-  //     const newSelectedFiles = [...state.selectedFiles];
-  //     // if (selectedIndex >= 0 && selectedIndex < newSelectedFiles.length) {
-  //       // Update rotate array to match new page order
-  //       const newRotate = newItems.map((item) => item.rotate);
-  //       newselectedFiles[selectedIndex]? = {
-  //         ...newselectedFiles[selectedIndex]?,
-  //         rotate: newRotate,
-  //       // };
-  //     }
-  //     return { selectedFiles: newSelectedFiles };
-  //   });
-  // };
   loadingState: "idle",
+  recentActivities: [{
+    fileName:'',fileSize:'',fileType:'',fileUrl:'',icon:'',
+  }],
   progress: 0,
   downLoadUrl: null,
   downLoadId: null,
@@ -96,6 +84,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
   ) => set(() => ({ loadingState: newLoadingState })),
   setProgress: (newProgress: number) => set(() => ({ progress: newProgress })),
   selectedIndex: 0,
+    reorderSelectedFiles: (newFilesOrder:ISelectedFile[]) => set({ selectedFiles: newFilesOrder }),
   toggleSideMenuOpen: () =>
     set((state) => ({ sideMenuOpen: !state.sideMenuOpen })),
   setSelectedFile: (newSelectedFile: ISelectedFile) =>
@@ -157,7 +146,6 @@ const useToolsStore = create<ToolsStore>((set) => ({
       const newSelectedFiles = [...state.selectedFiles];
       if (fileIndex >= 0 && fileIndex < newSelectedFiles.length) {
         const file = newSelectedFiles[fileIndex];
-        // Ensure 'rotate' array exists before attempting to map over it
         if (file?.rotate) {
           newSelectedFiles[fileIndex] = {
             ...file,
@@ -175,45 +163,6 @@ const useToolsStore = create<ToolsStore>((set) => ({
       }
       return { selectedFiles: newSelectedFiles };
     }),
-  // resetRotate: (fileIndex: number) =>
-  //   set((state) => {
-  //     const newSelectedFiles = [...state.selectedFiles];
-  //     if (fileIndex >= 0 && fileIndex < newSelectedFiles.length) {
-  //       newSelectedFiles[fileIndex] = {
-  //         ...newSelectedFiles[fileIndex],
-  //         rotate: newSelectedFiles[fileIndex].rotate.map(() => 0),
-  //       };
-  //       console.log(
-  //         `Reset rotate for file ${fileIndex}:`,
-  //         newSelectedFiles[fileIndex].rotate
-  //       );
-  //     }
-  //     return { selectedFiles: newSelectedFiles };
-  //   }),
-  // rotateIndividualPage: (fileIndex: number, pageIndex: number) =>
-  //   set((state) => {
-  //     const newSelectedFiles:ISelectedFile[]  =  [...state.selectedFiles];
-  //     if (
-  //       fileIndex >= 0 &&
-  //       fileIndex < newSelectedFiles.length &&
-  //       pageIndex >= 0 &&
-  //       pageIndex < newSelectedFiles[fileIndex].rotate.length
-  //     ) {
-  //       newSelectedFiles[fileIndex] = {
-  //         ...newSelectedFiles[fileIndex],
-  //         rotate: [
-  //           ...newSelectedFiles[fileIndex].rotate.slice(0, pageIndex),
-  //           ((newSelectedFiles[fileIndex].rotate[pageIndex] ?? 0) + 90) % 360,
-  //           ...newSelectedFiles[fileIndex].rotate.slice(pageIndex + 1) ?? 0,
-  //         ],
-  //       };
-  //       console.log(
-  //         `Rotate page ${pageIndex} of file ${fileIndex}:`,
-  //         newSelectedFiles[fileIndex].rotate?.[pageIndex]
-  //       );
-  //     }
-  //     return { selectedFiles: newSelectedFiles };
-  //   }),
   rotateIndividualPage: (fileIndex: number, pageIndex: number) =>
     set((state) => {
       const newSelectedFiles: ISelectedFile[] = [...state.selectedFiles];
@@ -277,7 +226,6 @@ const useToolsStore = create<ToolsStore>((set) => ({
   setNumPages: (fileIndex: number, numPages: number) =>
     set((state) => {
       const newSelectedFiles = [...state.selectedFiles];
-      // if (fileIndex >= 0 && fileIndex < newSelectedFiles.length) {
       newSelectedFiles[fileIndex] = {
         ...newSelectedFiles[fileIndex],
         numPages: numPages,
@@ -287,11 +235,6 @@ const useToolsStore = create<ToolsStore>((set) => ({
           rotate: Array(numPages).fill(0),
         })),
         rotate: Array(numPages).fill(0),
-        // };
-        // console.log(
-        //   `Set numPages for file ${fileIndex} to ${numPages}, rotate:`,
-        //   newSelectedFiles[fileIndex].rotate
-        // );
       };
       return { selectedFiles: newSelectedFiles };
     }),
@@ -303,12 +246,10 @@ const useToolsStore = create<ToolsStore>((set) => ({
         newSelectedFiles[fileIndex] = {
           ...newSelectedFiles[fileIndex],
           pdfPages: newItems,
-          // rotate: newItems.map((item) => item.rotate),
         };
       }
       return {
         selectedFiles: newSelectedFiles,
-        // items: newItems,
       };
     }),
   downloadFile: async (downloadUrl: string) => {
@@ -316,14 +257,6 @@ const useToolsStore = create<ToolsStore>((set) => ({
       const res = await baseAxios.get("/tools/download/" + downloadUrl, {
         responseType: "blob",
       });
-      // const res = await axios.get(
-      //   "http://localhost:5000/api/v1/tools/download/" + downloadUrl,
-      //   {
-      //     responseType: "blob", // Important: get the response as a Blob
-      //   }
-      // );
-
-      // Create a URL for the blob
       const url = window.URL.createObjectURL(new Blob([res.data]));
 
       // Create a temporary link element
@@ -351,35 +284,81 @@ const useToolsStore = create<ToolsStore>((set) => ({
       // return "error";
     }
   },
-  convertPdfToWord: async (pdfFile: File) => {
+  getRecentActivities : async () => {
+    try {
+      const res = await baseAxios.get("/tools/recent-activities", {withCredentials:true});
+      set({ recentActivities: await res.data.recentActivities });
+      // await res.data.activities; // Return the response data (download URL or file path)
+    } catch (error) {
+      console.error("Error fetching recent activities:", error);
+        
+      return [];
+    }
+  },
+  convertWordToPdf: async (pdfFile: File) => {
+    set({ loadingState: "loading", progress: 0, downLoadUrl: null });
+    try {
+      const form = new FormData();
+      form.append("pdfFile", pdfFile);
+      const res = await baseAxios.post("/tools/convert-word-to-pdf",
+        form,
+        {withCredentials:true},
+      );
+      set({
+        loadingState: "success",
+        downLoadUrl: res.data.fileUrl,
+        downLoadId: res.data.fileId,
+      });
+        // window.location.href = `download/${await res.data.fileUrl}`;
+      return res.data; // Return the response data (download URL or file path)
+    } catch (error) {
+      console.error("Error converting Word to Pdf:", error);
+      set({ loadingState: "error" });
+         enqueueSnackbar("failed to convert word to pdf", {
+           variant: "error",
+         });
+      return "error!!";
+    }
+  },
+   convertPdfToWord: async (pdfFile: File) => {
     set({ loadingState: "loading", progress: 0, downLoadUrl: null });
     try {
       const form = new FormData();
       form.append("pdfFile", pdfFile);
       const res = await baseAxios.post("/tools/convert-pdf-to-word",
         form,
-        {
-          onUploadProgress: (progressEvent) => {
-            const total = progressEvent.total || 1; // Avoid division by zero
-            const progress = Math.round((progressEvent.loaded * 100) / total);
-            set({ progress });
-          },
-        }
+        {withCredentials:true},
       );
-      // const res = await axios.post(
-      //   "http://localhost:5000/api/v1/tools/convert-pdf-to-word",
-      //   form,
-      //   {
-      //     onUploadProgress: (progressEvent) => {
-      //       const total = progressEvent.total || 1; // Avoid division by zero
-      //       const progress = Math.round((progressEvent.loaded * 100) / total);
-      //       set({ progress });
-      //     },
-      //   }
-      // );
       set({
         loadingState: "success",
         downLoadUrl: res.data.fileUrl,
+        downLoadId: res.data.fileId,
+      });
+        // window.location.href = `download/${await res.data.fileUrl}`;
+      return res.data; // Return the response data (download URL or file path)
+    } catch (error) {
+      console.error("Error converting PDF to Word:", error);
+      set({ loadingState: "error" });
+         enqueueSnackbar("failed to convert pdf to word", {
+           variant: "error",
+         });
+      return "error!!";
+    }
+  },
+     mergePdfs: async (pdfFiles: ISelectedFile[]) => {
+    set({ loadingState: "loading", progress: 0, downLoadUrl: null });
+    try {
+      const form = new FormData();
+      
+  pdfFiles.forEach((file) => {
+    // 'files' must match the field name in your Express route's `upload.array('files')`
+    form.append("pdfFiles", file.file);
+  });      const res = await baseAxios.post("/tools/merge-pdfs",
+        form,
+        {withCredentials:true},
+      );
+      set({
+        loadingState: "success",
         downLoadId: res.data.fileId,
       });
         // window.location.href = `download/${await res.data.fileUrl}`;

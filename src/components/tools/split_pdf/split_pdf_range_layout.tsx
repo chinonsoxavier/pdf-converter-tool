@@ -25,7 +25,7 @@ const SplitPdfRangeLayout = () => {
                   onLoadError={(error) =>
                     console.error("PDF load error:", error)
                   }
-                  className="w-full gap-5 flex-col center p-0 sm:p-5 rounded-lg shadow-md bg-[red]"
+                  className="w-full gap-5 flex-col center p-0 sm:p-5 rounded-lg shadow-md "
                 >
                   <Page
                     loading={<PdfLoadingComponent/>}
