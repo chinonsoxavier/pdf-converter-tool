@@ -1,28 +1,30 @@
 import ConverterLayout from "@/components/tools/layout_types/converter_layout";
 import { Check } from "lucide-react";
 import { useState } from "react";
+import useToolsStore from "../tools_store";
 
 const CompressPdf = () => {
-    const [compressionOption, setCompressionOption] = useState('recommended');
-  
+    const [compressionOption, setCompressionOption] = useState('Medium');
+  const { compressPdf,selectedFiles } = useToolsStore();
   return (
     <div className=" to-primary/5 min-h-lvh from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)]">
       <ConverterLayout
         actionButtonText="Compress File"
         convertingStateText="Compressing Pdf File"
         label="Compress Pdf File"
+        handleFileUpload={() => compressPdf(selectedFiles, compressionOption)}
         desc="Reduce file size without losing quality"
         actionMenuSideBar={
           <div className="">
             <div
-              onClick={() => setCompressionOption("extreme")}
+              onClick={() => setCompressionOption("High")}
               className={`py-5 duration-300 cursor-pointer px-4  border-b ${
-                compressionOption === "extreme" &&
+                compressionOption === "High" &&
                 "bg-muted dark:bg-primary hover:bg-muted/80 dark:hover:bg-primary/5"
               }`}
             >
               <p className="text-lg font-medium text-accent">
-                Extreme Compression
+                High Compression
               </p>
 
               <div className="flex items-start justify-between">
@@ -31,7 +33,7 @@ const CompressPdf = () => {
                 </p>
                 <span
                   className={`${
-                    compressionOption === "extreme" ? "flex" : "hidden"
+                    compressionOption === "High" ? "flex" : "hidden"
                   } items-center justify-center rounded-full w-7.5 h-7.5 bg-[#4acd86]`}
                 >
                   <Check className="w-4 h-4 text-white text-xl" />
@@ -40,9 +42,9 @@ const CompressPdf = () => {
             </div>
 
             <div
-              onClick={() => setCompressionOption("recommended")}
+              onClick={() => setCompressionOption("Medium")}
               className={`py-5 duration-300 cursor-pointer px-4  border-b ${
-                compressionOption === "recommended" &&
+                compressionOption === "Medium" &&
                 "bg-muted dark:bg-primary hover:bg-muted/80 dark:hover:bg-primary/5"
               }`}
             >
@@ -56,7 +58,7 @@ const CompressPdf = () => {
                 </p>
                 <span
                   className={`${
-                    compressionOption === "recommended" ? "flex" : "hidden"
+                    compressionOption === "Medium" ? "flex" : "hidden"
                   } items-center justify-center rounded-full w-7.5 h-7.5 bg-[#4acd86]`}
                 >
                   <Check className="w-4 h-4 text-white text-xl" />
@@ -65,9 +67,9 @@ const CompressPdf = () => {
             </div>
 
             <div
-              onClick={() => setCompressionOption("less")}
+              onClick={() => setCompressionOption("Low")}
               className={`py-5 duration-300 cursor-pointer px-4  border-b ${
-                compressionOption === "less" &&
+                compressionOption === "Low" &&
                 "bg-muted dark:bg-primary hover:bg-muted/80 dark:hover:bg-primary/5"
               }`}
             >
@@ -80,7 +82,7 @@ const CompressPdf = () => {
                 </p>
                 <span
                   className={`${
-                    compressionOption === "less" ? "flex" : "hidden"
+                    compressionOption === "Low" ? "flex" : "hidden"
                   } items-center justify-center rounded-full w-7.5 h-7.5 bg-[#4acd86]`}
                 >
                   <Check className="w-4 h-4 text-white text-xl" />

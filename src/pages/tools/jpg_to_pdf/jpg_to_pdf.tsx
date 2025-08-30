@@ -9,12 +9,15 @@ import {
 } from "@/components/ui/select";
 import useJpgToPdfStore from "./jpg_to_pdf_store";
 import { Input } from "@/components/ui/input";
+import useToolsStore from "../tools_store";
 
 const JpgToPdf = () => {
-  const { orientation,setOrientation,margin,setMargin,setSize,size } = useJpgToPdfStore();
+  const { orientation, setOrientation, margin, setMargin, setSize, size } = useJpgToPdfStore();
+  const {JpgToPdf,selectedFiles} = useToolsStore();
   return (
     <div className=" to-primary/5 min-h-lvh from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)]">
       <ConverterLayout
+        handleFileUpload={() => JpgToPdf(selectedFiles,orientation, margin)}
         actionButtonText="Convert Jpg to Pdf"
         convertingStateText="Converting Jpg to Pdf"
         label="Convert Jpg to Pdf"

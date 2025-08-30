@@ -349,7 +349,7 @@ const ConverterLayout = ({
               <Footer />
             </div>
           ) : (
-            <div className="relative flex items-start justify-start w-full">
+            <div className="relative flex h-full items-start justify-start w-full">
               {/* converter layout sidebar */}
               <ConverterLayoutSidebar
                 disabled={disabled}
@@ -428,7 +428,7 @@ const ConverterLayout = ({
                 <Button
                   disabled={disabled}
                   onClick={handleSubmitFile}
-                  className="max-w-sm font-semibold fixed bottom-10 right-10 sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center sm:hidden"
+                  className="max-w-sm font-semibold fixed bottom-10 left-10 sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center sm:hidden"
                   type="submit"
                 >
                   {actionButtonText}

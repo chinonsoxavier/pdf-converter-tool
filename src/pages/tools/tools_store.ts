@@ -58,6 +58,12 @@ interface ToolsStore {
   toggleSideMenuOpen: () => void;
   convertPdfToWord: (pdfFile: File) => Promise<string>;
   convertWordToPdf: (pdfFile: File) => Promise<string>;
+  compressPdf: (
+    pdfFiles: ISelectedFile[],
+    compressionLevel: string
+  ) => Promise<string>;
+  JpgToPdf: (pdfFiles: ISelectedFile[], orientation: string,margin:string) => Promise<string>;
+  PdfToJpg: (pdfFiles: ISelectedFile[], jpgQuality: string) => Promise<string>;
   mergePdfs: (pdfFile: ISelectedFile[]) => Promise<string>;
 }
 
@@ -73,9 +79,15 @@ const useToolsStore = create<ToolsStore>((set) => ({
       pdfPages: [],
     }),
   loadingState: "idle",
-  recentActivities: [{
-    fileName:'',fileSize:'',fileType:'',fileUrl:'',icon:'',
-  }],
+  recentActivities: [
+    {
+      fileName: "",
+      fileSize: "",
+      fileType: "",
+      fileUrl: "",
+      icon: "",
+    },
+  ],
   progress: 0,
   downLoadUrl: null,
   downLoadId: null,
@@ -84,7 +96,8 @@ const useToolsStore = create<ToolsStore>((set) => ({
   ) => set(() => ({ loadingState: newLoadingState })),
   setProgress: (newProgress: number) => set(() => ({ progress: newProgress })),
   selectedIndex: 0,
-    reorderSelectedFiles: (newFilesOrder:ISelectedFile[]) => set({ selectedFiles: newFilesOrder }),
+  reorderSelectedFiles: (newFilesOrder: ISelectedFile[]) =>
+    set({ selectedFiles: newFilesOrder }),
   toggleSideMenuOpen: () =>
     set((state) => ({ sideMenuOpen: !state.sideMenuOpen })),
   setSelectedFile: (newSelectedFile: ISelectedFile) =>
@@ -261,7 +274,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
 
       // Create a temporary link element
       const link = document.createElement("a");
-      link.href =  url;
+      link.href = url;
       // Set the download attribute with a file name
       // You should get the correct file extension from your API response
       link.setAttribute("download", "converted_file.docx");
@@ -278,20 +291,22 @@ const useToolsStore = create<ToolsStore>((set) => ({
     } catch (error) {
       // alert("Failed to download file");
       enqueueSnackbar("failed to download file", {
-        variant:"error"
+        variant: "error",
       });
       console.log(error);
       // return "error";
     }
   },
-  getRecentActivities : async () => {
+  getRecentActivities: async () => {
     try {
-      const res = await baseAxios.get("/tools/recent-activities", {withCredentials:true});
+      const res = await baseAxios.get("/tools/recent-activities", {
+        withCredentials: true,
+      });
       set({ recentActivities: await res.data.recentActivities });
       // await res.data.activities; // Return the response data (download URL or file path)
     } catch (error) {
       console.error("Error fetching recent activities:", error);
-        
+
       return [];
     }
   },
@@ -300,78 +315,162 @@ const useToolsStore = create<ToolsStore>((set) => ({
     try {
       const form = new FormData();
       form.append("pdfFile", pdfFile);
-      const res = await baseAxios.post("/tools/convert-word-to-pdf",
-        form,
-        {withCredentials:true},
-      );
+      const res = await baseAxios.post("/tools/convert-word-to-pdf", form, {
+        withCredentials: true,
+      });
       set({
         loadingState: "success",
         downLoadUrl: res.data.fileUrl,
         downLoadId: res.data.fileId,
       });
-        // window.location.href = `download/${await res.data.fileUrl}`;
+      // window.location.href = `download/${await res.data.fileUrl}`;
       return res.data; // Return the response data (download URL or file path)
     } catch (error) {
       console.error("Error converting Word to Pdf:", error);
       set({ loadingState: "error" });
-         enqueueSnackbar("failed to convert word to pdf", {
-           variant: "error",
-         });
+      enqueueSnackbar("failed to convert word to pdf", {
+        variant: "error",
+      });
       return "error!!";
     }
   },
-   convertPdfToWord: async (pdfFile: File) => {
+  convertPdfToWord: async (pdfFile: File) => {
     set({ loadingState: "loading", progress: 0, downLoadUrl: null });
     try {
       const form = new FormData();
       form.append("pdfFile", pdfFile);
-      const res = await baseAxios.post("/tools/convert-pdf-to-word",
-        form,
-        {withCredentials:true},
-      );
+      const res = await baseAxios.post("/tools/convert-pdf-to-word", form, {
+        withCredentials: true,
+      });
       set({
         loadingState: "success",
         downLoadUrl: res.data.fileUrl,
         downLoadId: res.data.fileId,
       });
-        // window.location.href = `download/${await res.data.fileUrl}`;
+      // window.location.href = `download/${await res.data.fileUrl}`;
       return res.data; // Return the response data (download URL or file path)
     } catch (error) {
       console.error("Error converting PDF to Word:", error);
       set({ loadingState: "error" });
-         enqueueSnackbar("failed to convert pdf to word", {
-           variant: "error",
-         });
+      enqueueSnackbar("failed to convert pdf to word", {
+        variant: "error",
+      });
       return "error!!";
     }
   },
-     mergePdfs: async (pdfFiles: ISelectedFile[]) => {
+  mergePdfs: async (pdfFiles: ISelectedFile[]) => {
     set({ loadingState: "loading", progress: 0, downLoadUrl: null });
     try {
       const form = new FormData();
-      
-  pdfFiles.forEach((file) => {
-    // 'files' must match the field name in your Express route's `upload.array('files')`
-    form.append("pdfFiles", file.file);
-  });      const res = await baseAxios.post("/tools/merge-pdfs",
-        form,
-        {withCredentials:true},
-      );
+
+      pdfFiles.forEach((file) => {
+        // 'files' must match the field name in your Express route's `upload.array('files')`
+        form.append("pdfFiles", file.file);
+      });
+      const res = await baseAxios.post("/tools/merge-pdfs", form, {
+        withCredentials: true,
+      });
       set({
         loadingState: "success",
         downLoadId: res.data.fileId,
       });
-        // window.location.href = `download/${await res.data.fileUrl}`;
+      // window.location.href = `download/${await res.data.fileUrl}`;
       return res.data; // Return the response data (download URL or file path)
     } catch (error) {
       console.error("Error converting PDF to Word:", error);
       set({ loadingState: "error" });
-         enqueueSnackbar("failed to convert pdf to word", {
-           variant: "error",
-         });
+      enqueueSnackbar("failed to convert pdf to word", {
+        variant: "error",
+      });
+      return "error!!";
+    }
+  },
+  compressPdf: async (pdfFiles: ISelectedFile[], compressionLevel: string) => {
+    set({ loadingState: "loading", progress: 0, downLoadUrl: null });
+    try {
+      const form = new FormData();
+
+      pdfFiles.forEach((file) => {
+        // 'files' must match the field name in your Express route's `upload.array('files')`
+        form.append("pdfFiles", file.file);
+        form.append("compressionLevel", compressionLevel);
+      });
+      await baseAxios.post("/tools/compress-pdf", form, {
+        withCredentials: true,
+      });
+      set({
+        loadingState: "success",
+        // downLoadId: res.data.fileId,
+      });
+      // window.location.href = `download/${await res.data.fileUrl}`;
+      // return res.data; // Return the response data (download URL or file path)
+    } catch (error) {
+      console.error("Error compressing PDF:", error);
+      set({ loadingState: "error" });
+      enqueueSnackbar("failed to compress pdf!", {
+        variant: "error",
+      });
+      return "error!!";
+    }
+  },
+  PdfToJpg: async (pdfFiles: ISelectedFile[], jpgQuality: string) => {
+    set({ loadingState: "loading", progress: 0, downLoadUrl: null });
+    try {
+      const form = new FormData();
+
+      pdfFiles.forEach((file) => {
+        // 'files' must match the field name in your Express route's `upload.array('files')`
+        form.append("pdfFiles", file.file);
+        form.append("quality", jpgQuality);
+      });
+      await baseAxios.post("/tools/convert-pdf-to-jpg", form, {
+        withCredentials: true,
+      });
+      set({
+        loadingState: "success",
+        // downLoadId: res.data.fileId,
+      });
+      // window.location.href = `download/${await res.data.fileUrl}`;
+      // return res.data; // Return the response data (download URL or file path)
+    } catch (error) {
+      console.error("Error converting PDF:", error);
+      set({ loadingState: "error" });
+      enqueueSnackbar("failed to convert pdf!", {
+        variant: "error",
+      });
+      return "error!!";
+    }
+  },
+  JpgToPdf: async (pdfFiles: ISelectedFile[], orientation: string, margin:string) => {
+    set({ loadingState: "loading", progress: 0, downLoadUrl: null });
+    try {
+      const form = new FormData();
+
+      pdfFiles.forEach((file) => {
+        // 'files' must match the field name in your Express route's `upload.array('files')`
+        form.append("pdfFiles", file.file);
+        form.append("orientation", orientation);
+        form.append("margin", margin);
+      });
+      await baseAxios.post("/tools/convert-jpg-to-pdf", form, {
+        withCredentials: true,
+      });
+      set({
+        loadingState: "success",
+        // downLoadId: res.data.fileId,
+      });
+      // window.location.href = `download/${await res.data.fileUrl}`;
+      // return res.data; // Return the response data (download URL or file path)
+    } catch (error) {
+      console.error("Error converting JPG:", error);
+      set({ loadingState: "error" });
+      enqueueSnackbar("failed to convert jpg!", {
+        variant: "error",
+      });
       return "error!!";
     }
   },
 }));
+
 
 export default useToolsStore;
