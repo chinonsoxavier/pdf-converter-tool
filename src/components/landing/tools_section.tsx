@@ -313,16 +313,7 @@ interface Tool {
 
   return (
     <ContainerLayout className="space-y-5 w-full border-t pt-6 sm:pt-10 text-center flex-col">
-      <motion.div
-        variants={variants1}
-        initial={"inactive"}
-        whileInView={"active"}
-        viewport={{ once: true }}
-      >
-        <p className="text-3xl sm:text-4xl text-primary-foreground font-semibold">
-          Meet our full product family
-        </p>
-      </motion.div>
+      
 
       <motion.div
         variants={variants3}

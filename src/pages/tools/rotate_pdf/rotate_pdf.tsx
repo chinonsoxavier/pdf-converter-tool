@@ -16,16 +16,25 @@ const RotatePdf = () => {
     resetRotate,
     selectedFiles,
     selectedIndex,
+    RotatePdf,
   } = useToolsStore();
 
   const { toggleRotateAllPage, rotateAllPage } = useRotateStore();
   // alert(selectedIndex);
 
   useEffect(() => {
-    console.log("Rotate all page state changed: ", selectedFiles[selectedIndex]?.rotate);
+    console.log(
+      "Rotate all page state changed: ",
+      selectedFiles[selectedIndex]?.rotate
+    );
     console.log("Rotate all page state : ", rotateAllPage);
   }, [rotateAllPage, selectedFiles[0], selectedFiles[0]?.rotate]);
-
+  // Format page ranges (e.g., "1-3,5,7-9")
+  const pageRanges =
+    selectedFiles[selectedIndex]?.rotate
+      ?.filter((page) => page > 0)
+      .map((page) => page)
+      .join(",") || "";
   return (
     <div className="">
       <ConverterLayout
@@ -33,6 +42,13 @@ const RotatePdf = () => {
         convertingStateText="Rotate Pdf"
         label="Rotate Pdf pages"
         desc="Rotate one or more pages"
+        handleFileUpload={() =>
+          RotatePdf(
+            selectedFiles[selectedIndex],
+            pageRanges,
+            "90"
+          )
+        }
         children={
           <div className="h-full center w-full my-10">
             <PdfRenderer
@@ -97,7 +113,7 @@ const RotatePdf = () => {
             <div
               onClick={() => toggleRotateAllPage()}
               className="flex items-center justify-start px-4 gap-2"
-              defaultChecked={rotateAllPage}
+              defaultChecked={!rotateAllPage}
             >
               <Checkbox id="rotate" className="w-4 text-white" />
               <Label htmlFor="rotate">Rotate all pages</Label>

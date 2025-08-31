@@ -8,6 +8,7 @@ interface RotatePdfStore {
 
 const useRotateStore = create<RotatePdfStore>((set) => ({
   rotateAllPage: false,
+  
   toggleRotateAllPage: () =>
     set((state) => ({ rotateAllPage: !state.rotateAllPage })),
 }));

@@ -62,7 +62,11 @@ interface ToolsStore {
     pdfFiles: ISelectedFile[],
     compressionLevel: string
   ) => Promise<string>;
-  JpgToPdf: (pdfFiles: ISelectedFile[], orientation: string,margin:string) => Promise<string>;
+  JpgToPdf: (
+    pdfFiles: ISelectedFile[],
+    orientation: string,
+    margin: string
+  ) => Promise<string>;
   PdfToJpg: (pdfFiles: ISelectedFile[], jpgQuality: string) => Promise<string>;
   mergePdfs: (pdfFile: ISelectedFile[]) => Promise<string>;
 }
@@ -441,7 +445,11 @@ const useToolsStore = create<ToolsStore>((set) => ({
       return "error!!";
     }
   },
-  JpgToPdf: async (pdfFiles: ISelectedFile[], orientation: string, margin:string) => {
+  JpgToPdf: async (
+    pdfFiles: ISelectedFile[],
+    orientation: string,
+    margin: string
+  ) => {
     set({ loadingState: "loading", progress: 0, downLoadUrl: null });
     try {
       const form = new FormData();
@@ -470,6 +478,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       return "error!!";
     }
   },
+
 }));
 
 
