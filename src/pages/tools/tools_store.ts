@@ -69,6 +69,8 @@ interface ToolsStore {
   ) => Promise<string>;
   PdfToJpg: (pdfFiles: ISelectedFile[], jpgQuality: string) => Promise<string>;
   mergePdfs: (pdfFile: ISelectedFile[]) => Promise<string>;
+  RotatePdf: (pdfFile: ISelectedFile[]) => Promise<string>;
+  ReorderPages: (pdfFile: ISelectedFile[]) => Promise<string>;
 }
 
 const useToolsStore = create<ToolsStore>((set) => ({
@@ -406,8 +408,6 @@ const useToolsStore = create<ToolsStore>((set) => ({
         loadingState: "success",
         // downLoadId: res.data.fileId,
       });
-      // window.location.href = `download/${await res.data.fileUrl}`;
-      // return res.data; // Return the response data (download URL or file path)
     } catch (error) {
       console.error("Error compressing PDF:", error);
       set({ loadingState: "error" });
@@ -434,8 +434,6 @@ const useToolsStore = create<ToolsStore>((set) => ({
         loadingState: "success",
         // downLoadId: res.data.fileId,
       });
-      // window.location.href = `download/${await res.data.fileUrl}`;
-      // return res.data; // Return the response data (download URL or file path)
     } catch (error) {
       console.error("Error converting PDF:", error);
       set({ loadingState: "error" });
@@ -467,8 +465,6 @@ const useToolsStore = create<ToolsStore>((set) => ({
         loadingState: "success",
         // downLoadId: res.data.fileId,
       });
-      // window.location.href = `download/${await res.data.fileUrl}`;
-      // return res.data; // Return the response data (download URL or file path)
     } catch (error) {
       console.error("Error converting JPG:", error);
       set({ loadingState: "error" });
@@ -478,7 +474,52 @@ const useToolsStore = create<ToolsStore>((set) => ({
       return "error!!";
     }
   },
+  RotatePdf: async (pdfFiles: ISelectedFile[]) => {
+    set({ loadingState: "loading", progress: 0, downLoadUrl: null });
+    try {
+      const form = new FormData();
 
+      form.append("pdfFiles", pdfFiles[0].file);
+      form.append("rotate", JSON.stringify(pdfFiles[0].rotate || []));
+      await baseAxios.post("/tools/rotate-pdf-pages", form, {
+        withCredentials: true,
+      });
+      set({
+        loadingState: "success",
+        // downLoadId: res.data.fileId,
+      });
+    } catch (error) {
+      console.error("Error converting JPG:", error);
+      set({ loadingState: "error" });
+      enqueueSnackbar("failed to convert jpg!", {
+        variant: "error",
+      });
+      return "error!!";
+    }
+  },
+  ReorderPages: async (pdfFiles: ISelectedFile[]) => {
+    set({ loadingState: "loading", progress: 0, downLoadUrl: null });
+    try {
+      const form = new FormData();
+
+      form.append("pdfFiles", pdfFiles[0].file);
+      form.append("pageOrder", JSON.stringify(pdfFiles[0].pdfPages || []));
+      await baseAxios.post("/tools/reorder-pages", form, {
+        withCredentials: true,
+      });
+      set({
+        loadingState: "success",
+        // downLoadId: res.data.fileId,
+      });
+    } catch (error) {
+      console.error("Error converting JPG:", error);
+      set({ loadingState: "error" });
+      enqueueSnackbar("failed to convert jpg!", {
+        variant: "error",
+      });
+      return "error!!";
+    }
+  },
 }));
 
 

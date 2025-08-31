@@ -52,7 +52,7 @@ export default function DraggableGrid({
   pagerotable = false, // Whether the PDF can be rotated
 }: DraggableGridProps) {
   const [draggedItem, setDraggedItem] = useState<DraggedItem | null>(null);
-  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const [, setDragOverIndex] = useState<number | null>(null);
 
   const { selectedFiles, removeSelectedFiles, setRotateRight } =
     useToolsStore();
@@ -159,9 +159,9 @@ export default function DraggableGrid({
                 setNumPages(selectedIndex, numPages);
               }}
               onLoadError={(error) => console.error("PDF load error:", error)}
-              className="items-center h-full flex-cl justify-evenly flex-wrap flex gap-5 duration-500 p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-white"
+              className="items-center h-full flex-cl justify-evenly flex-wrap flex gap-5 duration-500 p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-primary"
             >
-              <div className="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4">
+              <div className="flex items-center justify-center flex-wrap gap-4">
                 {selectedFiles[selectedIndex]?.pdfPages?.map((item, index) => (
                   <div
                     key={item.id}
@@ -176,11 +176,7 @@ export default function DraggableGrid({
               cursor-move transition-all duration-200
                hover:scale-102
               ${draggedItem?.index === index ? "opacity-50 scale-95" : ""}
-              ${
-                dragOverIndex === index
-                  ? "border-blue-500 border-dashed bg-blue-50"
-                  : ""
-              }
+           
             `}
                   >
                     <div className="relative">
@@ -205,7 +201,7 @@ export default function DraggableGrid({
                         rotate={item?.rotate[index]}
                         className="pdf_shadow flex-1 w-full rounded border"
                         pageNumber={item.pageNumber}
-                        width={170}
+                        width={150}
                         renderTextLayer={false}
                         renderAnnotationLayer={false}
                       />

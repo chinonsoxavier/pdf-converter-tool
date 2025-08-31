@@ -8,13 +8,15 @@ const OrganisePdf = () => {
     selectedFiles,
       selectedIndex,
       setNumPages, rotateIndividualPage,
-    setItems
+    setItems,
+    ReorderPages
   } = useToolsStore();
   return (
     <div className="">
       <ConverterLayout
+      handleFileUpload={()=>ReorderPages(selectedFiles)}
         actionButtonText="Organise Pdf"
-        convertingStateText="Organise Pdf"
+        convertingStateText="Organising Pdf"
         label="Organise Pdf pages"
         desc="Drag & drop rearrangement of pages"
         children={
@@ -59,11 +61,7 @@ const OrganisePdf = () => {
                     {file.fileName}
                   </p>
 
-                  <div className="flex items-start justify-between">
-                    <p className="text-base text-secondary-foreground flex-1">
-                      Convert PDFs to standard-quality JPG images.
-                    </p>
-                  </div>
+              
                 </div>
               ))}
             </div>

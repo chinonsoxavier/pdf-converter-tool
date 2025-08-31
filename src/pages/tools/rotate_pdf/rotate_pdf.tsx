@@ -30,23 +30,17 @@ const RotatePdf = () => {
     console.log("Rotate all page state : ", rotateAllPage);
   }, [rotateAllPage, selectedFiles[0], selectedFiles[0]?.rotate]);
   // Format page ranges (e.g., "1-3,5,7-9")
-  const pageRanges =
-    selectedFiles[selectedIndex]?.rotate
-      ?.filter((page) => page > 0)
-      .map((page) => page)
-      .join(",") || "";
+
   return (
     <div className="">
       <ConverterLayout
         actionButtonText="Rotate Pdf"
-        convertingStateText="Rotate Pdf"
+        convertingStateText="Rotating Pdf"
         label="Rotate Pdf pages"
         desc="Rotate one or more pages"
         handleFileUpload={() =>
           RotatePdf(
-            selectedFiles[selectedIndex],
-            pageRanges,
-            "90"
+            selectedFiles
           )
         }
         children={
