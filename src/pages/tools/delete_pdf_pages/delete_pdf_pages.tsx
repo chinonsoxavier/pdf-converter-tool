@@ -1,47 +1,47 @@
 import ConverterLayout from "@/components/tools/layout_types/converter_layout";
 import useToolsStore from "../tools_store";
-import ExtractPdfChildrenSection from "../../../components/tools/extract_pdf/extract_pdf_children_section";
 import { Button } from "@/components/ui/button";
-import useExtractPdfStore from "./extract_pdf_store";
 import { Input } from "@/components/ui/input";
 import { useEffect } from "react";
+import useDeletePdfStore from "./delete_pdf_pages_store";
+import DeletePdfChildrenSection from "@/components/tools/delete_pdf/delete_pdf_children_section";
 
-const ExtractPdf = () => {
+const DeletePdf = () => {
   const { selectedFiles } = useToolsStore();
   const {
-    extractMode,
-    setExtractMode,
-    pagesToExtract,
-    setPagesToExtract,
+    deleteMode,
+    deleteAllPages,
+    pagesToDelete,
+    setDeleteMode,
+    setPagesToDelete,
     updatePagesFromInput,
-    resetPagesToExtract,
-  } = useExtractPdfStore();
+  } = useDeletePdfStore();
 
   // Assume selectedFiles[0] contains the PDF with a numPages property
   const maxPages = selectedFiles[0]?.numPages || 20; // Fallback to 20 if numPages is unavailable
 
   // Initialize pagesToExtract based on maxPages when component mounts or maxPages changes
   useEffect(() => {
-    setPagesToExtract(
+    setPagesToDelete(
       Array.from({ length: maxPages }, (_, i) => ({
         number: i + 1,
         selected: false,
       }))
     );
-  }, [maxPages]);
+  }, [maxPages,setPagesToDelete]);
 
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-    setExtractMode("selected");
+    setDeleteMode("selected");
     updatePagesFromInput(e.target.value, maxPages);
   };
 
-  const selectedCount = pagesToExtract.filter((item) => item.selected).length;
+  const selectedCount = pagesToDelete.filter((item) => item.selected).length;
 
   return (
     <ConverterLayout
-      children={<ExtractPdfChildrenSection />}
-      actionButtonText="Extract Pdf"
-      label="Extract PDF Files"
+      children={<DeletePdfChildrenSection />}
+      actionButtonText="Delete Pdf"
+      label="Delete PDF Files"
       desc="Separate one page or a whole set for easy conversion into independent PDF files."
       disabled={selectedFiles.length <= 0} // Adjusted to <= 0 since you likely need at least one file
       convertingStateText="Extracting PDF files"
@@ -53,30 +53,30 @@ const ExtractPdf = () => {
           <div className="center gap-4 p-4 py-6">
             <Button
               onClick={() => {
-                setExtractMode("all");
-                resetPagesToExtract(); // Clear selections when switching to "all"
+                setDeleteMode("all");
+                deleteAllPages(); // Clear selections when switching to "all"
               }}
               className="w-full"
-              variant={`${extractMode === "all" ? "default" : "outline"}`}
+              variant={`${deleteMode === "all" ? "default" : "outline"}`}
             >
-              Extract all pages
+              Delete all pages
             </Button>
             <Button
-              onClick={() => setExtractMode("selected")}
+              onClick={() => setDeleteMode("selected")}
               className="w-full"
-              variant={`${extractMode === "selected" ? "default" : "outline"}`}
+              variant={`${deleteMode === "selected" ? "default" : "outline"}`}
             >
               Select pages
             </Button>
           </div>
           <div className="bg-secondary rounded mx-4 p-4 text-[15px]">
-            Selected pages will be converted into separate PDF files.
+            Selected pages will be deleted from the PDF file.
           </div>
-          {extractMode === "selected" && (
+          {deleteMode === "selected" && (
             <div className="p-4 space-y-4">
               <div className="space-y-2">
                 <p className="text-primary-foreground font-semibold text-lg">
-                  Pages to extract:
+                  Pages to delete:
                 </p>
                 <Input
                   onChange={handleInputChange}
@@ -102,4 +102,4 @@ const ExtractPdf = () => {
   );
 };
 
-export default ExtractPdf;
+export default DeletePdf;

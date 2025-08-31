@@ -4,6 +4,8 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "./ui/tooltip";
 import { Check, RotateCwIcon, XIcon } from "lucide-react";
 import useToolsStore from "@/pages/tools/tools_store";
 import PdfLoadingComponent from "./pdf_loading_component";
+import useExtractPdfStore from "@/pages/tools/extract_pdf/extract_pdf_store";
+import useDeletePdfStore from "@/pages/tools/delete_pdf_pages/delete_pdf_pages_store";
 
 const PdfRenderer = ({
   file,
@@ -16,24 +18,24 @@ const PdfRenderer = ({
   showCloseIcon = true,
   label,
   flexDirection,
-  extractible = false,
+  extractible,
   isolatePages = false,
   showPdfSize = true, // Whether to show PDF size
   handlePageClick,
-  deletable
+  deletable,
 }: {
   file: string;
   index?: number;
   pageNumber: "all" | "1";
   scale?: number;
   className?: string;
-    pagerotable?: boolean;
+  pagerotable?: boolean;
   deletable?: boolean; // Whether the PDF pages can be deleted
   pdfrotable?: boolean;
   label?: string;
   showCloseIcon?: boolean;
   flexDirection?: "col" | "row";
-  extractible?: boolean;
+  extractible?:boolean;
   isolatePages?: boolean; // Whether to isolate pages
   showPdfSize?: boolean; // Whether to show PDF size
   handlePageClick?: (pageIndex: number) => void; // Callback for page click
@@ -48,10 +50,15 @@ const PdfRenderer = ({
     selectedIndex,
   } = useToolsStore();
 
+  const {togglePageSelection,setExtractMode,pagesToExtract} = useExtractPdfStore();
+
+  const {togglePageDeleteSelection,setDeleteMode,pagesToDelete} = useDeletePdfStore();
   // useEffect(() => {
   //   initRotate(0, numPages[0]);
   //   console.log(numPages[0]);
   console.log(selectedFiles[selectedIndex]?.numPages);
+  console.log(pagesToDelete);
+  console.log(pagesToExtract);
   // }, [selectedFiles, numPages]);
 
   // useEffect(() => {
@@ -68,8 +75,8 @@ const PdfRenderer = ({
       // Optionally revoke the object URL to free memory
       URL.revokeObjectURL(selectedFiles[selectedIndex ?? 0].fileUrl);
     }
-  // };
-}
+    // };
+  };
 
   return (
     <Tooltip>
@@ -131,7 +138,7 @@ const PdfRenderer = ({
               {Array.from(
                 new Array(selectedFiles[index ?? 0]?.numPages || 0),
                 (_, index) => (
-                  <div key={index} className="relative">
+                  <div onClick={()=>{togglePageSelection(index+1);setExtractMode("selected");togglePageDeleteSelection(index + 1);setDeleteMode("selected")}} key={index} className="relative">
                     {pagerotable && (
                       <Tooltip>
                         <TooltipTrigger
@@ -149,27 +156,27 @@ const PdfRenderer = ({
                       </Tooltip>
                     )}
 
-                    {
-                      extractible &&
-                    <div className="center rounded-full w-6 h-6 bg-[green] absolute z-30 left-2 top-2">
-                      <Check className="w-4 h-4 text-white text-xl" />
-                    </div>
-                    }
+                    {extractible && pagesToExtract[index]?.selected && (
+                      <div className="center rounded-full w-6 h-6 bg-[green] absolute z-30 left-2 top-2">
+                        <Check className="w-4 h-4 text-white text-xl" />
+                      </div>
+                    )}
 
-                    {deletable && (<div>
-                      <Tooltip>
-                        <TooltipTrigger
-                          asChild
-                       
-                          className="absolute text-white opacity-50 hover:opacity-100 duration-700 bg-red-500 center top-2 right-2 z-10 rounded-full w-6 h-6 p-1"
-                        >
-                          <XIcon />
-                        </TooltipTrigger>
-                        <TooltipContent className="text-white">
-                          Delete Page
-                        </TooltipContent>
-                      </Tooltip>
-                    </div>)}
+                    {deletable && pagesToDelete[index]?.selected && (
+                      <div>
+                        <Tooltip>
+                          <TooltipTrigger
+                            asChild
+                            className="absolute text-white opacity-50 hover:opacity-100 duration-700 bg-red-500 center top-2 right-2 z-10 rounded-full w-6 h-6 p-1"
+                          >
+                            <XIcon />
+                          </TooltipTrigger>
+                          <TooltipContent className="text-white">
+                            Delete Page
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                    )}
 
                     <Page
                       loading={<PdfLoadingComponent />}
@@ -234,14 +241,14 @@ const PdfRenderer = ({
                     selectedFiles[selectedIndex]?.fileSize / (1024 * 1024)
                   ).toFixed(2) + " MB - "
             }${
-  selectedFiles[selectedIndex] &&
-  selectedFiles[selectedIndex].fileType &&
-  (selectedFiles[selectedIndex].fileType[0] === "jpg" ||
-   selectedFiles[selectedIndex].fileType[0] === "png")
-    ? ""
-    : (selectedFiles[selectedIndex]?.numPages ||
-       selectedFiles[index ?? 0]?.numPages) + " pages"
-}`}
+              selectedFiles[selectedIndex] &&
+              selectedFiles[selectedIndex].fileType &&
+              (selectedFiles[selectedIndex].fileType[0] === "jpg" ||
+                selectedFiles[selectedIndex].fileType[0] === "png")
+                ? ""
+                : (selectedFiles[selectedIndex]?.numPages ||
+                    selectedFiles[index ?? 0]?.numPages) + " pages"
+            }`}
           </p>
         </TooltipContent>
       )}

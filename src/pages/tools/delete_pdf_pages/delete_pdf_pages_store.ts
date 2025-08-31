@@ -6,45 +6,44 @@ interface Item {
   selected: boolean;
 }
 
-interface ExtractPdfStore {
-  extractMode: "all" | "selected";
-  pagesToExtract: Item[];
-  setExtractMode: (mode: "all" | "selected") => void;
-  setPagesToExtract: (pages: Item[]) => void;
-  togglePageSelection: (number: number) => void;
+interface DeletePdfStore {
+  deleteMode: "all" | "selected";
+  pagesToDelete: Item[];
+  setDeleteMode: (mode: "all" | "selected") => void;
+  setPagesToDelete: (pages: Item[]) => void;
+  togglePageDeleteSelection: (number: number) => void;
   updatePagesFromInput: (value: string, maxPages: number) => void;
-  resetPagesToExtract: () => void;
-  extractAllPages: () => void;
+  deleteAllPages: () => void;
 }
 
-const useExtractPdfStore = create<ExtractPdfStore>((set) => ({
-  extractMode: "all",
-  pagesToExtract: [], // Initialize as empty; will be populated dynamically
-  setExtractMode: (mode: "all" | "selected") =>
-    set(() => ({ extractMode: mode })),
-  setPagesToExtract: (pages: Item[]) => set(() => ({ pagesToExtract: pages })),
-  togglePageSelection: (number: number) =>
+const useDeletePdfStore = create<DeletePdfStore>((set) => ({
+  deleteMode: "all",
+  pagesToDelete: [], // Initialize as empty; will be populated dynamically
+  setDeleteMode: (mode: "all" | "selected") =>
+    set(() => ({ deleteMode: mode })),
+  setPagesToDelete: (pages: Item[]) => set(() => ({ pagesToDelete: pages })),
+  togglePageDeleteSelection: (number: number) =>
     set((state) => {
-      const newPages = state.pagesToExtract.map((item) =>
+      const newPages = state.pagesToDelete.map((item) =>
         item.number === number ? { ...item, selected: !item.selected } : item
       );
-      return { pagesToExtract: newPages };
+      return { pagesToDelete: newPages };
     }),
-  extractAllPages: () =>
+  deleteAllPages: () =>
     set((state) => ({
-      pagesToExtract: state.pagesToExtract.map((item) => ({
+      pagesToDelete: state.pagesToDelete.map((item) => ({
         ...item,
         selected: true,
       })),
     })),
-    
+
   updatePagesFromInput: (value: string, maxPages: number) =>
     set((state) => {
       const selectedNumbers = new Set<number>();
       if (!value.trim()) {
         // Clear selections if input is empty
         return {
-          pagesToExtract: state.pagesToExtract.map((item) => ({
+          pagesToDelete: state.pagesToDelete.map((item) => ({
             ...item,
             selected: false,
           })),
@@ -77,19 +76,12 @@ const useExtractPdfStore = create<ExtractPdfStore>((set) => ({
 
       // Update pages based on selected numbers
       return {
-        pagesToExtract: state.pagesToExtract.map((item) => ({
+        pagesToDelete: state.pagesToDelete.map((item) => ({
           ...item,
           selected: selectedNumbers.has(item.number),
         })),
       };
     }),
-  resetPagesToExtract: () =>
-    set((state) => ({
-      pagesToExtract: state.pagesToExtract.map((item) => ({
-        ...item,
-        selected: true,
-      })),
-    })),
 }));
 
-export default useExtractPdfStore;
+export default useDeletePdfStore;

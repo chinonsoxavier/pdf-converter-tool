@@ -183,7 +183,7 @@ interface Tool {
       category: "edit",
     },
     {
-      label: "Add Header/Footer",
+      label: "Add Header Footer",
       icon: AddHeaderFooter,
       isFree: true,
       info: "Insert simple text headers or footers",

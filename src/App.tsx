@@ -27,7 +27,6 @@ import ExtractPdf from "./pages/tools/extract_pdf/extract_pdf";
 import useToolsStore from "./pages/tools/tools_store";
 import { useLocation } from "react-router-dom";
 import { useEffect } from "react";
-import DeletePdfPages from "./pages/tools/extract_pdf/delete_pdf_pages/delete_pdf_pages";
 import AddPdfPageNumber from "./pages/tools/add_pdf_page_number/add_pdf_page_number";
 import AddHeaderFooter from "./pages/tools/add_header_footer/add_header_footer";
 import PreviewPdf from "./pages/tools/preview_pdf/preview_pdf";
@@ -39,6 +38,7 @@ import ResetPasswordPage from "./pages/(auth)/reset_password/reset_password";
 import useAuthStore from "./pages/(auth)/auth_store";
 import VerifyEmailPage from "./pages/(auth)/verify_email/verify_email";
 import VerifyEmailTokenPage from "./pages/(auth)/verify_email_token/verify_email_token";
+import DeletePdfPages from "./pages/tools/delete_pdf_pages/delete_pdf_pages";
 const App = () => {
 
   const location = useLocation();
