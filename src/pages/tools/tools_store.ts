@@ -1,4 +1,4 @@
-import {  enqueueSnackbar } from "notistack";
+import { enqueueSnackbar } from "notistack";
 import { create } from "zustand";
 import { baseAxios } from "@/network/base_urls";
 interface ISelectedFile {
@@ -18,7 +18,6 @@ interface PageItem {
   pageNumber: number; // Page number for react-pdf
   rotate: number[]; // Rotation for the page (synchronized with ISelectedFile.rotate)
 }
-
 
 interface IRecentActivities {
   fileName: string;
@@ -501,9 +500,15 @@ const useToolsStore = create<ToolsStore>((set) => ({
     set({ loadingState: "loading", progress: 0, downLoadUrl: null });
     try {
       const form = new FormData();
+      const pageNumbers = pdfFiles.map((item) => item.pdfPages.map((item)=>item.pageNumber));
 
       form.append("pdfFiles", pdfFiles[0].file);
-      form.append("pageOrder", JSON.stringify(pdfFiles[0].pdfPages || []));
+      console.log(pdfFiles[0].pdfPages);
+      console.log(pageNumbers[0]);
+      form.append(
+        "pageOrder",
+        pageNumbers ? JSON.stringify(pageNumbers[0]) : "[]"
+      );
       await baseAxios.post("/tools/reorder-pages", form, {
         withCredentials: true,
       });
@@ -521,6 +526,5 @@ const useToolsStore = create<ToolsStore>((set) => ({
     }
   },
 }));
-
 
 export default useToolsStore;

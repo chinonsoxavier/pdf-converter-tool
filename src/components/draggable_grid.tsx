@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Document, Page } from "react-pdf";
 import { RotateCwIcon, XIcon } from "lucide-react";
@@ -57,6 +57,11 @@ export default function DraggableGrid({
   const { selectedFiles, removeSelectedFiles, setRotateRight } =
     useToolsStore();
 
+  useEffect(() => {
+  console.log(selectedFiles[selectedIndex]?.pdfPages)
+  }, [selectedFiles])
+  
+  
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
     item: PageItem,
@@ -159,7 +164,7 @@ export default function DraggableGrid({
                 setNumPages(selectedIndex, numPages);
               }}
               onLoadError={(error) => console.error("PDF load error:", error)}
-              className="items-center h-full flex-cl justify-evenly flex-wrap flex gap-5 duration-500 p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-primary"
+              className="items-center h-full flex-cl justify-evenly flex-wrap flex gap-5 duration-500 p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-secondary"
             >
               <div className="flex items-center justify-center flex-wrap gap-4">
                 {selectedFiles[selectedIndex]?.pdfPages?.map((item, index) => (
@@ -172,7 +177,7 @@ export default function DraggableGrid({
                     onDrop={(e) => handleDrop(e, index)}
                     onDragEnd={handleDragEnd}
                     className={`
-              h-auto border pdf_shadow rounded-md p-3 flex items-center justify-center
+              h-auto border pdf_shadow rounded-md p-3 bg-white dark:bg-primary flex items-center justify-center
               cursor-move transition-all duration-200
                hover:scale-102
               ${draggedItem?.index === index ? "opacity-50 scale-95" : ""}
