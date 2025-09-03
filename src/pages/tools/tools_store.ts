@@ -1,6 +1,11 @@
 import { enqueueSnackbar } from "notistack";
 import { create } from "zustand";
 import { baseAxios } from "@/network/base_urls";
+import ExtractPdfStore from "./extract_pdf/extract_pdf_store";
+import DeletePdfPages from "./delete_pdf_pages/delete_pdf_pages_store";
+import AddPageNumber from "./add_pdf_page_number/add_pdf_page_number_store";
+import AddPageHeaderFooter  from "./add_header_footer/add_header_footer_store";
+// import ExtractPdfStore from "../../pages/tools/extract_pdf/extract_pdf_store";
 interface ISelectedFile {
   rotate?: number[]; // Per-page rotations for this file
   fileName: string;
@@ -70,6 +75,10 @@ interface ToolsStore {
   mergePdfs: (pdfFile: ISelectedFile[]) => Promise<string>;
   RotatePdf: (pdfFile: ISelectedFile[]) => Promise<string>;
   ReorderPages: (pdfFile: ISelectedFile[]) => Promise<string>;
+  ExtractPdf: (pdfFile: ISelectedFile[]) => Promise<string>;
+  DeletePdfPages: (pdfFile: ISelectedFile[]) => Promise<string>;
+  AddPageNumbers: (pdfFile: ISelectedFile[]) => Promise<string>;
+  AddPageHeaderFooter: (pdfFile: ISelectedFile[]) => Promise<string>;
 }
 
 const useToolsStore = create<ToolsStore>((set) => ({
@@ -400,12 +409,12 @@ const useToolsStore = create<ToolsStore>((set) => ({
         form.append("pdfFiles", file.file);
         form.append("compressionLevel", compressionLevel);
       });
-      await baseAxios.post("/tools/compress-pdf", form, {
+      const res = await baseAxios.post("/tools/compress-pdf", form, {
         withCredentials: true,
       });
       set({
         loadingState: "success",
-        // downLoadId: res.data.fileId,
+        downLoadId: res.data.fileId,
       });
     } catch (error) {
       console.error("Error compressing PDF:", error);
@@ -426,12 +435,12 @@ const useToolsStore = create<ToolsStore>((set) => ({
         form.append("pdfFiles", file.file);
         form.append("quality", jpgQuality);
       });
-      await baseAxios.post("/tools/convert-pdf-to-jpg", form, {
+      const res = await baseAxios.post("/tools/convert-pdf-to-jpg", form, {
         withCredentials: true,
       });
       set({
         loadingState: "success",
-        // downLoadId: res.data.fileId,
+        downLoadId: res.data.fileId,
       });
     } catch (error) {
       console.error("Error converting PDF:", error);
@@ -457,12 +466,12 @@ const useToolsStore = create<ToolsStore>((set) => ({
         form.append("orientation", orientation);
         form.append("margin", margin);
       });
-      await baseAxios.post("/tools/convert-jpg-to-pdf", form, {
+      const res = await baseAxios.post("/tools/convert-jpg-to-pdf", form, {
         withCredentials: true,
       });
       set({
         loadingState: "success",
-        // downLoadId: res.data.fileId,
+        downLoadId: res.data.fileId,
       });
     } catch (error) {
       console.error("Error converting JPG:", error);
@@ -480,12 +489,12 @@ const useToolsStore = create<ToolsStore>((set) => ({
 
       form.append("pdfFiles", pdfFiles[0].file);
       form.append("rotate", JSON.stringify(pdfFiles[0].rotate || []));
-      await baseAxios.post("/tools/rotate-pdf-pages", form, {
+      const res = await baseAxios.post("/tools/rotate-pdf-pages", form, {
         withCredentials: true,
       });
       set({
         loadingState: "success",
-        // downLoadId: res.data.fileId,
+        downLoadId: res.data.fileId,
       });
     } catch (error) {
       console.error("Error converting JPG:", error);
@@ -500,7 +509,9 @@ const useToolsStore = create<ToolsStore>((set) => ({
     set({ loadingState: "loading", progress: 0, downLoadUrl: null });
     try {
       const form = new FormData();
-      const pageNumbers = pdfFiles.map((item) => item.pdfPages.map((item)=>item.pageNumber));
+      const pageNumbers = pdfFiles.map((item) =>
+        item.pdfPages.map((item) => item.pageNumber)
+      );
 
       form.append("pdfFiles", pdfFiles[0].file);
       console.log(pdfFiles[0].pdfPages);
@@ -509,12 +520,12 @@ const useToolsStore = create<ToolsStore>((set) => ({
         "pageOrder",
         pageNumbers ? JSON.stringify(pageNumbers[0]) : "[]"
       );
-      await baseAxios.post("/tools/reorder-pages", form, {
+      const res = await baseAxios.post("/tools/reorder-pages", form, {
         withCredentials: true,
       });
       set({
         loadingState: "success",
-        // downLoadId: res.data.fileId,
+        downLoadId: res.data.fileId,
       });
     } catch (error) {
       console.error("Error converting JPG:", error);
@@ -525,6 +536,183 @@ const useToolsStore = create<ToolsStore>((set) => ({
       return "error!!";
     }
   },
+  ExtractPdf: async (pdfFiles: ISelectedFile[]) => {
+    set({ loadingState: "loading", progress: 0, downLoadUrl: null });
+    try {
+      const form = new FormData();
+      const pages = ExtractPdfStore.getState().pagesToExtract;
+      const pagesToExtract = pages
+        .filter((item) => item.selected) // keep only selected items
+        .map((item) => item.number);
+
+      form.append("pdfFiles", pdfFiles[0].file);
+
+      form.append("pageRanges", JSON.stringify(pagesToExtract.join(", ")));
+
+      console.log(pagesToExtract);
+      const res = await baseAxios.post("/tools/export-pdf-pages", form, {
+        withCredentials: true,
+      });
+      set({
+        loadingState: "success",
+        downLoadId: res.data.fileId,
+      });
+    } catch (error) {
+      console.error("Error extracting JPG:", error);
+      set({ loadingState: "error" });
+      enqueueSnackbar("failed to convert jpg!", {
+        variant: "error",
+      });
+      return "error!!";
+    }
+  },
+  DeletePdfPages: async (pdfFiles: ISelectedFile[]) => {
+    set({ loadingState: "loading", progress: 0, downLoadUrl: null });
+    try {
+      const form = new FormData();
+      const pages = DeletePdfPages.getState().pagesToDelete;
+      const pagesToDelete = pages
+        .filter((item) => item.selected) // keep only selected items
+        .map((item) => item.number);
+
+      form.append("pdfFiles", pdfFiles[0].file);
+
+      form.append("pageRanges", JSON.stringify(pagesToDelete.join(", ")));
+
+      console.log(pagesToDelete);
+      const res = await baseAxios.post("/tools/delete-pdf-pages", form, {
+        withCredentials: true,
+      });
+      set({
+        loadingState: "success",
+        downLoadId: res.data.fileId,
+      });
+    } catch (error) {
+      console.error("Error deleting JPG:", error);
+      set({ loadingState: "error" });
+      enqueueSnackbar("failed to convert jpg!", {
+        variant: "error",
+      });
+      return "error!!";
+    }
+  },
+  AddPageNumbers: async (pdfFiles: ISelectedFile[]) => {
+    set({ loadingState: "loading", progress: 0, downLoadUrl: null });
+    try {
+      const form = new FormData();
+      const startPosition = AddPageNumber.getState().startPosition;
+      const pageNumberPosition = AddPageNumber.getState().numberPosition;
+      const pages = AddPageNumber.getState().pagesToNumber;
+      const color = AddPageNumber.getState().fontColor;
+      const size = AddPageNumber.getState().fontSize;
+      const pagesToNumber = pages.map((item) => item.number);
+
+      form.append("pdfFiles", pdfFiles[0].file);
+
+      form.append("pageRanges", JSON.stringify(pagesToNumber.join(", ")));
+      form.append("startPosition", JSON.stringify(startPosition));
+      console.log(pageNumberPosition);
+      form.append("position", pageNumberPosition);
+      form.append("size", size);
+      form.append("color", color);
+
+      console.log(pagesToNumber);
+      const res = await baseAxios.post("/tools/add-pdf-page-numbers", form, {
+        withCredentials: true,
+      });
+      set({
+        loadingState: "success",
+        downLoadId: res.data.fileId,
+      });
+    } catch (error) {
+      console.error("Error adding page numbers JPG:", error);
+      set({ loadingState: "error" });
+      enqueueSnackbar("failed to add pdf page numbers!", {
+        variant: "error",
+      });
+      return "error!!";
+    }
+  },
+
+  AddPageHeaderFooter: async (pdfFiles: ISelectedFile[]) => {
+    set({ loadingState: "loading", progress: 0, downLoadUrl: null });
+    try {
+      const form = new FormData();
+      const startPosition = AddPageNumber.getState().startPosition;
+      const pageNumberPosition = AddPageNumber.getState().numberPosition;
+      const pages = AddPageNumber.getState().pagesToNumber;
+      const color = AddPageNumber.getState().fontColor;
+      const size = AddPageNumber.getState().fontSize;
+      const pagesToNumber = pages.map((item) => item.number);
+
+      form.append("pdfFiles", pdfFiles[0].file);
+
+      form.append("pageRanges", JSON.stringify(pagesToNumber.join(", ")));
+      form.append("startPosition", JSON.stringify(startPosition));
+      console.log(pageNumberPosition);
+      form.append("position", pageNumberPosition);
+      form.append("size", size);
+      form.append("color", color);
+
+      console.log(pagesToNumber);
+      const res = await baseAxios.post("/tools/reorder-pages", form, {
+        withCredentials: true,
+      });
+      set({
+        loadingState: "success",
+        downLoadId: res.data.fileId,
+      });
+    } catch (error) {
+      console.error("Error adding page numbers JPG:", error);
+      set({ loadingState: "error" });
+      enqueueSnackbar("failed to add pdf page numbers!", {
+        variant: "error",
+      });
+      return "error!!";
+    }
+  },
+  // AddPageHeaderFooter: async (pdfFiles: ISelectedFile[]) => {
+  //   set({ loadingState: "loading", progress: 0, downLoadUrl: null });
+  //   try {
+  //     const form = new FormData();
+  //     const customizationStyle = AddPageHeaderFooter.getState().customizationStyle;
+  //     const startPosition = AddPageHeaderFooter.getState().startFrom;
+  //     const pageNumberPosition = AddPageHeaderFooter.getState().position;
+  //     const pages = AddPageHeaderFooter.getState().pagesToApply;
+  //     const color = AddPageHeaderFooter.getState().fontColor;
+  //     const size = AddPageHeaderFooter.getState().fontSize;
+  //     const pagesToNumber = pages.map((item) => item.number);
+
+  //     form.append("headerLabel", customizationStyle);
+  //     form.append("pdfFiles", pdfFiles[0].file);
+  //     form.append("pdfFiles", pdfFiles[0].file);
+
+  //     form.append("headerLabel", pdfFiles[0].file);
+  //     form.append("pageRanges", JSON.stringify(pagesToNumber.join(", ")));
+  //     form.append("startPosition", JSON.stringify(startPosition));
+  //     console.log(pageNumberPosition);
+  //     form.append("position", pageNumberPosition);
+  //     form.append("size", size);
+  //     form.append("color", color);
+
+  //     console.log(pagesToNumber);
+  //     const res = await baseAxios.post("/tools/reorder-pages", form, {
+  //       withCredentials: true,
+  //     });
+  //     set({
+  //       loadingState: "success",
+  //       downLoadId: res.data.fileId,
+  //     });
+  //   } catch (error) {
+  //     console.error("Error adding page numbers JPG:", error);
+  //     set({ loadingState: "error" });
+  //     enqueueSnackbar("failed to add pdf page numbers!", {
+  //       variant: "error",
+  //     });
+  //     return "error!!";
+  //   }
+  // },
 }));
+
 
 export default useToolsStore;

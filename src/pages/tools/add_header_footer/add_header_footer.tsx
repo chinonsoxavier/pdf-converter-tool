@@ -11,18 +11,30 @@ import { Input } from "@/components/ui/input";
 import useAddHeaderFooterStore from "./add_header_footer_store";
 
 const AddHeaderFooter = () => {
-  const { selectedFiles } = useToolsStore();
-
-  const { setHeaderFooterPosition,HeaderFooterPosition,setCustomText, setMargin, customizationStyle,setCustomizationStyle,setPagesToApply,setStartFrom, margin } =
-    useAddHeaderFooterStore();
+  const { selectedFiles,AddPageHeaderFooter } = useToolsStore();
+  const {
+    fontColor,
+    fontSize,
+    setFontColor,
+    setFontSize,
+    setHeaderFooterPosition,
+    HeaderFooterPosition,
+    setCustomText,
+    setMargin,
+    customizationStyle,
+    setCustomizationStyle,
+    setStartFrom,
+    margin,
+  } = useAddHeaderFooterStore();
 
   return (
     <ConverterLayout
       //   children={<MergePdfChildrenSection />}
       actionButtonText="Add Page Numbers"
+      handleFileUpload={()=>AddPageHeaderFooter(selectedFiles)}
       label="Add pdf page numbers "
       desc="Insert page numbers automatically"
-      disabled={selectedFiles.length <= 1}
+      disabled={selectedFiles.length <= 0}
       convertingStateText="Merging PDF files"
       actionMenuSideBar={
         <div className="px-4 py-6 space-y-3">
@@ -147,13 +159,46 @@ const AddHeaderFooter = () => {
             />
           </div>
 
-          <div className="space-y-2">
-            <p>Pages to apply:</p>
-            <Input
-              onChange={(e) => setPagesToApply([parseInt(e.target.value)])}
-              defaultValue={1}
-              placeholder="Example: 1,2,3-5,7-10"
-            />
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Font Size
+            </label>
+            <Select value={fontSize} onValueChange={setFontSize}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="8">8pt</SelectItem>
+                <SelectItem value="10">10pt</SelectItem>
+                <SelectItem value="12">12pt</SelectItem>
+                <SelectItem value="14">14pt</SelectItem>
+                <SelectItem value="16">16pt</SelectItem>
+                <SelectItem value="18">18pt</SelectItem>
+                <SelectItem value="20">20pt</SelectItem>
+                <SelectItem value="24">24pt</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
+
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Font Color
+            </label>
+            <div className="flex items-center gap-3">
+              <Input
+                type="color"
+                value={fontColor}
+                onChange={(e) => setFontColor(e.target.value)}
+                className="w-16 h-9 p-1 cursor-pointer"
+              />
+              <Input
+                type="text"
+                value={fontColor}
+                onChange={(e) => setFontColor(e.target.value)}
+                placeholder="#000000"
+                className="flex-1 font-mono text-sm"
+              />
+            </div>
           </div>
         </div>
       }

@@ -7,7 +7,7 @@ import { Input } from "@/components/ui/input";
 import { useEffect } from "react";
 
 const ExtractPdf = () => {
-  const { selectedFiles } = useToolsStore();
+  const { selectedFiles ,ExtractPdf} = useToolsStore();
   const {
     extractMode,
     setExtractMode,
@@ -39,6 +39,7 @@ const ExtractPdf = () => {
 
   return (
     <ConverterLayout
+      handleFileUpload={()=>ExtractPdf(selectedFiles)}
       children={<ExtractPdfChildrenSection />}
       actionButtonText="Extract Pdf"
       label="Extract PDF Files"

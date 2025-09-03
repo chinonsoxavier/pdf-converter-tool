@@ -235,7 +235,15 @@ const ConverterLayout = ({
       <SidemenuLyout />
 
       {/* main content */}
-      {loadingState === "idle" ? (
+      {loadingState === "error" ||
+      loadingState === "loading" ||
+      loadingState === "success" ? (
+        <ToolPageLoader
+          label={label}
+          convertingStateText={convertingStateText}
+          handleSubmitFile={handleSubmitFile}
+        />
+      ) : (
         <main className="w-full h-[88%] overflow-y-scroll dark:bg-primary">
           {!selectedFiles[selectedIndex] ? (
             <div className="">
@@ -373,13 +381,13 @@ const ConverterLayout = ({
                           file={selectedFiles[selectedIndex]?.fileUrl}
                           pageNumber={"1"}
                         />
-                          ) : (
-                              <>
-                        <ToolsFileExtensionCard
-                          src={selectedFiles[selectedIndex]?.fileUrl}
-                          fileType={selectedFiles[selectedIndex]?.fileType[0]}
-                                />
-                                </>
+                      ) : (
+                        <>
+                          <ToolsFileExtensionCard
+                            src={selectedFiles[selectedIndex]?.fileUrl}
+                            fileType={selectedFiles[selectedIndex]?.fileType[0]}
+                          />
+                        </>
                       )}
                     </>
                   )}
@@ -464,12 +472,6 @@ const ConverterLayout = ({
             </div>
           )}
         </main>
-      ) : (
-        <ToolPageLoader
-          label={label}
-          convertingStateText={convertingStateText}
-          handleSubmitFile={handleSubmitFile}
-        />
       )}
     </div>
   );

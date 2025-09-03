@@ -7,7 +7,7 @@ import useDeletePdfStore from "./delete_pdf_pages_store";
 import DeletePdfChildrenSection from "@/components/tools/delete_pdf/delete_pdf_children_section";
 
 const DeletePdf = () => {
-  const { selectedFiles } = useToolsStore();
+  const { selectedFiles,DeletePdfPages } = useToolsStore();
   const {
     deleteMode,
     deleteAllPages,
@@ -39,6 +39,7 @@ const DeletePdf = () => {
 
   return (
     <ConverterLayout
+      handleFileUpload={()=>DeletePdfPages(selectedFiles)}
       children={<DeletePdfChildrenSection />}
       actionButtonText="Delete Pdf"
       label="Delete PDF Files"

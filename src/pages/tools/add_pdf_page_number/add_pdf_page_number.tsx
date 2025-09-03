@@ -5,41 +5,51 @@ import useAddPdfPageNumberStore from "./add_pdf_page_number_store";
 import { Input } from "@/components/ui/input";
 
 const AddPdfPageNumber = () => {
-    const { selectedFiles } = useToolsStore();
-    
-    const { setNumberPosition, setMargin, numberPosition,margin } =
-      useAddPdfPageNumberStore();
+  const { selectedFiles, AddPageNumbers } = useToolsStore();
+
+  const {
+    setNumberPosition,
+    setMargin,
+    numberPosition,
+    margin,
+    setStartPosition,
+    setFontSize,
+    setFontColor,
+    fontColor,
+    fontSize
+  } = useAddPdfPageNumberStore();
 
   return (
     <ConverterLayout
       //   children={<MergePdfChildrenSection />}
       actionButtonText="Add Page Numbers"
-      label="Add pdf page numbers "
+      label="Add pdf page numbers"
+      handleFileUpload={() => AddPageNumbers(selectedFiles)}
       desc="Insert page numbers automatically"
-      disabled={selectedFiles.length <= 1}
-      convertingStateText="Merging PDF files"
+      disabled={selectedFiles.length <= 0}
+      convertingStateText="Adding PDF page numbers"
       actionMenuSideBar={
-        <div className="px-4 py-6 space-y-5 sm:space-y-10">
+        <div className="px-4 py-6 space-y-2 sm:space-y-5">
           <div className="flex items-start justify-between gap-5 sm:gap-10">
             <div className="space-y-2">
               <p>Position</p>
               <div className="w-24 h-24 grid grid-cols-3">
                 <div
-                  onClick={() => setNumberPosition(1)}
+                  onClick={() => setNumberPosition("top-left")}
                   className={`${
-                    numberPosition === 1 && "bg-accent"
+                    numberPosition === "top-left" && "bg-accent"
                   } dark:border-white/50 border`}
                 ></div>
                 <div
-                  onClick={() => setNumberPosition(2)}
+                  onClick={() => setNumberPosition("top-center")}
                   className={`${
-                    numberPosition === 2 && "bg-accent"
+                    numberPosition === "top-center" && "bg-accent"
                   } dark:border-white/50 border`}
                 ></div>
                 <div
-                  onClick={() => setNumberPosition(3)}
+                  onClick={() => setNumberPosition("top-right")}
                   className={`${
-                    numberPosition === 3 && "bg-accent"
+                    numberPosition === "top-right" && "bg-accent"
                   } dark:border-white/50 border`}
                 ></div>
                 {/*  */}
@@ -48,21 +58,21 @@ const AddPdfPageNumber = () => {
                 <div className="dark:border-white/50 border-r"></div>
                 {/*  */}
                 <div
-                  onClick={() => setNumberPosition(4)}
+                  onClick={() => setNumberPosition("bottom-left")}
                   className={`${
-                    numberPosition === 4 && "bg-accent"
+                    numberPosition === "bottom-left" && "bg-accent"
                   } dark:border-white/50 border`}
                 ></div>
                 <div
-                  onClick={() => setNumberPosition(5)}
+                  onClick={() => setNumberPosition("bottom-center")}
                   className={`${
-                    numberPosition === 5 && "bg-accent"
+                    numberPosition === "bottom-center" && "bg-accent"
                   } dark:border-white/50 border`}
                 ></div>
                 <div
-                  onClick={() => setNumberPosition(6)}
+                  onClick={() => setNumberPosition("bottom-right")}
                   className={`${
-                    numberPosition === 6 && "bg-accent"
+                    numberPosition === "bottom-right" && "bg-accent"
                   } dark:border-white/50 border`}
                 ></div>
               </div>
@@ -87,12 +97,57 @@ const AddPdfPageNumber = () => {
                 </SelectContent>
               </Select>
             </div>
-              </div>
-              <div className="space-y-2">
-                  <p>Start numbering at:</p>
-                  <Input defaultValue={1} />
+          </div>
+          <div className="space-y-2">
+            <p className="text-primary-foreground font-semibold text-lg">
+              Start numbering at:
+            </p>
+            <Input
+              onChange={(e) => setStartPosition(parseInt(e.target.value, 10))}
+              defaultValue={1}
+            />
+          </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Font Size
+            </label>
+            <Select value={fontSize} onValueChange={setFontSize}>
+              <SelectTrigger>
+                <SelectValue />
+              </SelectTrigger>
+              <SelectContent>
+                <SelectItem value="8">8pt</SelectItem>
+                <SelectItem value="10">10pt</SelectItem>
+                <SelectItem value="12">12pt</SelectItem>
+                <SelectItem value="14">14pt</SelectItem>
+                <SelectItem value="16">16pt</SelectItem>
+                <SelectItem value="18">18pt</SelectItem>
+                <SelectItem value="20">20pt</SelectItem>
+                <SelectItem value="24">24pt</SelectItem>
+              </SelectContent>
+            </Select>
+          </div>
 
-              </div>
+          <div>
+            <label className="block text-sm font-medium text-gray-700 mb-3">
+              Font Color
+            </label>
+            <div className="flex items-center gap-3">
+              <Input
+                type="color"
+                value={fontColor}
+                onChange={(e) => setFontColor(e.target.value)}
+                className="w-16 h-9 p-1 cursor-pointer"
+              />
+              <Input
+                type="text"
+                value={fontColor}
+                onChange={(e) => setFontColor(e.target.value)}
+                placeholder="#000000"
+                className="flex-1 font-mono text-sm"
+              />
+            </div>
+          </div>
         </div>
       }
     />
