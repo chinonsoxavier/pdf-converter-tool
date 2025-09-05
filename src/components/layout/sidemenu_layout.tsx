@@ -33,7 +33,7 @@ const SidemenuLyout = () => {
     <div
       className={cn(
         sideMenuOpen ? "w-full" : "w-0",
-        "fixed h-lvh duration-500 backdrop-blur-[2px] z-50 right-0 bottom-0 overflow-hidden top-0 max-w-lvw"
+        "fixed h-dvh duration-500 backdrop-blur-[2px] z-50 right-0 bottom-0 overflow-hidden top-0 max-w-lvw"
       )}
     >
       <aside
@@ -49,7 +49,6 @@ const SidemenuLyout = () => {
               <Coffee />
               Support Us
             </Button>
-            
           </div>
           <div className="flex items-center justify-end">
             <div className="w-9 h-9 sm:w-10 sm:h-10 p-0 cursor-pointer dark:text-white text-secondary-foreground items-center justify-center flex md:hidden">

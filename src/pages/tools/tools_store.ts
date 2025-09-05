@@ -4,7 +4,7 @@ import { baseAxios } from "@/network/base_urls";
 import ExtractPdfStore from "./extract_pdf/extract_pdf_store";
 import DeletePdfPages from "./delete_pdf_pages/delete_pdf_pages_store";
 import AddPageNumber from "./add_pdf_page_number/add_pdf_page_number_store";
-import AddPageHeaderFooter  from "./add_header_footer/add_header_footer_store";
+import AddPageHeaderFooter from "./add_header_footer/add_header_footer_store";
 // import ExtractPdfStore from "../../pages/tools/extract_pdf/extract_pdf_store";
 interface ISelectedFile {
   rotate?: number[]; // Per-page rotations for this file
@@ -78,6 +78,7 @@ interface ToolsStore {
   ExtractPdf: (pdfFile: ISelectedFile[]) => Promise<string>;
   DeletePdfPages: (pdfFile: ISelectedFile[]) => Promise<string>;
   AddPageNumbers: (pdfFile: ISelectedFile[]) => Promise<string>;
+  SplitPdfPages: (pdfFile: ISelectedFile[]) => Promise<string>;
   AddPageHeaderFooter: (pdfFile: ISelectedFile[]) => Promise<string>;
 }
 
@@ -634,28 +635,62 @@ const useToolsStore = create<ToolsStore>((set) => ({
     }
   },
 
+ SplitPdfPages: async (pdfFiles: ISelectedFile[]) => {
+      const form = new FormData();
+      form.append("pdfFiles", pdfFiles[0].file);
+    set({ loadingState: "loading", progress: 0, downLoadUrl: null });
+    try {
+      // form.append("range", pageNumberPosition);
+      const res = await baseAxios.post("/tools/split-pdf-pages", form, {
+        withCredentials: true,
+      });
+      set({
+        loadingState: "success",
+        downLoadId: res.data.fileId,
+      });
+    } catch (error) {
+      console.error("Error adding page numbers JPG:", error);
+      set({ loadingState: "error" });
+      enqueueSnackbar("failed to add pdf page numbers!", {
+        variant: "error",
+      });
+      return "error!!";
+    }
+  },
+
   AddPageHeaderFooter: async (pdfFiles: ISelectedFile[]) => {
     set({ loadingState: "loading", progress: 0, downLoadUrl: null });
     try {
       const form = new FormData();
-      const startPosition = AddPageNumber.getState().startPosition;
-      const pageNumberPosition = AddPageNumber.getState().numberPosition;
-      const pages = AddPageNumber.getState().pagesToNumber;
-      const color = AddPageNumber.getState().fontColor;
-      const size = AddPageNumber.getState().fontSize;
+      const startPosition = AddPageHeaderFooter.getState().startFrom;
+      const pageNumberPosition = AddPageHeaderFooter.getState().position;
+      const pages = AddPageHeaderFooter.getState().pagesToApply;
+      const color = AddPageHeaderFooter.getState().fontColor;
+      const size = AddPageHeaderFooter.getState().fontSize;
+      const customText = AddPageHeaderFooter.getState().customText;
       const pagesToNumber = pages.map((item) => item.number);
 
       form.append("pdfFiles", pdfFiles[0].file);
+      form.append(
+        "headerOption",
+        AddPageHeaderFooter.getState().customizationStyle
+      );
+        form.append(
+          "footerOption",
+          AddPageHeaderFooter.getState().customizationStyle
+        );
 
       form.append("pageRanges", JSON.stringify(pagesToNumber.join(", ")));
       form.append("startPosition", JSON.stringify(startPosition));
       console.log(pageNumberPosition);
       form.append("position", pageNumberPosition);
-      form.append("size", size);
+      form.append("fontSize", size);
       form.append("color", color);
+      form.append("customFooterText", customText);
+      form.append("customHeaderText", customText);
 
       console.log(pagesToNumber);
-      const res = await baseAxios.post("/tools/reorder-pages", form, {
+      const res = await baseAxios.post("/tools/add-pdf-header-footer", form, {
         withCredentials: true,
       });
       set({
@@ -713,6 +748,5 @@ const useToolsStore = create<ToolsStore>((set) => ({
   //   }
   // },
 }));
-
 
 export default useToolsStore;

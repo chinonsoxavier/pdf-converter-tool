@@ -10,6 +10,7 @@ const PdfToWordConverter = () => {
   return (
     <div className="">
       <ConverterLayout
+        showAllSelectedFiles
         handleFileUpload = {()=>convertPdfToWord(selectedFiles[selectedIndex]?.file)}
         actionButtonText="Convert Pdf To Word"
         label="Pdf To Word Converter"

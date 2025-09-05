@@ -4,10 +4,10 @@ import { useState } from "react";
 import useToolsStore from "../tools_store";
 
 const CompressPdf = () => {
-    const [compressionOption, setCompressionOption] = useState('Medium');
-  const { compressPdf,selectedFiles } = useToolsStore();
+  const [compressionOption, setCompressionOption] = useState("Medium");
+  const { compressPdf, selectedFiles } = useToolsStore();
   return (
-    <div className=" to-primary/5 min-h-lvh from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)]">
+    <div className=" to-primary/5 min-h-dvh from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)]">
       <ConverterLayout
         actionButtonText="Compress File"
         convertingStateText="Compressing Pdf File"
@@ -94,6 +94,6 @@ const CompressPdf = () => {
       />
     </div>
   );
-}
+};
 
-export default CompressPdf
+export default CompressPdf;

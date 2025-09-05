@@ -5,18 +5,18 @@ import { Outlet } from "react-router-dom";
 
 const DashboardLayoutView = () => {
   return (
-    <div className="h-lvh">
+    <div className="h-dvh">
       {/* Header */}
       <div className="h-[12%] ">
         <DashboardHeaderLayout />
       </div>
 
       {/* sidebar menu */}
-       <DashboardSidemenuLayout/>
-      
+      <DashboardSidemenuLayout />
+
       {/* main content */}
       <section className="flex h-[88%] items-start justify-start overflow-scrol">
-       <DashboardSidebarLayout/>
+        <DashboardSidebarLayout />
         <div className="h-full w-full flex-col overflow-scroll">
           <Outlet />
         </div>

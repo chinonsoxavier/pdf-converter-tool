@@ -3,7 +3,13 @@ import { Button } from "@/components/ui/button";
 import { Card } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { motion } from "motion/react";
-import { CloudUpload, PlusIcon, Settings, XIcon } from "lucide-react";
+import {
+  CloudUpload,
+  PlusIcon,
+  Settings,
+  UploadIcon,
+  XIcon,
+} from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import "react-pdf/dist/Page/TextLayer.css";
 import "react-pdf/dist/Page/AnnotationLayer.css";
@@ -36,6 +42,7 @@ const ConverterLayout = ({
   convertingStateText,
   fileType = ["pdf"],
   handleFileUpload,
+  showAllSelectedFiles = false,
 }: Readonly<{
   disabled?: boolean;
   actionButtonText: string;
@@ -45,6 +52,7 @@ const ConverterLayout = ({
   desc: string;
   fileType?: string[];
   convertingStateText: string;
+  showAllSelectedFiles?: boolean;
   handleFileUpload?: (pdfFile: File) => Promise<string>;
 }>) => {
   const {
@@ -60,6 +68,8 @@ const ConverterLayout = ({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const fileInputRef2 = useRef<HTMLInputElement>(null);
+  const [hovered, setHovered] = useState(false);
+
   // const [processingTool, setProcessingTool] = useState(false);
   const [isDragging, setIsDragging] = useState<boolean>(false); // Track drag state
   const variants1 = {
@@ -77,54 +87,66 @@ const ConverterLayout = ({
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>
   ) => {
-    let file: File | undefined;
+    let files: FileList | File[] | undefined;
 
     if ("dataTransfer" in event) {
       // Drag event
-      file = event.dataTransfer.files?.[0];
+      files = event.dataTransfer.files;
       event.preventDefault();
       setIsDragging(false);
     } else {
       // Input change event
-      file = event.target.files?.[0];
+      files = event.target.files ?? undefined;
     }
 
-    const allowedFileTypes = fileType; // Assuming fileType is defined in your component
-    if (file) {
-      const fileType =
-        file && file.name
-          ? file.name.split(".").pop()?.toString() ?? "unknown"
-          : "unknown";
+    if (!files || files.length === 0) return;
 
-      if (!allowedFileTypes || !allowedFileTypes.includes(fileType)) {
+    const allowedFileTypes = fileType; // from props or state
+    const newSelectedFiles: {
+      fileUrl: string;
+      fileName: string;
+      fileSize: number;
+      fileType: string;
+      file: File;
+    }[] = [];
+
+    Array.from(files).forEach((file) => {
+      const fileExt = file.name.split(".").pop()?.toLowerCase() ?? "unknown";
+
+      if (!allowedFileTypes || !allowedFileTypes.includes(fileExt)) {
         enqueueSnackbar(
           `Invalid file type. Please upload a valid ${selectedFiles[selectedIndex]?.fileType[0]} file`,
-          {
-            variant: "error",
-          }
+          { variant: "error" }
         );
-        if (fileInputRef.current || fileInputRef2.current) {
-          fileInputRef.current.value = ""; // Clear the input value
-          fileInputRef2.current.value = ""; // Clear the input value
-        }
+
+        if (fileInputRef.current) fileInputRef.current.value = "";
+        if (fileInputRef2.current) fileInputRef2.current.value = "";
         return;
       }
 
       const fileUrl = URL.createObjectURL(file);
-      setSelectedFile({
-        fileUrl: fileUrl,
+      newSelectedFiles.push({
+        fileUrl,
         fileName: file.name,
         fileSize: file.size,
-        fileType: allowedFileTypes,
-        file: file,
+        fileType: fileExt,
+        file,
       });
+      setSelectedFile({
+        file: file,
+        fileUrl,
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: [fileExt],
+      });
+    });
 
-      console.log(file, "file");
-      console.log(typeof file);
-      console.log(selectedFiles, "selected file");
-      return;
-    }
+    // Append to existing files instead of overwriting
+
+    console.log(newSelectedFiles, "newly added files");
+    console.log(selectedFiles, "all selected files");
   };
+
   const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
     event.preventDefault();
     setIsDragging(true);
@@ -227,7 +249,7 @@ const ConverterLayout = ({
   }, [selectedFiles]);
 
   return (
-    <div className="h-lvh overflow-hidden">
+    <div className="h-dvh overflow-hidden">
       {/* header */}
       <div className="h-[12%]">
         <Header />
@@ -278,6 +300,7 @@ const ConverterLayout = ({
                     <Input
                       ref={fileInputRef}
                       type="file"
+                      multiple
                       accept={fileType
                         .map(
                           (file) =>
@@ -367,76 +390,197 @@ const ConverterLayout = ({
                 // setProcessingTool={setProcessingTool}
                 label={label}
               />
-              <div className="h-full overflow-y-auto  flex items-start w-full justify-center ">
-                <div className="flex w-full items-center justify-center relative flex-col p-7 h-full flex-1">
+              <div className="h-full overflow-y-auto relative flex items-start w-full justify-center ">
+                <div className="flex w-full items-center justify-start relative flex-col p-7 h-full flex-1">
                   {children ? (
                     children
                   ) : (
                     <>
+                      <div className="flex flex-col w-full justify-end p-3 items-end gap-5">
+                        <div className="items-center justify-center">
+                          <div
+                            onMouseEnter={() => setHovered(true)}
+                            onMouseOver={() => setHovered(true)}
+                            onMouseLeave={() => setHovered(false)}
+                            onMouseOut={() => setHovered(false)}
+                            className="center gap-2 duration-500 cursor-pointer text-white"
+                          >
+                            <Tooltip>
+                              <TooltipTrigger
+                                onClick={handleOpenPicker}
+                                className={`${
+                                  hovered
+                                    ? "rotate-0 translate-x-0 scale-100 opacity-100"
+                                    : "rotate-90 scale-0 translate-x-8 opacity-0"
+                                } cursor-pointer bg-accent duration-700 p-2 rounded-full`}
+                              >
+                                <svg
+                                  className="w-6 h-6"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 18 16"
+                                >
+                                  <path
+                                    fill="currentColor"
+                                    d="M8.7375,5.80725 L3.021,15.70725 L0.12375,10.69725 L5.847,0.795 L8.7375,5.80725 Z M17.865,10.38225 L12.078,10.39125 L6.378,0.489 L12.1725,0.489 L17.865,10.38225 Z M17.87625,10.9875 L14.9865,15.9975 L3.5415,15.99 L6.43425,10.98375 L17.87625,10.9875 Z"
+                                  ></path>
+                                </svg>
+                              </TooltipTrigger>
+                              <TooltipContent className="text-white">
+                                Add From Google Drive
+                              </TooltipContent>
+                            </Tooltip>
+
+                            <Tooltip>
+                              <TooltipTrigger
+                                className={`${
+                                  hovered
+                                    ? "rotate-0 translate-x-0 scale-100 opacity-100"
+                                    : "rotate-90 scale-0 translate-x-8 opacity-0"
+                                } cursor-pointer bg-accent duration-700 p-2 rounded-full`}
+                                onClick={handleButtonClick}
+                              >
+                                <svg
+                                  className="w-6 h-6"
+                                  xmlns="http://www.w3.org/2000/svg"
+                                  viewBox="0 0 18 16"
+                                >
+                                  <path
+                                    fill="currentColor"
+                                    d="M8.7375,5.80725 L3.021,15.70725 L0.12375,10.69725 L5.847,0.795 L8.7375,5.80725 Z M17.865,10.38225 L12.078,10.39125 L6.378,0.489 L12.1725,0.489 L17.865,10.38225 Z M17.87625,10.9875 L14.9865,15.9975 L3.5415,15.99 L6.43425,10.98375 L17.87625,10.9875 Z"
+                                  ></path>
+                                </svg>
+                              </TooltipTrigger>
+                              <TooltipContent className="text-white">
+                                Add From Dropbox
+                              </TooltipContent>
+                            </Tooltip>
+
+                            <Tooltip>
+                              <TooltipTrigger
+                                className={`${
+                                  hovered
+                                    ? "rotate-0 translate-x-0 scale-100 opacity-100"
+                                    : "rotate-90 scale-0 translate-x-8 opacity-0"
+                                } cursor-pointer bg-accent duration-700 p-2 rounded-full`}
+                                onClick={handleButtonClick}
+                              >
+                                <UploadIcon />
+                              </TooltipTrigger>
+                              <TooltipContent className="text-white">
+                                Add From Local Device
+                              </TooltipContent>
+                            </Tooltip>
+                            <Input
+                              ref={fileInputRef2}
+                              type="file"
+                              multiple
+                              accept={fileType
+                                .map(
+                                  (file) =>
+                                    `.${file.toLowerCase()},application/${file.toLowerCase()}`
+                                )
+                                .join(",")}
+                              onChange={handleFileChange}
+                              className="hidden"
+                              aria-label="Choose PDF file"
+                            />
+                            <Tooltip>
+                              <TooltipTrigger
+                                className="bg-accent p-2 rounded-full relative"
+                                onClick={handleButtonClick}
+                              >
+                                <div className="center bg-secondary border-accent border shadow rounded-full w-5 h-5 absolute -top-2 right-0">
+                                  <p className="text-xs font-semibold text-primary">
+                                    {selectedFiles.length}
+                                  </p>
+                                </div>
+                                <PlusIcon className="cursor-pointer" />
+                              </TooltipTrigger>
+                              <TooltipContent className="text-white">
+                                Add More Files
+                              </TooltipContent>
+                            </Tooltip>
+                          </div>
+                        </div>
+                        <div className="center gap-2 duration-500 cursor-pointer text-white">
+                          <Tooltip>
+                            <TooltipTrigger
+                              className="bg-secondary shadow-3xl border sm:hidden drop-shadow-2xl p-2 rounded-full"
+                              onClick={toggleSideMenuOpen}
+                            >
+                              {sideMenuOpen ? (
+                                <XIcon className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
+                              ) : (
+                                <Settings className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
+                              )}
+                            </TooltipTrigger>
+                            <TooltipContent className="text-white">
+                              Action Menu
+                            </TooltipContent>
+                          </Tooltip>
+                        </div>
+                      </div>
+
                       {fileType.includes("pdf") ? (
-                        <PdfRenderer
-                          label={selectedFiles[selectedIndex]?.fileName}
-                          className={`p-3 w- w-full min-w-fit mx-auto my-auto`}
-                          scale={0.8}
-                          file={selectedFiles[selectedIndex]?.fileUrl}
-                          pageNumber={"1"}
-                        />
-                      ) : (
                         <>
-                          <ToolsFileExtensionCard
-                            src={selectedFiles[selectedIndex]?.fileUrl}
-                            fileType={selectedFiles[selectedIndex]?.fileType[0]}
-                          />
+                          {showAllSelectedFiles ? (
+                            <div className="flex items-center justify-center gap-5 w-full flex-wrap">
+                              {selectedFiles.map((file, index) => (
+                                <div key={index} className="my-5">
+                                  <PdfRenderer
+                                    label={file?.fileName}
+                                    className={`p-3 w- w-9 min-w-fit`}
+                                    scale={0.8}
+                                    file={file?.fileUrl}
+                                    pageNumber={"1"}
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <>
+                              <PdfRenderer
+                                label={selectedFiles[selectedIndex]?.fileName}
+                                className={`p-3 w- w-full min-w-fit mx-auto my-auto`}
+                                scale={0.8}
+                                file={selectedFiles[selectedIndex]?.fileUrl}
+                                pageNumber={"1"}
+                              />
+                            </>
+                          )}
+                        </>
+                      ) : (
+                                <>
+                                  {showAllSelectedFiles ? (
+                                    <div className="flex items-center justify-center gap-5 w-full flex-wrap">
+                                      {selectedFiles.map((file, index) => (
+                                        <div key={index} className="my-5">
+                                          <ToolsFileExtensionCard
+                                            src={selectedFiles[selectedIndex]?.fileUrl}
+                                            fileType={selectedFiles[selectedIndex]?.fileType[0]}
+                                          />
+                                        </div>
+                                      ))}
+                                    </div>
+                                  ) : (
+                                    <ToolsFileExtensionCard
+                                      src={selectedFiles[selectedIndex]?.fileUrl}
+                                      fileType={selectedFiles[selectedIndex]?.fileType[0]}
+                                    />
+                                  )
+                                  }
                         </>
                       )}
                     </>
                   )}
-                  <div className="center fixed mr-5 sm:mr-0 right-0 shadow drop-shadow-md sm:right-5 sm:top-26 top-30 duration-500 cursor-pointer bg-accent text-white p-2 rounded-full">
-                    <Input
-                      ref={fileInputRef2}
-                      type="file"
-                      accept={fileType
-                        .map(
-                          (file) =>
-                            `.${file.toLowerCase()},application/${file.toLowerCase()}`
-                        )
-                        .join(",")}
-                      onChange={handleFileChange}
-                      className="hidden"
-                      aria-label="Choose PDF file"
-                    />
-                    <Tooltip>
-                      <TooltipTrigger onClick={handleButtonClick}>
-                        <PlusIcon className="cursor-pointer" />
-                      </TooltipTrigger>
-                      <TooltipContent className="text-white">
-                        Add More Files
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
-
-                  <div
-                    onClick={toggleSideMenuOpen}
-                    className="flex sm:hidden fixed mr-5 sm:mr-0 right-0 shadow drop-shadow-md sm:right-5 sm:top0 top-46 duration-500 cursor-pointer bg-secondary hover:text-accent text-white p-2 rounded-full"
-                  >
-                    <Tooltip>
-                      <TooltipTrigger>
-                        {sideMenuOpen ? (
-                          <XIcon className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
-                        ) : (
-                          <Settings className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
-                        )}
-                      </TooltipTrigger>
-                      <TooltipContent className="text-white">
-                        Action Menu
-                      </TooltipContent>
-                    </Tooltip>
-                  </div>
                 </div>
+
                 <Button
                   disabled={disabled}
                   onClick={handleSubmitFile}
-                  className="max-w-sm font-semibold fixed bottom-10 left-10 sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center sm:hidden"
+                  className={`${
+                    sideMenuOpen ? "opacity-0" : "opacity-100"
+                  } duration-500 max-w-sm font-semibold fixed bottom-10 left-10 sm:text-xl [&_svg]:size-6 group rounded-lg py-0 flex items-center sm:hidden`}
                   type="submit"
                 >
                   {actionButtonText}

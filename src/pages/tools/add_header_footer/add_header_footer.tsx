@@ -30,12 +30,12 @@ const AddHeaderFooter = () => {
   return (
     <ConverterLayout
       //   children={<MergePdfChildrenSection />}
-      actionButtonText="Add Page Numbers"
+      actionButtonText="Add Page Header And Footer"
       handleFileUpload={()=>AddPageHeaderFooter(selectedFiles)}
-      label="Add pdf page numbers "
-      desc="Insert page numbers automatically"
+      label="Add pdf page header and footer "
+      desc="Insert page header and footer automatically"
       disabled={selectedFiles.length <= 0}
-      convertingStateText="Merging PDF files"
+      convertingStateText="Adding page headers and footers"
       actionMenuSideBar={
         <div className="px-4 py-6 space-y-3">
           <div className="flex items-start justify-between gap-5 sm:gap-10">

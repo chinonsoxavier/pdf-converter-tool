@@ -5,6 +5,7 @@ const WordToPdfConverter = () => {
   return (
     <div>
       <ConverterLayout
+        showAllSelectedFiles
         handleFileUpload={() =>
           convertWordToPdf(selectedFiles[selectedIndex]?.file)
         }

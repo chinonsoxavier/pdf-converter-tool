@@ -12,12 +12,13 @@ import { Input } from "@/components/ui/input";
 import useToolsStore from "../tools_store";
 
 const JpgToPdf = () => {
-  const { orientation, setOrientation, margin, setMargin, setSize, size } = useJpgToPdfStore();
-  const {JpgToPdf,selectedFiles} = useToolsStore();
+  const { orientation, setOrientation, margin, setMargin, setSize, size } =
+    useJpgToPdfStore();
+  const { JpgToPdf, selectedFiles } = useToolsStore();
   return (
-    <div className=" to-primary/5 min-h-lvh from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)]">
+    <div className=" to-primary/5 min-h-dvh from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4,9,30)]">
       <ConverterLayout
-        handleFileUpload={() => JpgToPdf(selectedFiles,orientation, margin)}
+        handleFileUpload={() => JpgToPdf(selectedFiles, orientation, margin)}
         actionButtonText="Convert Jpg to Pdf"
         convertingStateText="Converting Jpg to Pdf"
         label="Convert Jpg to Pdf"
@@ -84,7 +85,7 @@ const JpgToPdf = () => {
 
               <div className="flex gap-2 items-center w-full justify-start">
                 <Input className="fle-1 w-min" type="checkbox" />
-                <p className="w-full" >Merge all images in one PDF file</p>
+                <p className="w-full">Merge all images in one PDF file</p>
               </div>
               {/* <div className="center gap-4 py-4">
                 <div className="bg-primary/10 center border rounded-md p-4 gap-3 flex-col flex-1">
@@ -103,7 +104,6 @@ const JpgToPdf = () => {
       />
     </div>
   );
-}
+};
 
-
-export default JpgToPdf
+export default JpgToPdf;

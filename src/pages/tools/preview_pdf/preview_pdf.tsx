@@ -16,73 +16,69 @@ import {
 import { useRef, useState } from "react";
 
 const PreviewPdfConverter = () => {
-  const { selectedFiles, selectedIndex,setSelectedFile } = useToolsStore();
-    const fileInputRef = useRef<HTMLInputElement>(null);
-    const [isDragging, setIsDragging] = useState<boolean>(false); // Track drag state
-    const handleFileChange = async (
-      event:
-        | React.ChangeEvent<HTMLInputElement>
-        | React.DragEvent<HTMLDivElement>
-    ) => {
-      let file: File | undefined;
+  const { selectedFiles, selectedIndex, setSelectedFile } = useToolsStore();
+  const fileInputRef = useRef<HTMLInputElement>(null);
+  const [isDragging, setIsDragging] = useState<boolean>(false); // Track drag state
+  const handleFileChange = async (
+    event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>
+  ) => {
+    let file: File | undefined;
 
-      if ("dataTransfer" in event) {
-        // Drag event
-        file = event.dataTransfer.files?.[0];
-        event.preventDefault();
-        setIsDragging(false);
-      } else {
-        // Input change event
-        file = event.target.files?.[0];
-      }
-
-      const allowedFileTypes = "pdf";
-      if (file) {
-        const fileType =
-          file && file.name
-            ? file.name.split(".").pop()?.toString() ?? "unknown"
-            : "unknown";
-
-        if (!allowedFileTypes || !allowedFileTypes.includes(fileType)) {
-          alert(
-            "Invalid file type. Please upload a valid " +
-              selectedFiles[selectedIndex]?.fileType[0] +
-              " file."
-          );
-          if (fileInputRef.current) {
-            fileInputRef.current.value = ""; // Clear the input value
-          }
-          return;
-        }
-
-        const fileUrl = URL.createObjectURL(file);
-        setSelectedFile({
-          fileUrl: fileUrl,
-          fileName: file.name,
-          fileSize: file.size,
-          fileType: [allowedFileTypes],
-        });
-
-        console.log("Selected file:", file.name, "Size:", file.size, "bytes");
-        return;
-      }
-    };
-    const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
-      event.preventDefault();
-      setIsDragging(true);
-    };
-
-    const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    if ("dataTransfer" in event) {
+      // Drag event
+      file = event.dataTransfer.files?.[0];
       event.preventDefault();
       setIsDragging(false);
-    };
+    } else {
+      // Input change event
+      file = event.target.files?.[0];
+    }
 
+    const allowedFileTypes = "pdf";
+    if (file) {
+      const fileType =
+        file && file.name
+          ? file.name.split(".").pop()?.toString() ?? "unknown"
+          : "unknown";
 
-    const handleButtonClick = () => {
-      fileInputRef.current?.click();
-    };
-  
-  
+      if (!allowedFileTypes || !allowedFileTypes.includes(fileType)) {
+        alert(
+          "Invalid file type. Please upload a valid " +
+            selectedFiles[selectedIndex]?.fileType[0] +
+            " file."
+        );
+        if (fileInputRef.current) {
+          fileInputRef.current.value = ""; // Clear the input value
+        }
+        return;
+      }
+
+      const fileUrl = URL.createObjectURL(file);
+      setSelectedFile({
+        fileUrl: fileUrl,
+        fileName: file.name,
+        fileSize: file.size,
+        fileType: [allowedFileTypes],
+      });
+
+      console.log("Selected file:", file.name, "Size:", file.size, "bytes");
+      return;
+    }
+  };
+  const handleDragOver = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(true);
+  };
+
+  const handleDragLeave = (event: React.DragEvent<HTMLDivElement>) => {
+    event.preventDefault();
+    setIsDragging(false);
+  };
+
+  const handleButtonClick = () => {
+    fileInputRef.current?.click();
+  };
+
   const variants1 = {
     inactive: {
       y: 20,
@@ -96,7 +92,7 @@ const PreviewPdfConverter = () => {
   };
 
   return (
-    <div className="h-lvh ">
+    <div className="h-dvh ">
       <div className="h-[12%]">
         <Header isLanding={false} />
       </div>
@@ -156,9 +152,7 @@ const PreviewPdfConverter = () => {
                       className="max-w-sm py-0 text-lg sm:text-xl rounded-lg flex items-center h-12 w-full"
                       type="submit"
                     >
-                      Choose
-                      pdf
-                      file
+                      Choose pdf file
                     </Button>
                     <div className="center gap-4">
                       <Tooltip>
@@ -207,10 +201,9 @@ const PreviewPdfConverter = () => {
             <Footer />
           </div>
         ) : (
-          <div className="h-full" >
+          <div className="h-full">
             <div className="flex items-center justify-center h-full">
               <Card className="w-full h-full max-w-3xl p-6 bg-secondary dark:border-primary border-dashed border-3">
-            
                 <iframe
                   src={selectedFiles[selectedIndex]?.fileUrl}
                   title="PDF Preview"

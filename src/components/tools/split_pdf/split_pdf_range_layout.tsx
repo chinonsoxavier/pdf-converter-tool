@@ -9,8 +9,9 @@ const SplitPdfRangeLayout = () => {
   const { Ranges, selectedRange, fixedRange } = useSplitPdfStore();
   const { width } = useWindowSize();
   return selectedRange === "custom" ? (
-    Ranges.map((range, index) => (
-      <div className="flex center flex-col gap-5 w-full" key={index}>
+    <div className="flex flex-wrap gap-5 w-full py-10 center">
+      { Ranges.map((range, index) => (
+      <div className="flex center flex-col gap-5 w- flex-1" key={index}>
         {range.name}
         <div className="rounded pr-10 sm:pr-6 center w-full">
           {selectedFiles.map((file, index) => (
@@ -41,6 +42,7 @@ const SplitPdfRangeLayout = () => {
                 </Document>
               ) : (
                 <>
+                
                   <Document
                     file={selectedFiles[selectedIndex]?.fileUrl}
                     onLoadSuccess={({ numPages }) => setNumPages(0, numPages)}
@@ -94,7 +96,8 @@ const SplitPdfRangeLayout = () => {
           ))}
         </div>
       </div>
-    ))
+      ))}
+      </div>
   ) : (
     <div className="w-full flex center flex-wrap gap-5 py-10">
       {fixedRange.map((range, indexx) =>
@@ -164,7 +167,8 @@ const SplitPdfRangeLayout = () => {
             </div>
           </div>
         ) : (
-          <div className="flex flex-wrap flex-col gap-5" key={indexx}>
+            <div className="flex flex-wrap flex-col gap-5" key={indexx}>
+              
             {range.name}
             <div className="rounded pr-10 sm:pr-6">
               {selectedFiles.map((file, index) => (

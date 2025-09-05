@@ -237,7 +237,7 @@ const App = () => {
         <Route
           path="/add_pdf_page_numbers/download/:id"
           element={
-            <ToolDownloadLayout label="Pdf pages number has been added successfully" />
+            <ToolDownloadLayout label="Pdf pages number has been added!" />
           }
         />
         {/* end of add pages pages */}
@@ -247,7 +247,7 @@ const App = () => {
         <Route
           path="/add_header_footer/download/:id"
           element={
-            <ToolDownloadLayout label="Pdf header and footer has been added successfully" />
+            <ToolDownloadLayout label="Pdf header/footer has been added" />
           }
         />
         {/* end of add headers/footers pages */}

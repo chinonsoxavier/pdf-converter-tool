@@ -67,7 +67,8 @@ const ToolsFileExtensionCard = ({
     toolsFilesExtensionIcon.map(
       (ext, index) =>
         ext.label === fileType && (
-              <Tooltip key={index} >
+          <Tooltip key={index} >
+            <div className="text-center">
                 <TooltipTrigger>
                   <div
                     className={cn(
@@ -100,9 +101,10 @@ const ToolsFileExtensionCard = ({
             }`}
           </p>
             </TooltipContent>
-            <p className="py-2 text-primary-foreground" >{selectedFiles[selectedIndex]?.fileName}</p>
+            <p className="py-2 text-sm text-primary-foreground" >{selectedFiles[selectedIndex]?.fileName}</p>
             
-    </Tooltip>
+          </div>
+          </Tooltip>
         )
     )
   );

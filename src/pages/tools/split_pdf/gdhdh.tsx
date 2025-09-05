@@ -5,7 +5,7 @@ import SplitPdfChildrenSection from "../../../components/tools/split_pdf/split_p
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Reorder } from "framer-motion";
-import {   Move, Plus, XIcon } from "lucide-react";
+import { Move, Plus, XIcon } from "lucide-react";
 import useToolsStore from "../tools_store";
 
 const SplitPdf = () => {
@@ -30,12 +30,21 @@ const SplitPdf = () => {
   };
 
   useEffect(() => {
-     console.log(Ranges)
+    if (selectedFiles[selectedIndex]) {
+      updateRange(
+        {
+          name: "Range 1",
+          from: 1,
+          to: selectedFiles[selectedIndex].numPages ?? 1,
+        },
+        "Range 1"
+      );
+    }
   }, [selectedIndex, selectedFiles[selectedIndex]?.numPages]);
 
   const handleAddRange = () => {
     const lastRange = Ranges.length > 0 ? Ranges[Ranges.length - 1] : null;
-    const newFrom = lastRange.from < selectedFiles[selectedIndex].numPages ? lastRange.to : 1;
+    const newFrom = lastRange ? lastRange.to + 1 : 1;
     addRange({
       name: `Range ${Ranges.length + 1}`,
       from: newFrom,
@@ -69,7 +78,7 @@ const SplitPdf = () => {
             >
               Custom Ranges
             </Button>
-            <Button 
+            <Button
               onClick={() => {
                 setSelectedRange("fixed");
                 setFixedRange(
@@ -159,7 +168,6 @@ const SplitPdf = () => {
                         <Input
                           type="number"
                           onChange={(e) => {
-                            console.log(Ranges);
                             const value = parseInt(e.target.value);
                             const previousRangeTo =
                               index > 0 ? Ranges[index - 1].to : 0;
@@ -184,7 +192,6 @@ const SplitPdf = () => {
                         <Input
                           type="number"
                           onChange={(e) => {
-                            console.log(Ranges);
                             const value = parseInt(e.target.value);
                             const maxPage =
                               selectedFiles[selectedIndex]?.numPages ?? 0;
@@ -210,8 +217,8 @@ const SplitPdf = () => {
                 <Button
                   onClick={handleAddRange}
                   size="sm"
-                    className="w-full mt-4"
-                    variant="outline"
+                  className="w-full mt-4"
+                  variant="outline"
                 >
                   <Plus size={16} className="mr-2" /> Add Range
                 </Button>
