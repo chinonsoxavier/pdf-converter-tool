@@ -10,7 +10,7 @@ const SplitPdfChildrenSection = () => {
   }, [selectedFiles]);
 
   return (
-    <div className="flex w-full flex-wrap h-full items-start justify-start gap-7">
+    <div className="flex w-full flex-wrap h-full items-start justify-start">
       {selectedFiles[selectedIndex]?.fileType[0] === "pdf" ? (
           <SplitPdfRangeLayout />
       ) : (

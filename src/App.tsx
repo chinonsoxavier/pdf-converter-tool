@@ -39,6 +39,8 @@ import useAuthStore from "./pages/(auth)/auth_store";
 import VerifyEmailPage from "./pages/(auth)/verify_email/verify_email";
 import VerifyEmailTokenPage from "./pages/(auth)/verify_email_token/verify_email_token";
 import DeletePdfPages from "./pages/tools/delete_pdf_pages/delete_pdf_pages";
+import axios from "axios";
+import OcrPdf from "./pages/tools/ocr_pdf/ocr_pdf";
 const App = () => {
 
   const location = useLocation();
@@ -69,9 +71,15 @@ const App = () => {
 
       return <Navigate to="/signin" />;
     }
+  
+  
 
   const { resetErrorMsg, user } = useAuthStore();
   useEffect(() => {
+    const pingServer = async () => {
+      await axios.get('/');
+    };
+    pingServer();
     resetStore();
     resetErrorMsg({status:''});
   }, [location.pathname]);
@@ -88,13 +96,11 @@ const App = () => {
         <Route path="/forgot-password" element={<ForgotPasswordPage />} />
         <Route
           path="/verify-email"
-          element={<EmailVerificationRouteWrapper/>
-          }
+          element={<EmailVerificationRouteWrapper />}
         />
         <Route
           path="/verify-email/:token"
-          element={<EmailVerificationTokenRouteWrapper/>
-          }
+          element={<EmailVerificationTokenRouteWrapper />}
         />
         <Route path="/reset-password/:token" element={<ResetPasswordPage />} />
         {/* end of auth routes */}
@@ -248,6 +254,16 @@ const App = () => {
           path="/add_header_footer/download/:id"
           element={
             <ToolDownloadLayout label="Pdf header/footer has been added" />
+          }
+        />
+        {/* end of add headers/footers pages */}
+
+        {/* add headers/footers pages */}
+        <Route path="/ocr" element={<OcrPdf />} />
+        <Route
+          path="/ocr_pdf/download/:id"
+          element={
+            <ToolDownloadLayout label="Pdf is now selectable" />
           }
         />
         {/* end of add headers/footers pages */}

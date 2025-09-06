@@ -36,12 +36,6 @@ import {
 } from "@/components/ui/tooltip";
 import { motion } from "motion/react";
 import {
-  Edit,
-  FilePlus2,
-  GalleryVerticalEnd,
-  Layers2,
-  LucideShieldCheck,
-  Redo2,
   Search,
 } from "lucide-react";
 import {  useNavigate } from "react-router-dom";
@@ -313,7 +307,6 @@ interface Tool {
 
   return (
     <ContainerLayout className="space-y-5 w-full border-t pt-6 sm:pt-10 text-center flex-col">
-      
 
       <motion.div
         variants={variants3}
@@ -348,7 +341,7 @@ interface Tool {
               }`}
               size="sm"
             >
-              <GalleryVerticalEnd className="" />
+              {/* <GalleryVerticalEnd className="" /> */}
               All
             </Button>
             <Button
@@ -364,7 +357,7 @@ interface Tool {
               }`}
               size="sm"
             >
-              <Redo2 />
+              {/* <Redo2 /> */}
               Convert
             </Button>
             <Button
@@ -380,7 +373,7 @@ interface Tool {
               }`}
               size="sm"
             >
-              <Edit />
+              {/* <Edit /> */}
               Edit
             </Button>
             <Button
@@ -396,7 +389,7 @@ interface Tool {
               }`}
               size="sm"
             >
-              <Layers2 />
+              {/* <Layers2 /> */}
               Organize
             </Button>
             <Button
@@ -412,7 +405,7 @@ interface Tool {
               }`}
               size="sm"
             >
-              <LucideShieldCheck />
+              {/* <LucideShieldCheck /> */}
               Secure
             </Button>
             <Button
@@ -428,7 +421,7 @@ interface Tool {
               }`}
               size="sm"
             >
-              <FilePlus2 />
+              {/* <FilePlus2 /> */}
               Enhance
             </Button>
           </div>
@@ -471,14 +464,10 @@ interface Tool {
                         const targetPath = tool?.label
                           .toLocaleLowerCase()
                           .replace(/\s+/g, "_");
-                        if (tool.isFree) {
-                          navigate("/" + targetPath);
-                        } else {
-                          navigate("/pricing");
-                        }
+                        navigate("/" + targetPath);
                       }}
                       className={cn(
-                        `tols h-full w-full flex-1 group relative gap-4 flex-col duration-500 cursor-pointer flex items-center justify-center rounded-xl pt-2 pb-7`
+                        `min-w-0 h-full w-full flex-1 group relative gap-4 flex-col duration-500 cursor-pointer flex items-center justify-center rounded-xl pt-2 pb-7`
                       )}
                     >
                       <TooltipContent className="text-white">
@@ -491,18 +480,21 @@ interface Tool {
                             tool.isFree
                               ? "bg-[rgba(21,128,61,.10)]"
                               : "bg-orange-100 dark:bg-transparent",
-                            "rounded-full w-7 h-7 z-10  text-xs whitespace-nowrap absolute left-3 top-3 flex items-center justify-center"
+                            "rounded-full w-7 h-7 z-10 text-xs whitespace-nowrap absolute left-3 top-3 flex items-center justify-center"
                           )}
                         >
                           {tool.isFree ? "🟢" : "🔒"}
                         </div>
                       </div>
-                      <div className="flex items-center ease-linear scale-95 duration-100 group-hover:scale-110 justify-center rounded-xl w-12 h-12 sm:w-22 sm:h-22">
+                      <div className="flex min-w-0 items-center ease-linear scale-95 duration-100 group-hover:scale-110 justify-center rounded-xl w-12 h-12 sm:w-22 sm:h-22">
                         <tool.icon size="lg" />
                       </div>
-                      <p className="font-medium text-ellipsis max-w-[150px] overflow-hidden text-sm whitespace-nowrap dark:text-white text-secondary-foreground">
-                        {tool.label}
-                      </p>
+                      {/* The fix is here */}
+                      <div className="flex px-2 w-full items-center justify-center min-w-0">
+                        <p className="font-medium text-ellipsis overflow-hidden text-sm whitespace-nowrap dark:text-white text-secondary-foreground">
+                          {tool.label}
+                        </p>
+                      </div>
                     </div>
                   </TooltipTrigger>
                 </Tooltip>

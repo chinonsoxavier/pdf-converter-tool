@@ -49,7 +49,7 @@ const HistorySection = () => {
     GetRecentActivities();
   }, []);
 
-  return (
+  return recentActivities.length > 0 ? (
     <motion.div
       variants={variants1}
       initial={"inactive"}
@@ -106,7 +106,7 @@ const HistorySection = () => {
         </div>
       </ContainerLayout>
     </motion.div>
-  );
+  ) : null;
 };
 
 export default HistorySection;

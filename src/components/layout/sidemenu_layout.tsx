@@ -44,7 +44,7 @@ const SidemenuLyout = () => {
       >
         <div className="flex items-center justify-between px-8 mb-10 w-full">
           <div className="flex items-center justify-start gap-5">
-            <Button> Sign In</Button>
+            <Button variant="outline" > Sign In</Button>
             <Button className="">
               <Coffee />
               Support Us

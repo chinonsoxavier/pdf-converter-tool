@@ -24,7 +24,7 @@ const { id } = useParams();
       <SidemenuLyout />
 
       {/* main content */}
-      <div className="pb-20">
+      <div className="py-5">
         <div className="mx-auto">
           <div className="text-center px-4 mb-8 py-12">
             <h1 className="text-3xl sm:text-4xl font-semibold text-primary-foreground mb-6">

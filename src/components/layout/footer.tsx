@@ -232,64 +232,67 @@ const Footer = () => {
 
         <div className="flex max-width flex-wrap  mx-auto items-center pb-10 pt-2 sm:justify-between justify-center gap-5 w-full">
           <p className="text-sm">PDFPlug.com © [2025]</p>
-          <ModeToggle />
+
           <p className="text-sm">A product by Amazonia Softech Ltd</p>
-          <Dialog>
-            <DialogTrigger className="text-secondary-foreground cursor-pointer">
-              English
-              <span className="border h-5 border-secondary-foreground rounded-sm ml-2">
-                <ChevronDown
-                  className="inline-block w-5 h-5 fill-secondary-foreground"
-                  fill="#2F2F2F"
-                  strokeWidth={0}
-                />
-              </span>
-            </DialogTrigger>
-            <DialogContent>
-              <DialogHeader>
-                <DialogTitle className="text-xl mb-2 text-[#2f2f2f] dark:text-primary-foreground sm:text-2xl text-center font-bold">
-                  Select Language
-                </DialogTitle>
-                <DialogDescription className="grid gap-1.5 grid-cols-[repeat(auto-fit,minmax(110px,1fr))] ">
-                  {[
-                    "English",
-                    "العربية",
-                    "Dansk",
-                    "Deutsch",
-                    "Español",
-                    "Français",
-                    "עברית",
-                    "हिन्दी",
-                    "Indonesia",
-                    "Italiano",
-                    "日本語",
-                    "한국어",
-                    "Lietuvių",
-                    "Norsk",
-                    "Polski",
-                    "Português",
-                    "Русский",
-                    "Svenska",
-                    "ไทย",
-                    "Türkçe",
-                    "Українська",
-                    "Tiếng Việt",
-                    "中文（中国）",
-                    "中文（台灣）",
-                  ].map((language, index) => (
-                    <button
-                      key={index}
-                      className={`${
-                        language === "English" && "bg-primary"
-                      } w-full whitespace-nowrap cursor-pointer text-left py-2 px-4 dark:hover:bg-primary/50 rounded hover:bg-primary/40 focus:outline-none`}
-                    >
-                      {language}
-                    </button>
-                  ))}
-                </DialogDescription>
-              </DialogHeader>
-            </DialogContent>
-          </Dialog>
+          <div className="flex items-center justify-center gap-3">
+            <Dialog>
+              <DialogTrigger className="text-secondary-foreground cursor-pointer">
+                English
+                <span className="border h-5 border-secondary-foreground rounded-sm ml-2">
+                  <ChevronDown
+                    className="inline-block w-5 h-5 fill-secondary-foreground"
+                    fill="#2F2F2F"
+                    strokeWidth={0}
+                  />
+                </span>
+              </DialogTrigger>
+              <DialogContent>
+                <DialogHeader>
+                  <DialogTitle className="text-xl mb-2 text-[#2f2f2f] dark:text-primary-foreground sm:text-2xl text-center font-bold">
+                    Select Language
+                  </DialogTitle>
+                  <DialogDescription className="grid gap-1.5 grid-cols-[repeat(auto-fit,minmax(110px,1fr))] ">
+                    {[
+                      "English",
+                      "العربية",
+                      "Dansk",
+                      "Deutsch",
+                      "Español",
+                      "Français",
+                      "עברית",
+                      "हिन्दी",
+                      "Indonesia",
+                      "Italiano",
+                      "日本語",
+                      "한국어",
+                      "Lietuvių",
+                      "Norsk",
+                      "Polski",
+                      "Português",
+                      "Русский",
+                      "Svenska",
+                      "ไทย",
+                      "Türkçe",
+                      "Українська",
+                      "Tiếng Việt",
+                      "中文（中国）",
+                      "中文（台灣）",
+                    ].map((language, index) => (
+                      <button
+                        key={index}
+                        className={`${
+                          language === "English" && "bg-primary"
+                        } w-full whitespace-nowrap cursor-pointer text-left py-2 px-4 dark:hover:bg-primary/50 rounded hover:bg-primary/40 focus:outline-none`}
+                      >
+                        {language}
+                      </button>
+                    ))}
+                  </DialogDescription>
+                </DialogHeader>
+              </DialogContent>
+            </Dialog>
+            <ModeToggle />
+          </div>
         </div>
       </motion.div>
     </footer>

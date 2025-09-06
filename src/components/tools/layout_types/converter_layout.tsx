@@ -391,140 +391,139 @@ const ConverterLayout = ({
                 label={label}
               />
               <div className="h-full overflow-y-auto relative flex items-start w-full justify-center ">
-                <div className="flex w-full items-center justify-start relative flex-col p-7 h-full flex-1">
+                <div className="flex w-full items-center justify-start relative flex-col p-4 h-full flex-1">
+                  <div className="flex flex-col w-full justify-center p-3 items-end gap-5">
+                    <div className="items-center justify-center">
+                      <div
+                        onMouseEnter={() => setHovered(true)}
+                        onMouseOver={() => setHovered(true)}
+                        onMouseLeave={() => setHovered(false)}
+                        onMouseOut={() => setHovered(false)}
+                        className="center gap-2 duration-500 cursor-pointer text-white"
+                      >
+                        <Tooltip>
+                          <TooltipTrigger
+                            onClick={handleOpenPicker}
+                            className={`${
+                              hovered
+                                ? "rotate-0 translate-x-0 scale-100 opacity-100"
+                                : "rotate-90 scale-0 translate-x-8 opacity-0"
+                            } cursor-pointer bg-accent duration-700 p-2 rounded-full`}
+                          >
+                            <svg
+                              className="w-5 h-5"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 18 16"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M8.7375,5.80725 L3.021,15.70725 L0.12375,10.69725 L5.847,0.795 L8.7375,5.80725 Z M17.865,10.38225 L12.078,10.39125 L6.378,0.489 L12.1725,0.489 L17.865,10.38225 Z M17.87625,10.9875 L14.9865,15.9975 L3.5415,15.99 L6.43425,10.98375 L17.87625,10.9875 Z"
+                              ></path>
+                            </svg>
+                          </TooltipTrigger>
+                          <TooltipContent className="text-white">
+                            Add From Google Drive
+                          </TooltipContent>
+                        </Tooltip>
+
+                        <Tooltip>
+                          <TooltipTrigger
+                            className={`${
+                              hovered
+                                ? "rotate-0 translate-x-0 scale-100 opacity-100"
+                                : "rotate-90 scale-0 translate-x-8 opacity-0"
+                            } cursor-pointer bg-accent duration-700 p-2 rounded-full`}
+                            onClick={handleButtonClick}
+                          >
+                            <svg
+                              className="w-5 h-5"
+                              xmlns="http://www.w3.org/2000/svg"
+                              viewBox="0 0 18 16"
+                            >
+                              <path
+                                fill="currentColor"
+                                d="M5.3475,0.7035 L0.096,4.125 L3.708,7.03725 L9.018,3.765 L5.3475,0.7035 Z M17.904,4.14 L12.66525,0.7275 L9.01875,3.7725 L14.29875,7.03875 L17.904,4.14 Z M9.01875,10.305 L12.66525,13.35975 L17.904,9.945 L14.2995,7.0395 L9.01875,10.305 Z M0.096,9.9585 L5.3475,13.35975 L9.01875,10.305 L3.70875,7.0455 L0.096,9.9585 Z M9.01875,10.9635 L5.35575,14.0385 L3.786,13.02 L3.786,14.16 L9.01875,17.30475 L14.271,14.15175 L14.271,13.0125 L12.693,14.031 L9.01875,10.9635 Z"
+                              ></path>
+                            </svg>
+                          </TooltipTrigger>
+                          <TooltipContent className="text-white">
+                            Add From Dropbox
+                          </TooltipContent>
+                        </Tooltip>
+
+                        <Tooltip>
+                          <TooltipTrigger
+                            className={`${
+                              hovered
+                                ? "rotate-0 translate-x-0 scale-100 opacity-100"
+                                : "rotate-90 scale-0 translate-x-8 opacity-0"
+                            } cursor-pointer bg-accent duration-700 p-2 rounded-full`}
+                            onClick={handleButtonClick}
+                          >
+                            <UploadIcon className="w-5 h-5" />
+                          </TooltipTrigger>
+                          <TooltipContent className="text-white">
+                            Add From Local Device
+                          </TooltipContent>
+                        </Tooltip>
+                        <Input
+                          ref={fileInputRef2}
+                          type="file"
+                          multiple
+                          accept={fileType
+                            .map(
+                              (file) =>
+                                `.${file.toLowerCase()},application/${file.toLowerCase()}`
+                            )
+                            .join(",")}
+                          onChange={handleFileChange}
+                          className="hidden"
+                          aria-label="Choose PDF file"
+                        />
+                        <Tooltip>
+                          <TooltipTrigger
+                            className="bg-accent p-2 rounded-full relative"
+                            onClick={handleButtonClick}
+                          >
+                            <div className="center bg-secondary border-accent border shadow rounded-full w-5 h-5 absolute -top-2 right-0">
+                              <p className="text-xs font-semibold text-primary">
+                                {selectedFiles.length}
+                              </p>
+                            </div>
+                            <PlusIcon className="cursor-pointer w-5 h-5" />
+                          </TooltipTrigger>
+                          <TooltipContent className="text-white">
+                            Add More Files
+                          </TooltipContent>
+                        </Tooltip>
+                      </div>
+                    </div>
+                    <div className="center gap-2 duration-500 cursor-pointer text-white">
+                      <Tooltip>
+                        <TooltipTrigger
+                          className="bg-secondary shadow-3xl border sm:hidden drop-shadow-2xl p-2 rounded-full"
+                          onClick={toggleSideMenuOpen}
+                        >
+                          {sideMenuOpen ? (
+                            <XIcon className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
+                          ) : (
+                            <Settings className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
+                          )}
+                        </TooltipTrigger>
+                        <TooltipContent className="text-white">
+                          Action Menu
+                        </TooltipContent>
+                      </Tooltip>
+                    </div>
+                  </div>
                   {children ? (
                     children
                   ) : (
                     <>
-                      <div className="flex flex-col w-full justify-end p-3 items-end gap-5">
-                        <div className="items-center justify-center">
-                          <div
-                            onMouseEnter={() => setHovered(true)}
-                            onMouseOver={() => setHovered(true)}
-                            onMouseLeave={() => setHovered(false)}
-                            onMouseOut={() => setHovered(false)}
-                            className="center gap-2 duration-500 cursor-pointer text-white"
-                          >
-                            <Tooltip>
-                              <TooltipTrigger
-                                onClick={handleOpenPicker}
-                                className={`${
-                                  hovered
-                                    ? "rotate-0 translate-x-0 scale-100 opacity-100"
-                                    : "rotate-90 scale-0 translate-x-8 opacity-0"
-                                } cursor-pointer bg-accent duration-700 p-2 rounded-full`}
-                              >
-                                <svg
-                                  className="w-6 h-6"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 18 16"
-                                >
-                                  <path
-                                    fill="currentColor"
-                                    d="M8.7375,5.80725 L3.021,15.70725 L0.12375,10.69725 L5.847,0.795 L8.7375,5.80725 Z M17.865,10.38225 L12.078,10.39125 L6.378,0.489 L12.1725,0.489 L17.865,10.38225 Z M17.87625,10.9875 L14.9865,15.9975 L3.5415,15.99 L6.43425,10.98375 L17.87625,10.9875 Z"
-                                  ></path>
-                                </svg>
-                              </TooltipTrigger>
-                              <TooltipContent className="text-white">
-                                Add From Google Drive
-                              </TooltipContent>
-                            </Tooltip>
-
-                            <Tooltip>
-                              <TooltipTrigger
-                                className={`${
-                                  hovered
-                                    ? "rotate-0 translate-x-0 scale-100 opacity-100"
-                                    : "rotate-90 scale-0 translate-x-8 opacity-0"
-                                } cursor-pointer bg-accent duration-700 p-2 rounded-full`}
-                                onClick={handleButtonClick}
-                              >
-                                <svg
-                                  className="w-6 h-6"
-                                  xmlns="http://www.w3.org/2000/svg"
-                                  viewBox="0 0 18 16"
-                                >
-                                  <path
-                                    fill="currentColor"
-                                    d="M8.7375,5.80725 L3.021,15.70725 L0.12375,10.69725 L5.847,0.795 L8.7375,5.80725 Z M17.865,10.38225 L12.078,10.39125 L6.378,0.489 L12.1725,0.489 L17.865,10.38225 Z M17.87625,10.9875 L14.9865,15.9975 L3.5415,15.99 L6.43425,10.98375 L17.87625,10.9875 Z"
-                                  ></path>
-                                </svg>
-                              </TooltipTrigger>
-                              <TooltipContent className="text-white">
-                                Add From Dropbox
-                              </TooltipContent>
-                            </Tooltip>
-
-                            <Tooltip>
-                              <TooltipTrigger
-                                className={`${
-                                  hovered
-                                    ? "rotate-0 translate-x-0 scale-100 opacity-100"
-                                    : "rotate-90 scale-0 translate-x-8 opacity-0"
-                                } cursor-pointer bg-accent duration-700 p-2 rounded-full`}
-                                onClick={handleButtonClick}
-                              >
-                                <UploadIcon />
-                              </TooltipTrigger>
-                              <TooltipContent className="text-white">
-                                Add From Local Device
-                              </TooltipContent>
-                            </Tooltip>
-                            <Input
-                              ref={fileInputRef2}
-                              type="file"
-                              multiple
-                              accept={fileType
-                                .map(
-                                  (file) =>
-                                    `.${file.toLowerCase()},application/${file.toLowerCase()}`
-                                )
-                                .join(",")}
-                              onChange={handleFileChange}
-                              className="hidden"
-                              aria-label="Choose PDF file"
-                            />
-                            <Tooltip>
-                              <TooltipTrigger
-                                className="bg-accent p-2 rounded-full relative"
-                                onClick={handleButtonClick}
-                              >
-                                <div className="center bg-secondary border-accent border shadow rounded-full w-5 h-5 absolute -top-2 right-0">
-                                  <p className="text-xs font-semibold text-primary">
-                                    {selectedFiles.length}
-                                  </p>
-                                </div>
-                                <PlusIcon className="cursor-pointer" />
-                              </TooltipTrigger>
-                              <TooltipContent className="text-white">
-                                Add More Files
-                              </TooltipContent>
-                            </Tooltip>
-                          </div>
-                        </div>
-                        <div className="center gap-2 duration-500 cursor-pointer text-white">
-                          <Tooltip>
-                            <TooltipTrigger
-                              className="bg-secondary shadow-3xl border sm:hidden drop-shadow-2xl p-2 rounded-full"
-                              onClick={toggleSideMenuOpen}
-                            >
-                              {sideMenuOpen ? (
-                                <XIcon className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
-                              ) : (
-                                <Settings className="group-hover:text-accent cursor-pointer text-secondary-foreground" />
-                              )}
-                            </TooltipTrigger>
-                            <TooltipContent className="text-white">
-                              Action Menu
-                            </TooltipContent>
-                          </Tooltip>
-                        </div>
-                      </div>
-
                       {fileType.includes("pdf") ? (
                         <>
                           {showAllSelectedFiles ? (
-                            <div className="flex items-center justify-center gap-5 w-full flex-wrap">
+                            <div className="flex items-center bg-[green] justify-center gap-5 w-full flex-wrap">
                               {selectedFiles.map((file, index) => (
                                 <div key={index} className="my-5">
                                   <PdfRenderer
@@ -550,25 +549,28 @@ const ConverterLayout = ({
                           )}
                         </>
                       ) : (
-                                <>
-                                  {showAllSelectedFiles ? (
-                                    <div className="flex items-center justify-center gap-5 w-full flex-wrap">
-                                      {selectedFiles.map((file, index) => (
-                                        <div key={index} className="my-5">
-                                          <ToolsFileExtensionCard
-                                            src={selectedFiles[selectedIndex]?.fileUrl}
-                                            fileType={selectedFiles[selectedIndex]?.fileType[0]}
-                                          />
-                                        </div>
-                                      ))}
-                                    </div>
-                                  ) : (
-                                    <ToolsFileExtensionCard
-                                      src={selectedFiles[selectedIndex]?.fileUrl}
-                                      fileType={selectedFiles[selectedIndex]?.fileType[0]}
-                                    />
-                                  )
-                                  }
+                        <>
+                          {showAllSelectedFiles ? (
+                            <div className="flex items-center justify-center gap-5 w-full flex-wrap">
+                              {selectedFiles.map((file, index) => (
+                                <div key={index} className="my-5">
+                                  <ToolsFileExtensionCard
+                                    src={selectedFiles[selectedIndex]?.fileUrl}
+                                    fileType={
+                                      selectedFiles[selectedIndex]?.fileType[0]
+                                    }
+                                  />
+                                </div>
+                              ))}
+                            </div>
+                          ) : (
+                            <ToolsFileExtensionCard
+                              src={selectedFiles[selectedIndex]?.fileUrl}
+                              fileType={
+                                selectedFiles[selectedIndex]?.fileType[0]
+                              }
+                            />
+                          )}
                         </>
                       )}
                     </>

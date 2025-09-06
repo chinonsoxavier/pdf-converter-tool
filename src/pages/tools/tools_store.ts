@@ -5,6 +5,7 @@ import ExtractPdfStore from "./extract_pdf/extract_pdf_store";
 import DeletePdfPages from "./delete_pdf_pages/delete_pdf_pages_store";
 import AddPageNumber from "./add_pdf_page_number/add_pdf_page_number_store";
 import AddPageHeaderFooter from "./add_header_footer/add_header_footer_store";
+import SplitPdfPage from "./split_pdf/split_pdf_store";
 // import ExtractPdfStore from "../../pages/tools/extract_pdf/extract_pdf_store";
 interface ISelectedFile {
   rotate?: number[]; // Per-page rotations for this file
@@ -62,6 +63,7 @@ interface ToolsStore {
   toggleSideMenuOpen: () => void;
   convertPdfToWord: (pdfFile: File) => Promise<string>;
   convertWordToPdf: (pdfFile: File) => Promise<string>;
+  SplitPdf: (pdfFile: ISelectedFile[]) => Promise<string>;
   compressPdf: (
     pdfFiles: ISelectedFile[],
     compressionLevel: string
@@ -635,9 +637,45 @@ const useToolsStore = create<ToolsStore>((set) => ({
     }
   },
 
- SplitPdfPages: async (pdfFiles: ISelectedFile[]) => {
+  SplitPdf: async (pdfFiles: ISelectedFile[]) => {
+    const fixedRanges = SplitPdfPage.getState().fixedRange;
+    set({ loadingState: "loading", progress: 0, downLoadUrl: null });
+    try {
+      const formattedRanges = fixedRanges.map((range) => {
+        if (range.from === range.to) {
+          // If from and to are the same, return a string with just the page number.
+          return `${range.from}`;
+        } else {
+          // If they are different, return a range string "from-to".
+          return `${range.from}-${range.to}`;
+        }
+      });
+
+
       const form = new FormData();
+      form.append("pageRanges", JSON.stringify(formattedRanges.join(", ")));
+         
       form.append("pdfFiles", pdfFiles[0].file);
+      // form.append("pageRanges",);
+      const res = await baseAxios.post("/tools/split-pdf-pages", form, {
+        withCredentials: true,
+      });
+      set({
+        loadingState: "success",
+        downLoadId: res.data.fileId,
+      });
+    } catch (error) {
+      console.error("Error adding page numbers JPG:", error);
+      set({ loadingState: "error" });
+      enqueueSnackbar("failed to add pdf page numbers!", {
+        variant: "error",
+      });
+      return "error!!";
+    }
+  },
+  SplitPdfPages: async (pdfFiles: ISelectedFile[]) => {
+    const form = new FormData();
+    form.append("pdfFiles", pdfFiles[0].file);
     set({ loadingState: "loading", progress: 0, downLoadUrl: null });
     try {
       // form.append("range", pageNumberPosition);
@@ -675,10 +713,10 @@ const useToolsStore = create<ToolsStore>((set) => ({
         "headerOption",
         AddPageHeaderFooter.getState().customizationStyle
       );
-        form.append(
-          "footerOption",
-          AddPageHeaderFooter.getState().customizationStyle
-        );
+      form.append(
+        "footerOption",
+        AddPageHeaderFooter.getState().customizationStyle
+      );
 
       form.append("pageRanges", JSON.stringify(pagesToNumber.join(", ")));
       form.append("startPosition", JSON.stringify(startPosition));

@@ -7,7 +7,7 @@ interface IRanges {
 }
 
 interface SplitPdfStore {
-  selectedRange: string;
+  // selectedRange: string;
   splitMethod: string;
   Ranges: IRanges[];
   fixedRange: IRanges[];
@@ -15,7 +15,7 @@ interface SplitPdfStore {
   setSplitMethod: (arg0: string) => void;
   initRange: (arg0: IRanges) => void;
   setFixedRange: (arg0: number,range:number) => void;
-  setSelectedRange: (arg0: string) => void;
+  // setSelectedRange: (arg0: string) => void;
   updateRange: (newRange: IRanges, name: string) => void;
   reOrderRange: (arg0: IRanges[]) => void;
 }
@@ -23,10 +23,10 @@ interface SplitPdfStore {
 const useSplitPdfStore = create<SplitPdfStore>((set) => ({
   fixedRange: [],
   Ranges: [{ name: "Range 1", from: 1, to: 1 }],
-  selectedRange: "custom",
+  // selectedRange: "custom",
   splitMethod: "Range",
-  setSelectedRange: (newRange: string) =>
-    set(() => ({ selectedRange: newRange })),
+  // setSelectedRange: (newRange: string) =>
+  //   set(() => ({ selectedRange: newRange })),
   addRange: (newRange: IRanges) =>
     set((state) => ({ Ranges: [...state.Ranges, newRange] })),
 
@@ -85,7 +85,7 @@ const useSplitPdfStore = create<SplitPdfStore>((set) => ({
         { length: maxRanges },
         (_, index) => {
           const from = index * rangeSize + 1;
-          const to = Math.min(from + rangeSize - 1);
+          const to = (from + rangeSize - 1);
           return {
             name: `Range ${index + 1}`,
             from,
