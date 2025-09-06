@@ -650,8 +650,6 @@ const useToolsStore = create<ToolsStore>((set) => ({
           return `${range.from}-${range.to}`;
         }
       });
-
-
       const form = new FormData();
       form.append("pageRanges", JSON.stringify(formattedRanges.join(", ")));
          
