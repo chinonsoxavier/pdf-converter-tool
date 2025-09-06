@@ -55,6 +55,7 @@ const PreviewPdfConverter = () => {
 
       const fileUrl = URL.createObjectURL(file);
       setSelectedFile({
+        file: file,
         fileUrl: fileUrl,
         fileName: file.name,
         fileSize: file.size,
