@@ -292,21 +292,21 @@ const useToolsStore = create<ToolsStore>((set) => ({
       const res = await baseAxios.get("/tools/download/" + downloadUrl, {
       responseType: "blob",
       });
-      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const url = res.data;
 
       // Create a temporary link element
       const link = document.createElement("a");
-      link.href = url;
+      link.href = url.url;
       // Set the download attribute with a file name
-      link.setAttribute("download", "converted_file.docx");
+      // link.setAttribute("download", "converted_file.docx");
       document.body.appendChild(link);
 
       // Programmatically click the link to trigger the download
       link.click();
 
       // Clean up the temporary URL and link element
-      link.remove();
-      window.URL.revokeObjectURL(url);
+      // link.remove();
+      // window.URL.revokeObjectURL(url);
         set({ isDownloadIdValid: true });
     } catch (error) {
       console.log(error);
