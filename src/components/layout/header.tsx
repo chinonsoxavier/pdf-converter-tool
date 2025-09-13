@@ -97,7 +97,7 @@ const Header = (isLanding: { isLanding?: boolean }) => {
       className={`${
         scrollPosition < 350
           ? `bg-primary/5 backdrop-blur-2xl  ${
-              isLanding ? "dark:bg-[rgb(4,9,30)]" : ""
+              isLanding ? "bg-accent/5" : ""
             }`
           : "dark:bg-primary bg-white"
       } flex w-full sticky z-50 duration-1000 top-0 overflow-hidden items-center px-4 border-y sm:px-8 sm:py-5 h-full py-5 justify-between`}

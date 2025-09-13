@@ -252,7 +252,7 @@ const ConverterLayout = ({
     <div className="h-dvh overflow-hidden">
       {/* header */}
       <div className="h-[12%]">
-        <Header />
+        <Header isLanding={false} />
       </div>
       <SidemenuLyout />
 
@@ -486,7 +486,7 @@ const ConverterLayout = ({
                             onClick={handleButtonClick}
                           >
                             <div className="center bg-secondary border-accent border shadow rounded-full w-5 h-5 absolute -top-2 right-0">
-                              <p className="text-xs font-semibold text-primary">
+                              <p className="text-xs font-semibold text-primary-foreground">
                                 {selectedFiles.length}
                               </p>
                             </div>
@@ -523,7 +523,7 @@ const ConverterLayout = ({
                       {fileType.includes("pdf") ? (
                         <>
                           {showAllSelectedFiles ? (
-                            <div className="flex items-center bg-[green] justify-center gap-5 w-full flex-wrap">
+                            <div className="flex items-center justify-center gap-5 w-full flex-wrap">
                               {selectedFiles.map((file, index) => (
                                 <div key={index} className="my-5">
                                   <PdfRenderer

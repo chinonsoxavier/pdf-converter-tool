@@ -40,6 +40,8 @@ interface ToolsStore {
   selectedFiles: ISelectedFile[];
   downLoadUrl: string[] | null;
   downLoadId: string[] | null;
+  isDownloadIdValid: boolean;
+  downloadFileErrorMessage:string;
   setLoadingState: (
     newLoadingState: "idle" | "loading" | "success" | "error"
   ) => void;
@@ -49,7 +51,7 @@ interface ToolsStore {
   recentActivities: IRecentActivities[];
   resetStore: () => void;
   setItems?: (pageIndex: number, pages: PageItem[]) => void;
-  downloadFile?: (downloadUrl: string) => Promise<string>;
+  downloadFile?: (downloadUrl: string) => Promise<void>;
   rotateIndividualPage: (fileIndex: number, pageIndex: number) => void;
   getRecentActivities: () => Promise<[]>;
   reorderSelectedFiles: (newFilesOrder: ISelectedFile[]) => void;
@@ -60,6 +62,7 @@ interface ToolsStore {
   removeSelectedFiles: (fileUrl: string) => void;
   setNumPages: (fileIndex: number, page: number) => void;
   setSelectedFile: (newSelectedFile: ISelectedFile) => void;
+  deleteFile: (fileId: string) => void;
   toggleSideMenuOpen: () => void;
   convertPdfToWord: (pdfFile: File) => Promise<string>;
   convertWordToPdf: (pdfFile: File) => Promise<string>;
@@ -88,6 +91,8 @@ const useToolsStore = create<ToolsStore>((set) => ({
   selectedFiles: [], // Initialize as empty to avoid default object issues
   sideMenuOpen: false,
   pdfPages: [],
+  isDownloadIdValid: true,
+  downloadFileErrorMessage: "",
   resetStore: () =>
     set({
       selectedFiles: [],
@@ -282,10 +287,10 @@ const useToolsStore = create<ToolsStore>((set) => ({
         selectedFiles: newSelectedFiles,
       };
     }),
-  downloadFile: async (downloadUrl: string) => {
+    downloadFile: async (downloadUrl: string) => {
     try {
       const res = await baseAxios.get("/tools/download/" + downloadUrl, {
-        responseType: "blob",
+      responseType: "blob",
       });
       const url = window.URL.createObjectURL(new Blob([res.data]));
 
@@ -293,7 +298,6 @@ const useToolsStore = create<ToolsStore>((set) => ({
       const link = document.createElement("a");
       link.href = url;
       // Set the download attribute with a file name
-      // You should get the correct file extension from your API response
       link.setAttribute("download", "converted_file.docx");
       document.body.appendChild(link);
 
@@ -303,18 +307,16 @@ const useToolsStore = create<ToolsStore>((set) => ({
       // Clean up the temporary URL and link element
       link.remove();
       window.URL.revokeObjectURL(url);
-
-      return "success";
+        set({ isDownloadIdValid: true });
     } catch (error) {
-      // alert("Failed to download file");
-      enqueueSnackbar("failed to download file", {
-        variant: "error",
-      });
       console.log(error);
-      // return "error";
+      set({ isDownloadIdValid: false });
+         enqueueSnackbar("Invalid download link or file has expired.", {
+         variant: "error",
+         });
     }
-  },
-  getRecentActivities: async () => {
+    },
+    getRecentActivities: async () => {
     try {
       const res = await baseAxios.get("/tools/recent-activities", {
         withCredentials: true,
@@ -364,6 +366,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
         downLoadUrl: res.data.fileUrl,
         downLoadId: res.data.fileId,
       });
+      console.log(res.data);
       // window.location.href = `download/${await res.data.fileUrl}`;
       return res.data; // Return the response data (download URL or file path)
     } catch (error) {
@@ -390,6 +393,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       set({
         loadingState: "success",
         downLoadId: res.data.fileId,
+        downLoadUrl: res.data.fileUrl,
       });
       // window.location.href = `download/${await res.data.fileUrl}`;
       return res.data; // Return the response data (download URL or file path)
@@ -417,6 +421,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       });
       set({
         loadingState: "success",
+        downLoadUrl: res.data.fileUrl,
         downLoadId: res.data.fileId,
       });
     } catch (error) {
@@ -444,6 +449,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       set({
         loadingState: "success",
         downLoadId: res.data.fileId,
+        downLoadUrl: res.data.fileUrl,
       });
     } catch (error) {
       console.error("Error converting PDF:", error);
@@ -475,6 +481,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       set({
         loadingState: "success",
         downLoadId: res.data.fileId,
+        downLoadUrl: res.data.fileUrl,
       });
     } catch (error) {
       console.error("Error converting JPG:", error);
@@ -498,6 +505,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       set({
         loadingState: "success",
         downLoadId: res.data.fileId,
+        downLoadUrl: res.data.fileUrl,
       });
     } catch (error) {
       console.error("Error converting JPG:", error);
@@ -529,6 +537,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       set({
         loadingState: "success",
         downLoadId: res.data.fileId,
+        downLoadUrl: res.data.fileUrl,
       });
     } catch (error) {
       console.error("Error converting JPG:", error);
@@ -559,6 +568,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       set({
         loadingState: "success",
         downLoadId: res.data.fileId,
+        downLoadUrl: res.data.fileUrl,
       });
     } catch (error) {
       console.error("Error extracting JPG:", error);
@@ -589,6 +599,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       set({
         loadingState: "success",
         downLoadId: res.data.fileId,
+        downLoadUrl: res.data.fileUrl,
       });
     } catch (error) {
       console.error("Error deleting JPG:", error);
@@ -626,6 +637,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       set({
         loadingState: "success",
         downLoadId: res.data.fileId,
+        downLoadUrl: res.data.fileUrl,
       });
     } catch (error) {
       console.error("Error adding page numbers JPG:", error);
@@ -652,7 +664,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       });
       const form = new FormData();
       form.append("pageRanges", JSON.stringify(formattedRanges.join(", ")));
-         
+
       form.append("pdfFiles", pdfFiles[0].file);
       // form.append("pageRanges",);
       const res = await baseAxios.post("/tools/split-pdf-pages", form, {
@@ -661,6 +673,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       set({
         loadingState: "success",
         downLoadId: res.data.fileId,
+        downLoadUrl: res.data.fileUrl,
       });
     } catch (error) {
       console.error("Error adding page numbers JPG:", error);
@@ -683,6 +696,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       set({
         loadingState: "success",
         downLoadId: res.data.fileId,
+        downLoadUrl: res.data.fileUrl,
       });
     } catch (error) {
       console.error("Error adding page numbers JPG:", error);
@@ -732,6 +746,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       set({
         loadingState: "success",
         downLoadId: res.data.fileId,
+        downLoadUrl: res.data.fileUrl,
       });
     } catch (error) {
       console.error("Error adding page numbers JPG:", error);
@@ -740,6 +755,28 @@ const useToolsStore = create<ToolsStore>((set) => ({
         variant: "error",
       });
       return "error!!";
+    }
+  },
+  deleteFile: async (fileId: string) => {
+    try {
+      const res = await baseAxios.post(
+        "/tools/delete-file/" + fileId,
+
+        {
+          withCredentials: true,
+        }
+      );
+      set({
+        loadingState: "success",
+        downLoadId: res.data.fileId,
+      });
+    } catch (error) {
+      console.error("Error deleting file", error);
+      set({ loadingState: "error" });
+      enqueueSnackbar("error deleting file", {
+        variant: "error",
+      });
+      return;
     }
   },
   // AddPageHeaderFooter: async (pdfFiles: ISelectedFile[]) => {

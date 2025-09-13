@@ -35,7 +35,7 @@ const MergePdfChildrenSection = () => {
   // };
 
   return (
-    <>
+    <div className="flex items-center justify-center flex-wrap" >
       {selectedFiles[selectedIndex]?.fileType[0] === "pdf" ? (
         selectedFiles.map((file, index) => (
           <div
@@ -60,7 +60,7 @@ const MergePdfChildrenSection = () => {
           fileType={selectedFiles[selectedIndex]?.fileType[0]}
         />
       )}
-    </>
+    </div>
   );
 };
 

@@ -4,13 +4,13 @@ import { motion } from "motion/react";
 const HeroSection = () => {
     const variants1 = {
       inactive: {
-        y: 100,
+        y: 50,
         opacity: 0,
       },
       active: {
         y: 0,
         opacity: 1,
-        transition: { duration: 1.5 },
+        transition: { duration: .5 },
       },
     };
     const variants2 = {
@@ -21,14 +21,14 @@ const HeroSection = () => {
       active: {
         y: 0,
         opacity: 1,
-        transition: { duration: 1.5 },
+        transition: { duration: .5 },
       },
   };
 
   return (
     <>
       <ContainerLayout
-        id="hero_section"
+        id="hero_secion"
         className="text-center max-width h-full space-y-7 sm:py-10 py-6 flex items-center justify-center flex-col"
       >
         {/* <h1 className="text-center text-5xl font-semibold">
