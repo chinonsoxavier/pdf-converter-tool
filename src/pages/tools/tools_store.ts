@@ -301,7 +301,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       // You should get the correct file extension from your API response
       const selectedFile = pdfFiles; // Assuming the first file is the one being downloaded
       const fileName = selectedFile.fileName || "downloaded_file";
-      const fileType = selectedFile.fileType[0] || "docx"; // Default to 'docx' if no type is provided
+      const fileType =  "docx"; // Default to 'docx' if no type is provided
       link.setAttribute("download", `${fileName}.${fileType}`);
       document.body.appendChild(link);
 
