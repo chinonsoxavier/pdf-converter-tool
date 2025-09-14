@@ -91,7 +91,7 @@ const HistorySection = () => {
                 <Tooltip>
                   <TooltipTrigger
                     onClick={() => {
-                      downloadFile(activity.fileUrl,selectedFiles[selectedIndex]);
+                      downloadFile(activity.fileUrl,selectedFiles[selectedIndex]?.fileName,selectedFiles[selectedIndex]?.fileType[0]);
                     }}
                   >
                     <Download size={19} className="text-secondary-foreground" />

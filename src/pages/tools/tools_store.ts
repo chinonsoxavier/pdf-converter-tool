@@ -51,7 +51,7 @@ interface ToolsStore {
   recentActivities: IRecentActivities[];
   resetStore: () => void;
   setItems?: (pageIndex: number, pages: PageItem[]) => void;
-  downloadFile?: (downloadUrl: string,pdfFiles:ISelectedFile) => Promise<string>;
+  downloadFile?: (downloadUrl: string,fileName:string,fileType:string) => Promise<string>;
   rotateIndividualPage: (fileIndex: number, pageIndex: number) => void;
   getRecentActivities: () => Promise<[]>;
   reorderSelectedFiles: (newFilesOrder: ISelectedFile[]) => void;
@@ -287,7 +287,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
         selectedFiles: newSelectedFiles,
       };
     }),
-  downloadFile: async (downloadUrl: string,pdfFiles:ISelectedFile) => {
+  downloadFile: async (downloadUrl: string,fileName:string,fileType:string) => {
     try {
       const res = await baseAxios.get("/tools/download/" + downloadUrl, {
         responseType: "blob",
@@ -297,12 +297,12 @@ const useToolsStore = create<ToolsStore>((set) => ({
       // Create a temporary link element
       const link = document.createElement("a");
       link.href = url;
-      console.log(pdfFiles)
+      // console.log(pdfFiles)
       // Set the download attribute with a file name
       // You should get the correct file extension from your API response
       // const selectedFile = pdfFiles; // Assuming the first file is the one being downloaded
-      const fileName = "downloaded_file";
-      const fileType =  "docx"; // Default to 'docx' if no type is provided
+      // const fileName = "downloaded_file";
+      // const fileType =  "docx"; // Default to 'docx' if no type is provided
       link.setAttribute("download", `${fileName}.${fileType}`);
       document.body.appendChild(link);
 

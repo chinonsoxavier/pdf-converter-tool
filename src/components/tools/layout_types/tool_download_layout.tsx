@@ -98,7 +98,7 @@ export default function ToolDownload({ label }: { label: string }) {
 
                 {/* Download button */}
                 <Button
-                  onClick={() => downloadFile(id,selectedFiles[selectedIndex])}
+                  onClick={() => downloadFile(id,selectedFiles[selectedIndex]?.fileName,selectedFiles[selectedIndex]?.fileType[0])}
                   className="text-white px-8 py-3 rounded-lg font-medium"
                 >
                   <Download className="w-5 h-5 mr-2" />
