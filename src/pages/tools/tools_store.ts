@@ -51,7 +51,7 @@ interface ToolsStore {
   recentActivities: IRecentActivities[];
   resetStore: () => void;
   setItems?: (pageIndex: number, pages: PageItem[]) => void;
-  downloadFile?: (downloadUrl: string) => Promise<void>;
+  downloadFile?: (downloadUrl: string,pdfFiles:ISelectedFile) => Promise<string>;
   rotateIndividualPage: (fileIndex: number, pageIndex: number) => void;
   getRecentActivities: () => Promise<[]>;
   reorderSelectedFiles: (newFilesOrder: ISelectedFile[]) => void;
@@ -287,36 +287,43 @@ const useToolsStore = create<ToolsStore>((set) => ({
         selectedFiles: newSelectedFiles,
       };
     }),
-    downloadFile: async (downloadUrl: string) => {
+  downloadFile: async (downloadUrl: string,pdfFiles:ISelectedFile) => {
     try {
       const res = await baseAxios.get("/tools/download/" + downloadUrl, {
-      responseType: "blob",
+        responseType: "blob",
       });
-      const url = res.data;
+      const url = window.URL.createObjectURL(new Blob([res.data]));
 
       // Create a temporary link element
       const link = document.createElement("a");
-      link.href = url.url;
+      link.href = url;
       // Set the download attribute with a file name
-      // link.setAttribute("download", "converted_file.docx");
+      // You should get the correct file extension from your API response
+      const selectedFile = pdfFiles; // Assuming the first file is the one being downloaded
+      const fileName = selectedFile.fileName || "downloaded_file";
+      const fileType = selectedFile.fileType[0] || "docx"; // Default to 'docx' if no type is provided
+      link.setAttribute("download", `${fileName}.${fileType}`);
       document.body.appendChild(link);
 
       // Programmatically click the link to trigger the download
       link.click();
 
       // Clean up the temporary URL and link element
-      // link.remove();
-      // window.URL.revokeObjectURL(url);
-        set({ isDownloadIdValid: true });
+      link.remove();
+      window.URL.revokeObjectURL(url);
+
+      return "success";
     } catch (error) {
+      // alert("Failed to download file");
+      enqueueSnackbar("failed to download file", {
+        variant: "error",
+      });
       console.log(error);
-      set({ isDownloadIdValid: false });
-         enqueueSnackbar("Invalid download link or file has expired.", {
-         variant: "error",
-         });
+      // return "error";
     }
-    },
-    getRecentActivities: async () => {
+  },
+
+  getRecentActivities: async () => {
     try {
       const res = await baseAxios.get("/tools/recent-activities", {
         withCredentials: true,
@@ -342,7 +349,6 @@ const useToolsStore = create<ToolsStore>((set) => ({
         downLoadUrl: res.data.fileUrl,
         downLoadId: res.data.fileId,
       });
-      // window.location.href = `download/${await res.data.fileUrl}`;
       return res.data; // Return the response data (download URL or file path)
     } catch (error) {
       console.error("Error converting Word to Pdf:", error);

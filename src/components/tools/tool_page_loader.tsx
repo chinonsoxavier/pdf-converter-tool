@@ -13,7 +13,7 @@ const ToolPageLoader = ({
   handleSubmitFile: () => void;
 }) => {
   const navigate = useNavigate();
-  const { loadingState, downLoadId,setLoadingState } = useToolsStore();
+  const { loadingState,downLoadId,setLoadingState } = useToolsStore();
 
   useEffect(() => {
     if (loadingState === "success") {

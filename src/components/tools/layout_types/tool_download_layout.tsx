@@ -7,23 +7,23 @@ import useToolsStore from "@/pages/tools/tools_store";
 import { ArrowLeft, Copy, CopyCheck, Download, Home, Info, Loader2,  Trash2 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { baseAxios } from "@/network/base_urls";
-import {  useEffect, useRef, useState } from "react";
+import { useState } from "react";
 import { useCopyToClipboard } from "@/hooks/use_copy_to_clipboard_hook";
 export default function ToolDownload({ label }: { label: string }) {
-  const { downloadFile, isDownloadIdValid } = useToolsStore();
+  const { downloadFile, isDownloadIdValid,selectedFiles,selectedIndex } = useToolsStore();
   const { id } = useParams();
   const navigate = useNavigate();
   const [deleteLoading,setDeleteLoading] = useState(false)
 
-useEffect(() => {
-  if (id && !hasRun.current) {
-    hasRun.current = true;
-    downloadFile(id);
-  }
-}, [id]);
+// useEffect(() => {
+//   if (id && !hasRun.current) {
+//     hasRun.current = true;
+//     downloadFile(id);
+//   }
+// }, [id]);
 
 // Initialize useRef outside the component
-const hasRun = useRef(false);
+// const hasRun = useRef(false);
 
   const handleDeleteFile = async () => {
     // deleteFile(id);
@@ -98,7 +98,7 @@ const hasRun = useRef(false);
 
                 {/* Download button */}
                 <Button
-                  onClick={() => downloadFile(id)}
+                  onClick={() => downloadFile(id,selectedFiles[selectedIndex])}
                   className="text-white px-8 py-3 rounded-lg font-medium"
                 >
                   <Download className="w-5 h-5 mr-2" />
