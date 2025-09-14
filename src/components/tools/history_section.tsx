@@ -9,7 +9,7 @@ import useToolsStore from "@/pages/tools/tools_store";
 const HistorySection = () => {
   // const [recentActivities, setRecentActivities] =
   // useState<[{ fileName: string, downloadUrl: string, fileSize: string, icon: string ,fileType:string}]>([{ fileName: '', downloadUrl: '', fileSize: '', icon: '',fileType:'' }]);
-  const { getRecentActivities, recentActivities, downloadFile,selectedFiles,selectedIndex } =
+  const { getRecentActivities, recentActivities, downloadFile, } =
     useToolsStore();
 
   const variants1 = {
@@ -91,7 +91,7 @@ const HistorySection = () => {
                 <Tooltip>
                   <TooltipTrigger
                     onClick={() => {
-                      downloadFile(activity.fileUrl,selectedFiles[selectedIndex]?.fileName,selectedFiles[selectedIndex]?.fileType[0]);
+                      downloadFile(activity.fileUrl,activity?._id);
                     }}
                   >
                     <Download size={19} className="text-secondary-foreground" />

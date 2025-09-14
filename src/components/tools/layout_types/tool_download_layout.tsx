@@ -4,39 +4,55 @@ import SidemenuLyout from "@/components/layout/sidemenu_layout";
 import { Button } from "@/components/ui/button";
 import { enqueueSnackbar } from "notistack";
 import useToolsStore from "@/pages/tools/tools_store";
-import { ArrowLeft, Copy, CopyCheck, Download, Home, Info, Loader2,  Trash2 } from "lucide-react";
+import {
+  ArrowLeft,
+  Copy,
+  CopyCheck,
+  Download,
+  Home,
+  Info,
+  Loader2,
+  Trash2,
+} from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { baseAxios } from "@/network/base_urls";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useCopyToClipboard } from "@/hooks/use_copy_to_clipboard_hook";
 export default function ToolDownload({ label }: { label: string }) {
-  const { downloadFile, isDownloadIdValid,selectedFiles,selectedIndex } = useToolsStore();
+  const { downloadFile, isDownloadIdValid, downLoadUrl,selectedIndex } =
+    useToolsStore();
   const { id } = useParams();
   const navigate = useNavigate();
-  const [deleteLoading,setDeleteLoading] = useState(false)
+  const [deleteLoading, setDeleteLoading] = useState(false);
 
-// useEffect(() => {
-//   if (id && !hasRun.current) {
-//     hasRun.current = true;
-//     downloadFile(id);
-//   }
-// }, [id]);
+  // useEffect(() => {
+  //   if (id && !hasRun.current) {
+  //     hasRun.current = true;
+  //     downloadFile(id);
+  //   }
+  // }, [id]);
 
-// Initialize useRef outside the component
-// const hasRun = useRef(false);
+  // Initialize useRef outside the component
+  // const hasRun = useRef(false);
+
+  
+  useEffect(() => {
+   
+  }, [])
+  
 
   const handleDeleteFile = async () => {
     // deleteFile(id);
-    setDeleteLoading(true)
+    setDeleteLoading(true);
     try {
-      const res =await baseAxios.delete("/tools/delete-file/" + id, {
+      const res = await baseAxios.delete("/tools/delete-file/" + id, {
         withCredentials: true,
       });
       navigate(-1);
       // navigate(-1);
-        enqueueSnackbar("deleted file successfully", {
-          variant: "success",
-        });
+      enqueueSnackbar("deleted file successfully", {
+        variant: "success",
+      });
       console.log(res);
       // navigate(-1);
     } catch (error) {
@@ -45,10 +61,10 @@ export default function ToolDownload({ label }: { label: string }) {
         variant: "error",
       });
     } finally {
-      setDeleteLoading(false)
+      setDeleteLoading(false);
     }
     // navigate(-1);
-  }
+  };
   const { copyToClipboard, isCopied } = useCopyToClipboard();
   return (
     <>
@@ -74,7 +90,7 @@ export default function ToolDownload({ label }: { label: string }) {
                 This usually happens when links are older than 1 hour.
               </p>
               <Button>
-                <a href="/" className="center gap-1">                                                                                                                                                           
+                <a href="/" className="center gap-1">
                   <Home /> Go Back to Home
                 </a>
               </Button>
@@ -92,13 +108,18 @@ export default function ToolDownload({ label }: { label: string }) {
                   variant="ghost"
                   size="icon"
                   className="rounded-full bg-gray-600 hover:bg-gray-700 text-white"
-                >                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                               
+                >
                   <ArrowLeft className="w-5 h-5" />
                 </Button>
 
                 {/* Download button */}
                 <Button
-                  onClick={() => downloadFile(id,selectedFiles[selectedIndex]?.fileName,selectedFiles[selectedIndex]?.fileType[0])}
+                  onClick={() =>
+                      downloadFile(
+                      downLoadUrl[selectedIndex],
+                      id,
+                    )
+                  }
                   className="text-white px-8 py-3 rounded-lg font-medium"
                 >
                   <Download className="w-5 h-5 mr-2" />

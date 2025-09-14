@@ -31,6 +31,7 @@ interface IRecentActivities {
   fileSize: string;
   icon: string;
   fileType: string;
+  _id:string
 }
 
 interface ToolsStore {
@@ -40,18 +41,24 @@ interface ToolsStore {
   selectedFiles: ISelectedFile[];
   downLoadUrl: string[] | null;
   downLoadId: string[] | null;
+  downLoadFileName: string | null;
+  downLoadIdFileType: string | null;
   isDownloadIdValid: boolean;
-  downloadFileErrorMessage:string;
+  downloadFileErrorMessage: string;
   setLoadingState: (
     newLoadingState: "idle" | "loading" | "success" | "error"
   ) => void;
   selectedIndex: number;
   sideMenuOpen: boolean;
   pdfPages: PageItem[];
+  getFileInfo: (fileId: string) => void;
   recentActivities: IRecentActivities[];
   resetStore: () => void;
   setItems?: (pageIndex: number, pages: PageItem[]) => void;
-  downloadFile?: (downloadUrl: string,fileName:string,fileType:string) => Promise<string>;
+  downloadFile?: (
+    downloadUrl: string,
+    downLoadId: string
+  ) => Promise<string>;
   rotateIndividualPage: (fileIndex: number, pageIndex: number) => void;
   getRecentActivities: () => Promise<[]>;
   reorderSelectedFiles: (newFilesOrder: ISelectedFile[]) => void;
@@ -91,6 +98,9 @@ const useToolsStore = create<ToolsStore>((set) => ({
   selectedFiles: [], // Initialize as empty to avoid default object issues
   sideMenuOpen: false,
   pdfPages: [],
+  downLoadFileName:'',
+  downLoadFileUrl: '',
+  downLoadIdFileType:'',
   isDownloadIdValid: true,
   downloadFileErrorMessage: "",
   resetStore: () =>
@@ -103,6 +113,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
   loadingState: "idle",
   recentActivities: [
     {
+      _id:"",
       fileName: "",
       fileSize: "",
       fileType: "",
@@ -287,9 +298,45 @@ const useToolsStore = create<ToolsStore>((set) => ({
         selectedFiles: newSelectedFiles,
       };
     }),
-  downloadFile: async (downloadUrl: string,fileName:string,fileType:string) => {
+  getFileInfo: async (fileId: string) => {
     try {
-      const res = await baseAxios.get("/tools/download/" + downloadUrl, {
+      const res = baseAxios.get("/tools/get-file-info" + fileId);
+       set({
+         downLoadFileName: (await res).data.downLoadFileName,
+         downLoadIdFileType: (await res).data.downLoadIdFileType,
+       });
+    } catch (error) {
+      console.log(error+"failed to get file info");
+    }
+  },
+  downloadFile: async (downloadUrl: string,downLoadId:string) => {
+    
+    function getFileNameAndExtension(downloadUrl: string) {
+      // Extract just the last part after "/"
+      const pathname = new URL(downloadUrl).pathname;
+      const filename = pathname.substring(pathname.lastIndexOf("/") + 1);
+
+      // Split filename into name + extension
+      const lastDot = filename.lastIndexOf(".");
+      if (lastDot === -1) {
+        return { filename, name: filename, extension: "" }; // no extension
+      }
+
+      return {
+        filename, // full filename
+        name: filename.substring(0, lastDot), // without extension
+        extension: filename.substring(lastDot + 1), // without the dot
+      };
+    }
+
+    // Example usage:
+    // const url = "http://localhost:5000/downloads/report.final.version.pdf";
+    // console.log(getFileNameAndExtension(url));
+
+    try {
+
+      
+      const res = await baseAxios.get("/tools/download/" + downLoadId, {
         responseType: "blob",
       });
       const url = window.URL.createObjectURL(new Blob([res.data]));
@@ -303,7 +350,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
       // const selectedFile = pdfFiles; // Assuming the first file is the one being downloaded
       // const fileName = "downloaded_file";
       // const fileType =  "docx"; // Default to 'docx' if no type is provided
-      link.setAttribute("download", `${fileName}.${fileType}`);
+      link.setAttribute("download", `${getFileNameAndExtension(downloadUrl).name}.${getFileNameAndExtension(downloadUrl).extension}`);
       document.body.appendChild(link);
 
       // Programmatically click the link to trigger the download
@@ -361,7 +408,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
     }
   },
   convertPdfToWord: async (pdfFile: File) => {
-    set({ loadingState: "loading", progress: 0, downLoadUrl: null });
+    set({ loadingState: "loading"});
     try {
       const form = new FormData();
       form.append("pdfFile", pdfFile);
