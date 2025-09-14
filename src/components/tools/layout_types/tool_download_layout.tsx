@@ -16,10 +16,10 @@ import {
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { baseAxios } from "@/network/base_urls";
-import { useEffect, useState } from "react";
+import {  useState } from "react";
 import { useCopyToClipboard } from "@/hooks/use_copy_to_clipboard_hook";
 export default function ToolDownload({ label }: { label: string }) {
-  const { downloadFile, isDownloadIdValid, downLoadUrl,selectedIndex } =
+  const { downloadFile, isDownloadIdValid} =
     useToolsStore();
   const { id } = useParams();
   const navigate = useNavigate();
@@ -35,10 +35,6 @@ export default function ToolDownload({ label }: { label: string }) {
   // Initialize useRef outside the component
   // const hasRun = useRef(false);
 
-  
-  useEffect(() => {
-   
-  }, [])
   
 
   const handleDeleteFile = async () => {
@@ -113,10 +109,11 @@ export default function ToolDownload({ label }: { label: string }) {
                 </Button>
 
                 {/* Download button */}
-                <Button
+                  <Button
                   onClick={() =>
                       downloadFile(
-                      downLoadUrl[selectedIndex],
+                        
+                      // downLoadUrl[selectedIndex],
                       id,
                     )
                   }

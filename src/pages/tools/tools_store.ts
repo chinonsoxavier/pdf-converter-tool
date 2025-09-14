@@ -16,6 +16,7 @@ interface ISelectedFile {
   fileSize: number;
   numPages?: number;
   pdfPages?: PageItem[];
+  conversionFormat:string
 }
 
 // Define the structure of a PDF page item
@@ -56,7 +57,7 @@ interface ToolsStore {
   resetStore: () => void;
   setItems?: (pageIndex: number, pages: PageItem[]) => void;
   downloadFile?: (
-    downloadUrl: string,
+    // downloadUrl: string,
     downLoadId: string
   ) => Promise<string>;
   rotateIndividualPage: (fileIndex: number, pageIndex: number) => void;
@@ -300,34 +301,23 @@ const useToolsStore = create<ToolsStore>((set) => ({
     }),
   getFileInfo: async (fileId: string) => {
     try {
-      const res = baseAxios.get("/tools/get-file-info" + fileId);
-       set({
-         downLoadFileName: (await res).data.downLoadFileName,
-         downLoadIdFileType: (await res).data.downLoadIdFileType,
-       });
+      const res = baseAxios.get("/tools/get-file-info/" + fileId);
+      // set({
+      //   downLoadFileName: "(await res).data.fileName",
+      //   //  downLoadFileName: (await res).data.fileName,
+      //   downLoadIdFileType: (await res).data.fileType,
+      // });
+
+
+      // alert("ghvgv");
+      console.log((await res).data)
     } catch (error) {
       console.log(error+"failed to get file info");
     }
   },
-  downloadFile: async (downloadUrl: string,downLoadId:string) => {
-    
-    function getFileNameAndExtension(downloadUrl: string) {
-      // Extract just the last part after "/"
-      const pathname = new URL(downloadUrl).pathname;
-      const filename = pathname.substring(pathname.lastIndexOf("/") + 1);
-
-      // Split filename into name + extension
-      const lastDot = filename.lastIndexOf(".");
-      if (lastDot === -1) {
-        return { filename, name: filename, extension: "" }; // no extension
-      }
-
-      return {
-        filename, // full filename
-        name: filename.substring(0, lastDot), // without extension
-        extension: filename.substring(lastDot + 1), // without the dot
-      };
-    }
+  downloadFile: async (downLoadId:string,) => {
+    // alert(downLoadId);
+ 
 
     // Example usage:
     // const url = "http://localhost:5000/downloads/report.final.version.pdf";
@@ -336,11 +326,17 @@ const useToolsStore = create<ToolsStore>((set) => ({
     try {
 
       
-      const res = await baseAxios.get("/tools/download/" + downLoadId, {
-        responseType: "blob",
-      });
-      const url = window.URL.createObjectURL(new Blob([res.data]));
+      const res = await baseAxios.get("/tools/download/" + downLoadId);
 
+      const { fileName, fileUrl } = res.data;
+
+      const response = await baseAxios.get(fileUrl, { responseType: 'blob' });
+
+      // const url = window.URL.createObjectURL(new Blob([response.data]));
+      // const url = window.URL.createObjectURL(new Blob([response.data]));
+
+      const url = window.URL.createObjectURL(new Blob([response.data]));
+// 
       // Create a temporary link element
       const link = document.createElement("a");
       link.href = url;
@@ -350,11 +346,12 @@ const useToolsStore = create<ToolsStore>((set) => ({
       // const selectedFile = pdfFiles; // Assuming the first file is the one being downloaded
       // const fileName = "downloaded_file";
       // const fileType =  "docx"; // Default to 'docx' if no type is provided
-      link.setAttribute("download", `${getFileNameAndExtension(downloadUrl).name}.${getFileNameAndExtension(downloadUrl).extension}`);
+      link.setAttribute("download",fileName);
       document.body.appendChild(link);
 
+      // console.log(getFileNameAndExtension(downloadUrl));
       // Programmatically click the link to trigger the download
-      link.click();
+      // link.click();
 
       // Clean up the temporary URL and link element
       link.remove();
@@ -419,6 +416,14 @@ const useToolsStore = create<ToolsStore>((set) => ({
         loadingState: "success",
         downLoadUrl: res.data.fileUrl,
         downLoadId: res.data.fileId,
+      });
+
+      set((state) => {
+        const updatedFiles = state.selectedFiles.map((file) => ({
+          ...file,
+          conversionFormat: "pdf",
+        }));
+        return { selectedFiles: updatedFiles };
       });
       console.log(res.data);
       // window.location.href = `download/${await res.data.fileUrl}`;
