@@ -16,7 +16,7 @@ import {
 } from "lucide-react";
 import { useNavigate, useParams } from "react-router-dom";
 import { baseAxios } from "@/network/base_urls";
-import {  useState } from "react";
+import {  useEffect, useRef, useState } from "react";
 import { useCopyToClipboard } from "@/hooks/use_copy_to_clipboard_hook";
 export default function ToolDownload({ label }: { label: string }) {
   const { downloadFile, isDownloadIdValid} =
@@ -25,15 +25,15 @@ export default function ToolDownload({ label }: { label: string }) {
   const navigate = useNavigate();
   const [deleteLoading, setDeleteLoading] = useState(false);
 
-  // useEffect(() => {
-  //   if (id && !hasRun.current) {
-  //     hasRun.current = true;
-  //     downloadFile(id);
-  //   }
-  // }, [id]);
+  useEffect(() => {
+    if (id && !hasRun.current) {
+      hasRun.current = true;
+      downloadFile(id);
+    }
+  }, [id]);
 
   // Initialize useRef outside the component
-  // const hasRun = useRef(false);
+  const hasRun = useRef(false);
 
   
 

@@ -99,9 +99,9 @@ const useToolsStore = create<ToolsStore>((set) => ({
   selectedFiles: [], // Initialize as empty to avoid default object issues
   sideMenuOpen: false,
   pdfPages: [],
-  downLoadFileName:'',
-  downLoadFileUrl: '',
-  downLoadIdFileType:'',
+  downLoadFileName: "",
+  downLoadFileUrl: "",
+  downLoadIdFileType: "",
   isDownloadIdValid: true,
   downloadFileErrorMessage: "",
   resetStore: () =>
@@ -114,7 +114,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
   loadingState: "idle",
   recentActivities: [
     {
-      _id:"",
+      _id: "",
       fileName: "",
       fileSize: "",
       fileType: "",
@@ -308,63 +308,40 @@ const useToolsStore = create<ToolsStore>((set) => ({
       //   downLoadIdFileType: (await res).data.fileType,
       // });
 
-
       // alert("ghvgv");
-      console.log((await res).data)
+      console.log((await res).data);
     } catch (error) {
-      console.log(error+"failed to get file info");
+      console.log(error + "failed to get file info");
     }
   },
-  downloadFile: async (downLoadId:string,) => {
-    // alert(downLoadId);
- 
-
-    // Example usage:
-    // const url = "http://localhost:5000/downloads/report.final.version.pdf";
-    // console.log(getFileNameAndExtension(url));
-
+  downloadFile: async (downLoadId: string) => {
     try {
-
-      
       const res = await baseAxios.get("/tools/download/" + downLoadId);
-
       const { fileName, fileUrl } = res.data;
 
-      const response = await baseAxios.get(fileUrl, { responseType: 'blob' });
+      const response = await baseAxios.get(fileUrl, { responseType: "blob" });
 
-      // const url = window.URL.createObjectURL(new Blob([response.data]));
-      // const url = window.URL.createObjectURL(new Blob([response.data]));
+      // Create blob URL directly from response data
+      const url = window.URL.createObjectURL(response.data);
 
-      const url = window.URL.createObjectURL(new Blob([response.data]));
-// 
-      // Create a temporary link element
+      // Create download link
       const link = document.createElement("a");
       link.href = url;
-      // console.log(pdfFiles)
-      // Set the download attribute with a file name
-      // You should get the correct file extension from your API response
-      // const selectedFile = pdfFiles; // Assuming the first file is the one being downloaded
-      // const fileName = "downloaded_file";
-      // const fileType =  "docx"; // Default to 'docx' if no type is provided
-      link.setAttribute("download",fileName);
+      link.setAttribute("download", fileName);
       document.body.appendChild(link);
 
-      // console.log(getFileNameAndExtension(downloadUrl));
-      // Programmatically click the link to trigger the download
-      // link.click();
+      // TRIGGER THE DOWNLOAD BY CLICKING THE LINK
+      link.click();
 
-      // Clean up the temporary URL and link element
+      // Cleanup
       link.remove();
       window.URL.revokeObjectURL(url);
 
       return "success";
     } catch (error) {
-      // alert("Failed to download file");
-      enqueueSnackbar("failed to download file", {
-        variant: "error",
-      });
+      set({isDownloadIdValid:false})
+      enqueueSnackbar("failed to download file", { variant: "error" });
       console.log(error);
-      // return "error";
     }
   },
 
@@ -405,7 +382,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
     }
   },
   convertPdfToWord: async (pdfFile: File) => {
-    set({ loadingState: "loading"});
+    set({ loadingState: "loading" });
     try {
       const form = new FormData();
       form.append("pdfFile", pdfFile);
