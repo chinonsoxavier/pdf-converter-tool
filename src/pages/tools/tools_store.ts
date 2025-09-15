@@ -16,7 +16,6 @@ interface ISelectedFile {
   fileSize: number;
   numPages?: number;
   pdfPages?: PageItem[];
-  conversionFormat:string
 }
 
 // Define the structure of a PDF page item
