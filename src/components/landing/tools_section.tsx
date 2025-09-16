@@ -201,7 +201,7 @@ interface Tool {
       category: "edit",
     },
     {
-      label: "PDF",
+      label: "Edit PDF",
       icon: EditPdf,
       isFree: false,
       info: "Modify text, images, or layout directly",
@@ -427,7 +427,7 @@ interface Tool {
           </div>
         </div>
       </motion.div>
-      <div className="grid grid-cols-[repeat(auto-fill,minmax(120px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-1.5 sm:gap-3 pb-12 sm:pb-20 w-full mt-4">
+      <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-1.5 sm:gap-3 pb-12 sm:pb-20 w-full mt-4">
         {Tools
           .slice(0, -1) 
           .filter(
