@@ -332,7 +332,6 @@ const useToolsStore = create<ToolsStore>((set) => ({
       // TRIGGER THE DOWNLOAD BY CLICKING THE LINK
       link.click();
 
-      // Cleanup
       link.remove();
       window.URL.revokeObjectURL(url);
 
