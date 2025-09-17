@@ -14,10 +14,9 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useRef, useState } from "react";
-import { Document, Page } from "react-pdf";
 
-const PreviewPdfConverter = () => {
-  const { selectedFiles, selectedIndex, setSelectedFile,setNumPages } = useToolsStore();
+const EditPdf = () => {
+  const { selectedFiles, selectedIndex, setSelectedFile } = useToolsStore();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false); // Track drag state
   const handleFileChange = async (
@@ -122,10 +121,10 @@ const PreviewPdfConverter = () => {
                   }`}
                 >
                   <h1 className="text-3xl sm:text-4xl sm:text-left text-center dark:text-white text-secondary-foreground font-semibold">
-                    Preview PDF
+                    Edit PDF
                   </h1>
                   <h1 className="text-secondary-foreground dark:text-white text-center text-lg sm:text-xl sm:mb-5">
-                    Upload your PDF file to preview it
+                    Upload your PDF file to edit it
                   </h1>
                   <CloudUpload className="dark:text-white text-secondary-foreground sm:w-18 sm:h-18 w-10 h-10" />
                   <p className="text-[14px] dark:text-white text-secondary-foreground">
@@ -191,29 +190,21 @@ const PreviewPdfConverter = () => {
               </motion.div>
             </div>
 
+            {/* History Section */}
             <HistorySection />
 
+            {/* Footer */}
             <Footer />
           </div>
         ) : (
           <div className="h-full">
             <div className="flex items-center justify-center h-full">
               <Card className="w-full h-full max-w-3xl p-6 bg-secondary dark:border-primary border-dashed border-3">
-                  <Document 
-                    file={selectedFiles[selectedIndex]?.fileUrl}
-                  onLoadSuccess={({ numPages }) => {
-                    setNumPages(selectedIndex, numPages);
-                    }}
-                  onLoadError={(error) =>
-                    console.error("PDF load error:", error)
-                  }
-                >
-                  {Array.from(
-                    new Array(selectedFiles[selectedIndex ?? 0]?.numPages || 0),(_, index) => (
-                      <Page className="w-full bg-[red]" scale={20} pageNumber={index + 1} />
-                    )
-                  )}
-                </Document>
+                <iframe 
+                  src={selectedFiles[selectedIndex]?.fileUrl}
+                  title="Edit Pdf"
+                  className="w-full h-full rounded-lg"
+                ></iframe>
               </Card>
             </div>
           </div>
@@ -223,4 +214,4 @@ const PreviewPdfConverter = () => {
   );
 };
 
-export default PreviewPdfConverter;
+export default EditPdf;

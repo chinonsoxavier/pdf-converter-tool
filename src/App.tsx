@@ -43,6 +43,7 @@ import axios from "axios";
 import OcrPdf from "./pages/tools/ocr_pdf/ocr_pdf";
 import ProtectPdf from "./pages/tools/protect_pdf/protect_pdf";
 import UnlockPdf from "./pages/tools/unlock_pdf/unlock_pdf";
+import EditPdf from "./pages/tools/edit_pdf/edit_pdf";
 const App = () => {
 
   const location = useLocation();
@@ -291,6 +292,11 @@ const App = () => {
         {/* preview pages */}
         <Route path="/preview_pdf" element={<PreviewPdf />} />
         {/* end of preview pages */}
+
+        {/* edit pdf */}
+        <Route path="/edit_pdf" element={<EditPdf/>} />
+        {/* end of edit pdf */}
+
         {/* end of tools routes */}
       </Routes>
     </AppThemeProvider>
