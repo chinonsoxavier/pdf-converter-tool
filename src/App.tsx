@@ -44,6 +44,7 @@ import OcrPdf from "./pages/tools/ocr_pdf/ocr_pdf";
 import ProtectPdf from "./pages/tools/protect_pdf/protect_pdf";
 import UnlockPdf from "./pages/tools/unlock_pdf/unlock_pdf";
 import EditPdf from "./pages/tools/edit_pdf/edit_pdf";
+import ESignatureWorkflow from "./pages/tools/e_signatures_workflow/e_signature_workflow";
 const App = () => {
 
   const location = useLocation();
@@ -246,7 +247,7 @@ const App = () => {
         />
         {/* end of protect-pdf pages */}
         {/* protect-pdf pages */}
-        <Route path="/e-signature_workflow" element={<UnlockPdf />} />
+        <Route path="/e-signature_workflow" element={<ESignatureWorkflow />} />
         <Route
           path="/e-signature_workflow/download/:id"
           element={
@@ -254,7 +255,7 @@ const App = () => {
           }
         />
         {/* end of protect-pdf pages */}
-     
+
         {/* delete pages */}
         <Route path="/delete_pdf_pages" element={<DeletePdfPages />} />
         <Route
@@ -271,6 +272,7 @@ const App = () => {
           element={
             <ToolDownloadLayout label="Pdf pages number has been added!" />
           }
+          e-signature_workflow
         />
         {/* end of add pages pages */}
         {/* add headers/footers pages */}
@@ -294,7 +296,7 @@ const App = () => {
         {/* end of preview pages */}
 
         {/* edit pdf */}
-        <Route path="/edit_pdf" element={<EditPdf/>} />
+        <Route path="/edit_pdf" element={<EditPdf />} />
         {/* end of edit pdf */}
 
         {/* end of tools routes */}

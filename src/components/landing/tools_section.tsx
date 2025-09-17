@@ -1,7 +1,6 @@
 import {
   AddHeaderFooter,
   AddPagesToPdf,
-  CloudUpload,
   EditPdf,
   ExtractPages,
   ISvgIconComponent,
@@ -241,14 +240,6 @@ interface Tool {
       category: "edit",
     },
     {
-      label: "Batch Tools",
-      icon: SignPdf,
-      isFree: false,
-      info: "Apply merge, compress, etc. to many files at once",
-      category: "all-tools", // Optional: can be removed or changed
-      color: "#f2f9fe",
-    },
-    {
       label: "Redact PDF",
       icon: RedactPdf,
       isFree: false,
@@ -280,14 +271,7 @@ interface Tool {
       category: "convert",
       color: "#f2f9fe",
     },
-    {
-      label: "Cloud Integration",
-      icon: CloudUpload,
-      isFree: false,
-      info: "Upload/Save directly from Google Drive, Dropbox, OneDrive",
-      category: "all-tools", // Optional: can be removed or changed
-      color: "#f2f9fe",
-    },
+
   ];
 
 

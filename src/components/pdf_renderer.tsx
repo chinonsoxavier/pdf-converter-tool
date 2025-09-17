@@ -53,17 +53,6 @@ const PdfRenderer = ({
   const {togglePageSelection,setExtractMode,pagesToExtract} = useExtractPdfStore();
 
   const {togglePageDeleteSelection,setDeleteMode,pagesToDelete} = useDeletePdfStore();
-  // useEffect(() => {
-  //   initRotate(0, numPages[0]);
-  //   console.log(numPages[0]);
-  console.log(selectedFiles[selectedIndex]?.numPages);
-  console.log(pagesToDelete);
-  console.log(pagesToExtract);
-  // }, [selectedFiles, numPages]);
-
-  // useEffect(() => {
-  //   console.log('rotate',selectedFiles[0].rotate)
-  // }, [selectedFiles[0].rotate ])
 
   const handleRemoveSelectedfile = () => {
     if (selectedFiles[selectedIndex ?? 0]?.fileUrl) {
