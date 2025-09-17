@@ -41,6 +41,8 @@ import VerifyEmailTokenPage from "./pages/(auth)/verify_email_token/verify_email
 import DeletePdfPages from "./pages/tools/delete_pdf_pages/delete_pdf_pages";
 import axios from "axios";
 import OcrPdf from "./pages/tools/ocr_pdf/ocr_pdf";
+import ProtectPdf from "./pages/tools/protect_pdf/protect_pdf";
+import UnlockPdf from "./pages/tools/unlock_pdf/unlock_pdf";
 const App = () => {
 
   const location = useLocation();
@@ -128,7 +130,6 @@ const App = () => {
           />
         </Route>
         {/* end of auth routes */}
-
         {/* terma route */}
         <Route path="/terms-and-privacy" element={<Terms />} />
         {/* privacy route */}
@@ -140,7 +141,6 @@ const App = () => {
         {/* blog route */}
         <Route path="/blog" element={<div>Blog</div>} />
         {/* end of blog route */}
-
         {/* tools routes */}
         {/* pfd to word routes */}
         <Route path="/pdf_to_word" element={<PdfToWordConverter />} />
@@ -217,7 +217,6 @@ const App = () => {
           }
         />
         {/* end of organise pages */}
-
         {/* extract pages */}
         <Route path="/extract_pdf_pages" element={<ExtractPdf />} />
         <Route
@@ -227,7 +226,34 @@ const App = () => {
           }
         />
         {/* end of extract pages */}
-
+        {/* protect-pdf pages */}
+        <Route path="/password_protect_pdf" element={<ProtectPdf />} />
+        <Route
+          path="/password_protect_pdf/download/:id"
+          element={
+            <ToolDownloadLayout label="Pdf pages has been encrypted successfully" />
+          }
+        />
+        {/* end of protect-pdf pages */}
+        {/* protect-pdf pages */}
+        <Route path="/unlock_pdf" element={<UnlockPdf />} />
+        <Route
+          path="/unlock_pdf/download/:id"
+          element={
+            <ToolDownloadLayout label="Pdf pages has been unlocked successfully" />
+          }
+        />
+        {/* end of protect-pdf pages */}
+        {/* protect-pdf pages */}
+        <Route path="/e-signature_workflow" element={<UnlockPdf />} />
+        <Route
+          path="/e-signature_workflow/download/:id"
+          element={
+            <ToolDownloadLayout label="Pdf pages has been signed successfully" />
+          }
+        />
+        {/* end of protect-pdf pages */}
+     
         {/* delete pages */}
         <Route path="/delete_pdf_pages" element={<DeletePdfPages />} />
         <Route
@@ -237,7 +263,6 @@ const App = () => {
           }
         />
         {/* end of delete pages */}
-
         {/* add pages pages */}
         <Route path="/add_pdf_page_numbers" element={<AddPdfPageNumber />} />
         <Route
@@ -247,7 +272,6 @@ const App = () => {
           }
         />
         {/* end of add pages pages */}
-
         {/* add headers/footers pages */}
         <Route path="/add_header_footer" element={<AddHeaderFooter />} />
         <Route
@@ -257,21 +281,16 @@ const App = () => {
           }
         />
         {/* end of add headers/footers pages */}
-
         {/* add headers/footers pages */}
         <Route path="/ocr" element={<OcrPdf />} />
         <Route
           path="/ocr_pdf/download/:id"
-          element={
-            <ToolDownloadLayout label="Pdf is now selectable" />
-          }
+          element={<ToolDownloadLayout label="Pdf is now selectable" />}
         />
         {/* end of add headers/footers pages */}
-
         {/* preview pages */}
         <Route path="/preview_pdf" element={<PreviewPdf />} />
         {/* end of preview pages */}
-
         {/* end of tools routes */}
       </Routes>
     </AppThemeProvider>
