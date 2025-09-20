@@ -169,7 +169,6 @@ var DESCRIPTORS = __webpack_require__(3724);
 var hasOwn = __webpack_require__(9297);
 
 var FunctionPrototype = Function.prototype;
-// eslint-disable-next-line es/no-object-getownpropertydescriptor -- safe
 var getDescriptor = DESCRIPTORS && Object.getOwnPropertyDescriptor;
 
 var EXISTS = hasOwn(FunctionPrototype, 'name');
