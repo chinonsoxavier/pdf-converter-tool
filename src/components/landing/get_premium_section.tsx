@@ -3,7 +3,6 @@ import ContainerLayout from "../layout/container_layout";
 import { Button } from "../ui/button";
 import { motion } from "motion/react";
 import {
-  CloudUpload,
   EditPdf,
   ISvgIconComponent,
   LockPdf,
@@ -81,14 +80,6 @@ const GetPremiumSection = () => {
       category: "edit",
     },
     {
-      label: "Batch Tools",
-      icon: SignPdf,
-      isFree: false,
-      info: "Apply merge, compress, etc. to many files at once",
-      category: "all-tools",
-      color: "#f2f9fe",
-    },
-    {
       label: "Redact PDF",
       icon: RedactPdf,
       isFree: false,
@@ -118,14 +109,6 @@ const GetPremiumSection = () => {
       isFree: false,
       info: "Convert High-Resolution PDF to Image(300–600 DPI export)",
       category: "convert",
-      color: "#f2f9fe",
-    },
-    {
-      label: "Cloud Integration",
-      icon: CloudUpload,
-      isFree: false,
-      info: "Upload/Save directly from Google Drive, Dropbox, OneDrive",
-      category: "all-tools", // Optional: can be removed or changed
       color: "#f2f9fe",
     },
   ];

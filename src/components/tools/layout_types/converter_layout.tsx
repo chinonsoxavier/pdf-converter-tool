@@ -230,9 +230,7 @@ const ConverterLayout = ({
         );
       } catch (error) {
         console.error("Error loading file from Google Drive:", error);
-        // enqueueSnackbar("Error loading file from Google Drive.", {
-        //   variant: "error",
-        // });
+
       }
     };
 
@@ -589,6 +587,8 @@ const ConverterLayout = ({
                   {/* <ArrowRightCircleIcon className="group-hover:translate-x-3 duration-1000" /> */}
                 </Button>
               </div>
+              {
+actionMenuSideBar &&
               <aside
                 className={cn(
                   "hidden overflow-hidden h-full w-full border-l flex-col sm:flex items-center justify-between max-w-sm bg-white dark:bg-secondary duration-1000"
@@ -614,6 +614,11 @@ const ConverterLayout = ({
                   </Button>
                 </div>
               </aside>
+              }
+              {
+                !actionMenuSideBar &&
+              <Button onClick={()=>handleFileUpload} className="absolute bottom-10 right-10" >{actionButtonText}</Button>
+              }
               {/* {children} */}
             </div>
           )}

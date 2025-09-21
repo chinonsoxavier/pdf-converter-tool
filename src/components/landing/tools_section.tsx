@@ -264,14 +264,13 @@ interface Tool {
       category: "convert",
     },
     {
-      label: "High-Resolution PDF to Image",
+      label: "High Resolution PDF to Image",
       icon: PdfToImage,
       isFree: false,
       info: "Convert High-Resolution PDF to Image(300–600 DPI export)",
       category: "convert",
       color: "#f2f9fe",
     },
-
   ];
 
 
@@ -413,7 +412,6 @@ interface Tool {
       </motion.div>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-1.5 sm:gap-3 pb-12 sm:pb-20 w-full mt-4">
         {Tools
-          .slice(0, -1) 
           .filter(
             (tool) =>
               tool.label && tool.label?.toLowerCase()?.includes(searchQuery)

@@ -45,6 +45,9 @@ import ProtectPdf from "./pages/tools/protect_pdf/protect_pdf";
 import UnlockPdf from "./pages/tools/unlock_pdf/unlock_pdf";
 import EditPdf from "./pages/tools/edit_pdf/edit_pdf";
 import ESignatureWorkflow from "./pages/tools/e_signatures_workflow/e_signature_workflow";
+import RedactPdf from "./pages/tools/redact_pdf/redact_pdf";
+import PdfToExcell from "./pages/tools/pdf_to_excell/pdf_to_excell";
+import PdfToImage from "./pages/tools/pdf_to_image/pdf_to_image";
 const App = () => {
 
   const location = useLocation();
@@ -291,6 +294,45 @@ const App = () => {
           element={<ToolDownloadLayout label="Pdf is now selectable" />}
         />
         {/* end of add headers/footers pages */}
+
+        {/* redact pdf*/}
+        <Route path="/redact_pdf" element={<RedactPdf />} />
+        <Route
+          path="/redact_pdf/download/:id"
+          element={<ToolDownloadLayout label="Pdf has been redacted" />}
+        />
+        {/* end of redact pdf*/}
+
+        {/* pdf to excell pdf*/}
+        <Route path="/convert_pdf_to_excel" element={<PdfToExcell />} />
+        <Route
+          path="/convert_pdf_to_excel/download/:id"
+          element={
+            <ToolDownloadLayout label="Pdf has converted to excell successfully" />
+          }
+        />
+        {/* end of pdf to excell pdf*/}
+
+        {/* pdf to powerpoint pdf*/}
+        <Route path="/convert_pdf_to_powerpoint" element={<PdfToExcell />} />
+        <Route
+          path="/convert_pdf_to_powerpoint/download/:id"
+          element={
+            <ToolDownloadLayout label="Pdf has converted to powerpoint successfully" />
+          }
+        />
+        {/* end of pdf to powerpoint pdf*/}
+
+        {/* pdf to image pdf*/}
+        <Route path="/high_resolution_pdf_to_image" element={<PdfToImage />} />
+        <Route
+          path="/high_resolution_pdf_to_image/download/:id"
+          element={
+            <ToolDownloadLayout label="Pdf has converted to image successfully" />
+          }
+        />
+        {/* end of pdf to image pdf*/}
+
         {/* preview pages */}
         <Route path="/preview_pdf" element={<PreviewPdf />} />
         {/* end of preview pages */}
