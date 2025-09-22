@@ -3,27 +3,17 @@ import { useRef, useState, useEffect } from "react";
 import { Document, Page } from "react-pdf";
 import useToolsStore from "@/pages/tools/tools_store";
 import ConverterLayout from "@/components/tools/layout_types/converter_layout";
-import {
-  AlertDialog,
-  AlertDialogAction,
-  AlertDialogCancel,
-  AlertDialogContent,
-  AlertDialogDescription,
-  AlertDialogFooter,
-  AlertDialogHeader,
-  AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
 import { Button } from "@/components/ui/button";
+import { LineSquiggleIcon, Send, SignatureIcon } from "lucide-react";
+import { Label } from "@/components/ui/label";
 const ESignatureWorkflow = () => {
-  const { selectedFiles, selectedIndex,  setNumPages, removeSelectedFiles } =
+  const { selectedFiles, selectedIndex,  setNumPages } =
     useToolsStore();
   const pdfContainerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
-  const [openMenu, setOpenMenu] = useState(false);
 
   // Update container width when window resizes
   useEffect(() => {
-    setOpenMenu(true);
     if (pdfContainerRef.current) {
       setContainerWidth(pdfContainerRef.current.clientWidth);
     }
@@ -49,61 +39,47 @@ const ESignatureWorkflow = () => {
     return 1.2;
   };
 
-    const handleRemoveSelectedfile = () => {
-      if (selectedFiles[selectedIndex ?? 0]?.fileUrl) {
-        removeSelectedFiles(selectedFiles[selectedIndex ?? 0].fileUrl);
-        console.log(
-          "Removed file with URL:",
-          selectedFiles[selectedIndex ?? 0].fileUrl
-        );
-        // Optionally revoke the object URL to free memory
-        URL.revokeObjectURL(selectedFiles[selectedIndex ?? 0].fileUrl);
-      }
-      // };
-    };
+  
 
 
   return (
     <ConverterLayout
+      actionMenuSideBar={
+        <div className="p-4 cnter flex-col space-y-4">
+          <Label>Signatures and Initials</Label>
+          <div className="flex item-center justify-start gap-4 w-full">
+            <Button size="sm" variant="outline">
+              <LineSquiggleIcon /> Create Signature
+            </Button>
+            <Button size="sm" variant="outline">
+              <SignatureIcon /> Create Initials
+            </Button>
+          </div>
+
+          <Label>Signing</Label>
+          <div className="flex item-center justify-start gap-4 w-full">
+            <Button size="sm" variant="outline">
+              <Send />Request E-Signatures
+            </Button>
+           
+          </div>
+        </div>
+      }
       // handleFileUpload={() => DeletePdfPages(selectedFiles)}
       children={
-        <div className="flex w-full items-center justify-center">
+        <div className="flex flex-col overflow-hidden h-full bg-[re] w-full items-center justify-center">
           <Card
             ref={pdfContainerRef}
-            className="w-full max-w-4xl p-4 sm:p-6 bg-secondary dark:border-primary border-dashed border-2 overflow-auto"
+            className="w-full p-4 overflow-x-hidden sm:p-6 bg-secondary dark:border-primary border-dashed border-2"
           >
             <Document
-              className="flex flex-col w-full items-center"
+              className="flx flex-col w-full items-start"
               file={selectedFiles[selectedIndex]?.fileUrl}
               onLoadSuccess={({ numPages }) => {
                 setNumPages(selectedIndex, numPages);
               }}
               onLoadError={(error) => console.error("PDF load error:", error)}
             >
-              <AlertDialog open={openMenu} onOpenChange={setOpenMenu}>
-                <AlertDialogContent>
-                  <AlertDialogHeader>
-                    <AlertDialogTitle className="text-center">
-                      Who is signing this document?
-                    </AlertDialogTitle>
-                    <AlertDialogDescription>
-                      <div className="center">
-                        <div className="center flex-1 bg-background rounded p-3 flex-col">
-                          <img src="" alt="" />
-                          <Button>Sign Myself</Button>
-                          <p>Create a signature and sign a document</p>
-                        </div>
-                      </div>
-                    </AlertDialogDescription>
-                  </AlertDialogHeader>
-                  <AlertDialogFooter>
-                    <AlertDialogCancel onClick={handleRemoveSelectedfile}>
-                      Cancel
-                    </AlertDialogCancel>
-                    <AlertDialogAction>Continue</AlertDialogAction>
-                  </AlertDialogFooter>
-                </AlertDialogContent>
-              </AlertDialog>
               {Array.from(
                 new Array(selectedFiles[selectedIndex]?.numPages || 0),
                 (_, index) => (
@@ -116,7 +92,7 @@ const ESignatureWorkflow = () => {
                       scale={calculateScale()}
                       width={
                         containerWidth > 0
-                          ? Math.min(containerWidth * 0.9, 800)
+                          ? Math.min(containerWidth * 1, 800)
                           : undefined
                       }
                     />
