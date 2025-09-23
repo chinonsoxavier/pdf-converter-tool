@@ -39,7 +39,6 @@ import useAuthStore from "./pages/(auth)/auth_store";
 import VerifyEmailPage from "./pages/(auth)/verify_email/verify_email";
 import VerifyEmailTokenPage from "./pages/(auth)/verify_email_token/verify_email_token";
 import DeletePdfPages from "./pages/tools/delete_pdf_pages/delete_pdf_pages";
-import axios from "axios";
 import OcrPdf from "./pages/tools/ocr_pdf/ocr_pdf";
 import ProtectPdf from "./pages/tools/protect_pdf/protect_pdf";
 import UnlockPdf from "./pages/tools/unlock_pdf/unlock_pdf";
