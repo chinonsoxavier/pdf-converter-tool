@@ -12,10 +12,10 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from "@/components/ui/alert-dialog"
+} from "@/components/ui/alert-dialog";
 import { Button } from "@/components/ui/button";
 const ESignatureWorkflow = () => {
-  const { selectedFiles, selectedIndex,  setNumPages, removeSelectedFiles } =
+  const { selectedFiles, selectedIndex, setNumPages, removeSelectedFiles } =
     useToolsStore();
   const pdfContainerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
@@ -49,19 +49,18 @@ const ESignatureWorkflow = () => {
     return 1.2;
   };
 
-    const handleRemoveSelectedfile = () => {
-      if (selectedFiles[selectedIndex ?? 0]?.fileUrl) {
-        removeSelectedFiles(selectedFiles[selectedIndex ?? 0].fileUrl);
-        console.log(
-          "Removed file with URL:",
-          selectedFiles[selectedIndex ?? 0].fileUrl
-        );
-        // Optionally revoke the object URL to free memory
-        URL.revokeObjectURL(selectedFiles[selectedIndex ?? 0].fileUrl);
-      }
-      // };
-    };
-
+  const handleRemoveSelectedfile = () => {
+    if (selectedFiles[selectedIndex ?? 0]?.fileUrl) {
+      removeSelectedFiles(selectedFiles[selectedIndex ?? 0].fileUrl);
+      console.log(
+        "Removed file with URL:",
+        selectedFiles[selectedIndex ?? 0].fileUrl
+      );
+      // Optionally revoke the object URL to free memory
+      URL.revokeObjectURL(selectedFiles[selectedIndex ?? 0].fileUrl);
+    }
+    // };
+  };
 
   return (
     <ConverterLayout

@@ -15,8 +15,7 @@ import {
 } from "@/components/ui/tooltip";
 import { useRef, useState, useEffect } from "react";
 import { Document, Page } from "react-pdf";
-
-
+// import { PaginationControls } from "./pagination-controls"; // New component
 const PreviewPdfConverter = () => {
   const { selectedFiles, selectedIndex, setSelectedFile, setNumPages } =
     useToolsStore();
@@ -24,6 +23,8 @@ const PreviewPdfConverter = () => {
   const [isDragging, setIsDragging] = useState<boolean>(false);
   const pdfContainerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   // Update container width when window resizes
   useEffect(() => {
@@ -112,33 +113,61 @@ const PreviewPdfConverter = () => {
     fileInputRef.current?.click();
   };
 
-  const variants1 = {
-    inactive: {
-      y: 20,
-      opacity: 0,
-    },
-    active: {
-      y: 0,
-      opacity: 1,
-      transition: { duration: 1.5 },
-    },
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
+
+      // Scroll to the specific page in the viewer
+      setTimeout(() => {
+        if (pdfContainerRef.current) {
+          const pageElement = pdfContainerRef.current.querySelector(
+            `[data-page-number="${page}"]`
+          );
+          if (pageElement) {
+            pageElement.scrollIntoView({ behavior: "smooth", block: "center" });
+          }
+        }
+      }, 100); // Small delay to ensure DOM updates
+    }
+  };
+
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      goToPage(currentPage + 1);
+    }
+  };
+
+  const prevPage = () => {
+    if (currentPage > 1) {
+      goToPage(currentPage - 1);
+    }
   };
 
   return (
-    <div className="flex flex-col min-h-screen">
+    <div className="flex flex-col h-screen">
       <div className="h-auto md:h-[12%]">
         <Header isLanding={false} />
       </div>
       <SidemenuLyout />
 
-      <main className="flex-grow w-full dark:bg-primary">
+      <main className="flex-grow h-[88%] w-full dark:bg-primary">
         {!selectedFiles[selectedIndex] ? (
           <div className="overflow-x-hidden">
             <div className="w-full flex flex-col items-center p-4 py-6 md:py-20 rounded-lg">
               <motion.div
-                variants={variants1}
-                initial={"inactive"}
-                whileInView={"active"}
+                variants={{
+                  inactive: {
+                    y: 20,
+                    opacity: 0,
+                  },
+                  active: {
+                    y: 0,
+                    opacity: 1,
+                    transition: { duration: 1.5 },
+                  },
+                }}
+                initial="inactive"
+                whileInView="active"
                 viewport={{ once: true }}
                 className="w-full mx-auto overflow-x-hidden flex justify-center"
               >
@@ -227,46 +256,142 @@ const PreviewPdfConverter = () => {
             <Footer />
           </div>
         ) : (
-          <div className="flex items-center justify-center p-2 sm:p-4">
-            <Card
-              ref={pdfContainerRef}
-              className="w-full max-w-4xl p-4 sm:p-6 bg-secondary dark:border-primary border-dashed border-2 overflow-auto"
-            >
-              <Document
-                className="flex flex-col items-center"
-                file={selectedFiles[selectedIndex]?.fileUrl}
-                onLoadSuccess={({ numPages }) => {
-                  setNumPages(selectedIndex, numPages);
-                }}
-                onLoadError={(error) => console.error("PDF load error:", error)}
-              >
-                {Array.from(
-                  new Array(selectedFiles[selectedIndex]?.numPages || 0),
-                  (_, index) => (
+          <div className="flex h-full overflow-y-hiden items-center justify-center p-2 sm:p-4">
+            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 w-full max-w-6xl">
+              {/* Thumbnail Navigation Panel */}
+              <div className="lg:col-span-1 sticky top-5 bg-secondary dark:border-primary border rounded-lg p-4 overflow-y-scroll">
+                <Document
+                  className="flex flex-col items-center"
+                  file={selectedFiles[selectedIndex]?.fileUrl}
+                  onLoadSuccess={({ numPages }) => {
+                    setTotalPages(numPages);
+                    setNumPages(selectedIndex, numPages);
+                  }}
+                  onLoadError={(error) =>
+                    console.error("PDF load error:", error)
+                  }
+                >
+                  {Array.from({ length: totalPages }, (_, index) => (
                     <div
                       key={index}
                       className="mb-4 w-full flex justify-center"
                     >
                       <Page
-                        className="max-w-full"
+                        className={`max-w-full shadow-lg border-3 rounded  ${
+                          index + 1 === currentPage && "border-accent"
+                        } `}
+                        pageNumber={index + 1}
+                        onClick={() => goToPage(index + 1)}
+                        renderTextLayer={false}
+                        renderAnnotationLayer={false}
+                        scale={0.35}
+                        width={containerWidth * 0.7}
+                      />
+                    </div>
+                  ))}
+                </Document>
+              </div>
+
+              {/* Main PDF Viewer */}
+              <div
+                className="lg:col-span-3 overflow-y-scroll bg-secondary dark:border-primary border rounded-lg py-4"
+                ref={pdfContainerRef}
+              >
+                <Document
+                  className="flex flex-col items-center"
+                  file={selectedFiles[selectedIndex]?.fileUrl}
+                  onLoadSuccess={({ numPages }) => {
+                    setTotalPages(numPages);
+                    setNumPages(selectedIndex, numPages);
+                  }}
+                  onLoadError={(error) =>
+                    console.error("PDF load error:", error)
+                  }
+                >
+                  {containerWidth}
+                  {Array.from({ length: totalPages }, (_, index) => (
+                    <div
+                      key={index}
+                      data-page-number={index + 1} // Add data attribute
+                      className="mb-4 w-full flex justify-center"
+                    >
+                      <Page
+                        className="max-w-full shadow-lg"
                         pageNumber={index + 1}
                         renderTextLayer={false}
                         renderAnnotationLayer={false}
                         scale={calculateScale()}
-                        width={
-                          containerWidth > 0
-                            ? Math.min(containerWidth * 0.9, 800)
-                            : undefined
-                        }
+                        width={containerWidth}
                       />
                     </div>
-                  )
-                )}
-              </Document>
-            </Card>
+                  ))}
+                </Document>
+              </div>
+            </div>
+
+            {/* Mobile Controls */}
+
+            {/* Desktop Controls (optional) */}
+            <div className="fixed bottom-4 left-1/2 transform -translate-x-1/2 flex space-x-2 z-50">
+              <PaginationControls
+                currentPage={currentPage}
+                totalPages={totalPages}
+                onNext={nextPage}
+                onPrev={prevPage}
+                onPageChange={goToPage}
+              />
+            </div>
           </div>
         )}
       </main>
+    </div>
+  );
+};
+
+// PaginationControls Component
+const PaginationControls = ({
+  currentPage,
+  totalPages,
+  onNext,
+  onPrev,
+  onPageChange,
+}: {
+  currentPage: number;
+  totalPages: number;
+  onNext: () => void;
+  onPrev: () => void;
+  onPageChange: (page: number) => void;
+}) => {
+  return (
+    <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 flex items-center space-x-2">
+      <button
+        onClick={onPrev}
+        disabled={currentPage === 1}
+        className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm disabled:opacity-50"
+      >
+        ← Previous
+      </button>
+
+      <span className="text-sm">
+        Page {currentPage} of {totalPages}
+      </span>
+
+      <button
+        onClick={onNext}
+        disabled={currentPage === totalPages}
+        className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm disabled:opacity-50"
+      >
+        Next →
+      </button>
+
+      <input
+        type="number"
+        min="1"
+        max={totalPages}
+        value={currentPage}
+        onChange={(e) => onPageChange(parseInt(e.target.value))}
+        className="w-16 px-2 py-1 border rounded text-sm text-center"
+      />
     </div>
   );
 };

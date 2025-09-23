@@ -31,7 +31,7 @@ interface IRecentActivities {
   fileSize: string;
   icon: string;
   fileType: string;
-  _id:string
+  _id: string;
 }
 
 interface ToolsStore {
@@ -337,7 +337,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
 
       return "success";
     } catch (error) {
-      set({isDownloadIdValid:false})
+      set({ isDownloadIdValid: false });
       enqueueSnackbar("failed to download file", { variant: "error" });
       console.log(error);
     }
