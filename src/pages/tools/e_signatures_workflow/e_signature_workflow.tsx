@@ -4,7 +4,7 @@ import { Document, Page } from "react-pdf";
 import useToolsStore from "@/pages/tools/tools_store";
 import ConverterLayout from "@/components/tools/layout_types/converter_layout";
 import { Button } from "@/components/ui/button";
-import { LineSquiggleIcon, Send, SignatureIcon } from "lucide-react";
+import {  Send, SignatureIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
 const ESignatureWorkflow = () => {
   const { selectedFiles, selectedIndex,  setNumPages } =
