@@ -48,6 +48,7 @@ import ESignatureWorkflow from "./pages/tools/e_signatures_workflow/e_signature_
 import RedactPdf from "./pages/tools/redact_pdf/redact_pdf";
 import PdfToExcell from "./pages/tools/pdf_to_excell/pdf_to_excell";
 import PdfToImage from "./pages/tools/pdf_to_image/pdf_to_image";
+import { baseAxios } from "./network/base_urls";
 const App = () => {
 
   const location = useLocation();
@@ -84,7 +85,7 @@ const App = () => {
   const { resetErrorMsg, user } = useAuthStore();
   useEffect(() => {
     const pingServer = async () => {
-      await axios.get('/');
+      await baseAxios.get('/');
     };
     pingServer();
     resetStore();
