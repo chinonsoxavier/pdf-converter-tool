@@ -124,7 +124,7 @@ const PreviewPdfConverter = () => {
             `[data-page-number="${page}"]`
           );
           if (pageElement) {
-            pageElement.scrollIntoView({ behavior: "smooth", block: "center" });
+            pageElement.scrollIntoView({ behavior: "smooth", block: "start" });
           }
         }
       }, 100); // Small delay to ensure DOM updates
@@ -150,7 +150,7 @@ const PreviewPdfConverter = () => {
       </div>
       <SidemenuLyout />
 
-      <main className="flex-grow h-[88%] w-full dark:bg-primary">
+      <main className="flex-grow overflow-y-scroll h-auto md:h-[88%] w-full dark:bg-primary">
         {!selectedFiles[selectedIndex] ? (
           <div className="overflow-x-hidden">
             <div className="w-full flex flex-col items-center p-4 py-6 md:py-20 rounded-lg">
@@ -256,45 +256,13 @@ const PreviewPdfConverter = () => {
             <Footer />
           </div>
         ) : (
-          <div className="flex h-full overflow-y-hiden items-center justify-center p-2 sm:p-4">
-            <div className="grid grid-cols-1 lg:grid-cols-4 gap-4 w-full max-w-6xl">
-              {/* Thumbnail Navigation Panel */}
-              <div className="lg:col-span-1 sticky top-5 bg-secondary dark:border-primary border rounded-lg p-4 overflow-y-scroll">
-                <Document
-                  className="flex flex-col items-center"
-                  file={selectedFiles[selectedIndex]?.fileUrl}
-                  onLoadSuccess={({ numPages }) => {
-                    setTotalPages(numPages);
-                    setNumPages(selectedIndex, numPages);
-                  }}
-                  onLoadError={(error) =>
-                    console.error("PDF load error:", error)
-                  }
-                >
-                  {Array.from({ length: totalPages }, (_, index) => (
-                    <div
-                      key={index}
-                      className="mb-4 w-full flex justify-center"
-                    >
-                      <Page
-                        className={`max-w-full shadow-lg border-3 rounded  ${
-                          index + 1 === currentPage && "border-accent"
-                        } `}
-                        pageNumber={index + 1}
-                        onClick={() => goToPage(index + 1)}
-                        renderTextLayer={false}
-                        renderAnnotationLayer={false}
-                        scale={0.35}
-                        width={containerWidth * 0.7}
-                      />
-                    </div>
-                  ))}
-                </Document>
-              </div>
+          <div className="flex h-fit relative items-center justify-center p-2 sm:p-4">
+            <div className="center w-full max-w-6xl">
+           
 
               {/* Main PDF Viewer */}
               <div
-                className="lg:col-span-3 overflow-y-scroll bg-secondary dark:border-primary border rounded-lg py-4"
+                className="lg:col-span-3 dark:border-primary border rounded-lg py-4"
                 ref={pdfContainerRef}
               >
                 <Document
@@ -308,7 +276,6 @@ const PreviewPdfConverter = () => {
                     console.error("PDF load error:", error)
                   }
                 >
-                  {containerWidth}
                   {Array.from({ length: totalPages }, (_, index) => (
                     <div
                       key={index}
@@ -342,7 +309,7 @@ const PreviewPdfConverter = () => {
               />
             </div>
           </div>
-        )}gi
+        )}
       </main>
     </div>
   );

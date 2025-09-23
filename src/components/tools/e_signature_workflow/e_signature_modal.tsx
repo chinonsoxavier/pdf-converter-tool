@@ -18,10 +18,7 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-  AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
-import { Button } from "@/components/ui/button";
-import { LineSquiggleIcon } from "lucide-react";
 
 // Define TypeScript interfaces
 interface Point {
@@ -345,12 +342,7 @@ const getSignatureData = (): SignatureData | null => {
   if (!isOpen) return null;
 
   return (
-    <AlertDialog>
-      <AlertDialogTrigger>
-        {/* <Button  size="sm" variant="outline"> */}
-            <LineSquiggleIcon className="mr-2" /> Create Signature
-        {/* </Button> */}
-      </AlertDialogTrigger>
+    <AlertDialog open={isOpen} onOpenChange={onClose} >
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>Create Your Signature</AlertDialogTitle>
@@ -359,7 +351,7 @@ const getSignatureData = (): SignatureData | null => {
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+        <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
           <div
             className="bg-white dark:bg-[#1E1E1E] rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_40px_rgba(0,0,0,0.4)] max-w-2xl w-full max-h-[90vh] overflow-hidden"
             style={{
@@ -371,11 +363,8 @@ const getSignatureData = (): SignatureData | null => {
             <div className="flex items-center justify-between p-6 border-b border-[#E6E6E6] dark:border-[#333333]">
               <div>
                 <h2 className="text-xl font-semibold text-black dark:text-white">
-                  PDF signature
+                  Create Signature
                 </h2>
-                <p className="text-sm text-[#F59E0B] mt-1">
-                  Free users can create only one signature.
-                </p>
               </div>
               <button
                 onClick={onClose}

@@ -14,17 +14,11 @@ import {
   TooltipTrigger,
 } from "@/components/ui/tooltip";
 import { useRef, useState } from "react";
-<<<<<<< HEAD
-
-const EditPdf = () => {
-  const { selectedFiles, selectedIndex, setSelectedFile } = useToolsStore();
-=======
 import { Document, Page } from "react-pdf";
 
 const EditPdf = () => {
   const { selectedFiles, selectedIndex, setSelectedFile, setNumPages } =
     useToolsStore();
->>>>>>> c4e33758b590ebf4231a60a60ef2f104c09237e0
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isDragging, setIsDragging] = useState<boolean>(false); // Track drag state
   const handleFileChange = async (
@@ -129,17 +123,10 @@ const EditPdf = () => {
                   }`}
                 >
                   <h1 className="text-3xl sm:text-4xl sm:text-left text-center dark:text-white text-secondary-foreground font-semibold">
-<<<<<<< HEAD
                     Preview PDF
                   </h1>
                   <h1 className="text-secondary-foreground dark:text-white text-center text-lg sm:text-xl sm:mb-5">
                     Upload your PDF file to preview it
-=======
-                    Edit PDF
-                  </h1>
-                  <h1 className="text-secondary-foreground dark:text-white text-center text-lg sm:text-xl sm:mb-5">
-                    Upload your PDF file to edit it
->>>>>>> c4e33758b590ebf4231a60a60ef2f104c09237e0
                   </h1>
                   <CloudUpload className="dark:text-white text-secondary-foreground sm:w-18 sm:h-18 w-10 h-10" />
                   <p className="text-[14px] dark:text-white text-secondary-foreground">
@@ -148,16 +135,7 @@ const EditPdf = () => {
                   <Input
                     ref={fileInputRef}
                     type="file"
-<<<<<<< HEAD
-                    accept={selectedFiles[selectedIndex]?.fileType
-                      .map(
-                        (file) =>
-                          `.${file.toLowerCase()},application/${file.toLowerCase()}`
-                      )
-                      .join(",")}
-=======
                     accept=".pdf"
->>>>>>> c4e33758b590ebf4231a60a60ef2f104c09237e0
                     onChange={handleFileChange}
                     className="hidden"
                     aria-label="Choose PDF file"
@@ -214,28 +192,14 @@ const EditPdf = () => {
               </motion.div>
             </div>
 
-<<<<<<< HEAD
-            {/* History Section */}
             <HistorySection />
 
-            {/* Footer */}
-=======
-            <HistorySection />
-
->>>>>>> c4e33758b590ebf4231a60a60ef2f104c09237e0
             <Footer />
           </div>
         ) : (
           <div className="h-full">
             <div className="flex items-center justify-center h-full">
               <Card className="w-full h-full max-w-3xl p-6 bg-secondary dark:border-primary border-dashed border-3">
-<<<<<<< HEAD
-                <iframe
-                  src={selectedFiles[selectedIndex]?.fileUrl}
-                  title="PDF Preview"
-                  className="w-full h-full rounded-lg"
-                ></iframe>
-=======
                 <Document
                   file={selectedFiles[selectedIndex]?.fileUrl}
                   onLoadSuccess={({ numPages }) => {
@@ -256,7 +220,6 @@ const EditPdf = () => {
                     )
                   )}
                 </Document>
->>>>>>> c4e33758b590ebf4231a60a60ef2f104c09237e0
               </Card>
             </div>
           </div>
