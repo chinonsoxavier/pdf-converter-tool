@@ -13,9 +13,13 @@ const ESignatureWorkflow = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [, setSavedSignature] = useState(null);
 
+interface SignatureData {
+  type: "canvas" | "text" | "image";
+  data: string;
+  font?: string;
+}
 
-
-    const handleSaveSignature = (signatureData) => {
+    const handleSaveSignature = (signatureData: SignatureData) => {
       setSavedSignature(signatureData);
       console.log("Signature saved:", signatureData);
     };
