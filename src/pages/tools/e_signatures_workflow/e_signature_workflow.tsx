@@ -48,9 +48,8 @@ const ESignatureWorkflow = () => {
         <div className="p-4 cnter flex-col space-y-4">
           <Label>Signatures and Initials</Label>
           <div className="flex item-center justify-start gap-4 w-full">
-            <Button size="sm" variant="outline">
-              <LineSquiggleIcon /> Create Signature
-            </Button>
+           
+
             <Button size="sm" variant="outline">
               <SignatureIcon /> Create Initials
             </Button>
@@ -59,9 +58,9 @@ const ESignatureWorkflow = () => {
           <Label>Signing</Label>
           <div className="flex item-center justify-start gap-4 w-full">
             <Button size="sm" variant="outline">
-              <Send />Request E-Signatures
+              <Send />
+              Request E-Signatures
             </Button>
-           
           </div>
         </div>
       }
