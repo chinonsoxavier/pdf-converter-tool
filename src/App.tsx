@@ -39,7 +39,6 @@ import useAuthStore from "./pages/(auth)/auth_store";
 import VerifyEmailPage from "./pages/(auth)/verify_email/verify_email";
 import VerifyEmailTokenPage from "./pages/(auth)/verify_email_token/verify_email_token";
 import DeletePdfPages from "./pages/tools/delete_pdf_pages/delete_pdf_pages";
-import axios from "axios";
 import OcrPdf from "./pages/tools/ocr_pdf/ocr_pdf";
 import ProtectPdf from "./pages/tools/protect_pdf/protect_pdf";
 import UnlockPdf from "./pages/tools/unlock_pdf/unlock_pdf";
@@ -48,6 +47,7 @@ import ESignatureWorkflow from "./pages/tools/e_signatures_workflow/e_signature_
 import RedactPdf from "./pages/tools/redact_pdf/redact_pdf";
 import PdfToExcell from "./pages/tools/pdf_to_excell/pdf_to_excell";
 import PdfToImage from "./pages/tools/pdf_to_image/pdf_to_image";
+import { baseAxios } from "./network/base_urls";
 const App = () => {
 
   const location = useLocation();
@@ -84,7 +84,7 @@ const App = () => {
   const { resetErrorMsg, user } = useAuthStore();
   useEffect(() => {
     const pingServer = async () => {
-      await axios.get('/');
+      await baseAxios.get('/');
     };
     pingServer();
     resetStore();
