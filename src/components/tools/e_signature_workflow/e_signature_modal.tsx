@@ -52,6 +52,7 @@ const ESignatureModal: React.FC<ESignatureModalProps> = ({
   onSave,
   onClose,
 }) => {
+
   const [activeTab, setActiveTab] = useState<string>("draw");
   const [typedSignature, setTypedSignature] = useState<string>("");
   const [selectedFont, setSelectedFont] = useState<string>("font-caveat");
@@ -346,11 +347,9 @@ const getSignatureData = (): SignatureData | null => {
   return (
     <AlertDialog>
       <AlertDialogTrigger>
-        <Button asChild size="sm" variant="outline">
-          <div className="flex items-center">
+        {/* <Button  size="sm" variant="outline"> */}
             <LineSquiggleIcon className="mr-2" /> Create Signature
-          </div>
-        </Button>
+        {/* </Button> */}
       </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
@@ -532,11 +531,9 @@ const getSignatureData = (): SignatureData | null => {
                     />
                     <label
                       htmlFor="signature-upload"
-                      className={`px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg cursor-pointer transition-colors ${
-                        uploading ? "opacity-50 cursor-not-allowed" : ""
-                      }`}
+                      className={`px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg cursor-pointer transition-colors`}
                     >
-                      {uploading ? "Uploading..." : "Choose File"}
+                      {"Choose File"}
                     </label>
                     {uploadedSignature && (
                       <button

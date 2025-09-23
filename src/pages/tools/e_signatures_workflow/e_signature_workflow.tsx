@@ -4,13 +4,23 @@ import { Document, Page } from "react-pdf";
 import useToolsStore from "@/pages/tools/tools_store";
 import ConverterLayout from "@/components/tools/layout_types/converter_layout";
 import { Button } from "@/components/ui/button";
-import {  Send, SignatureIcon } from "lucide-react";
+import { Send, SignatureIcon } from "lucide-react";
 import { Label } from "@/components/ui/label";
+import ESignatureModal from "@/components/tools/e_signature_workflow/e_signature_modal";
 const ESignatureWorkflow = () => {
-  const { selectedFiles, selectedIndex,  setNumPages } =
-    useToolsStore();
+  const { selectedFiles, selectedIndex, setNumPages } = useToolsStore();
   const pdfContainerRef = useRef<HTMLDivElement>(null);
   const [containerWidth, setContainerWidth] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [, setSavedSignature] = useState(null);
+
+
+
+    const handleSaveSignature = (signatureData) => {
+      setSavedSignature(signatureData);
+      console.log("Signature saved:", signatureData);
+    };
+
 
   // Update container width when window resizes
   useEffect(() => {
@@ -39,20 +49,21 @@ const ESignatureWorkflow = () => {
     return 1.2;
   };
 
-  
-
-
   return (
     <ConverterLayout
       actionMenuSideBar={
         <div className="p-4 cnter flex-col space-y-4">
           <Label>Signatures and Initials</Label>
           <div className="flex item-center justify-start gap-4 w-full">
-           
-
             <Button size="sm" variant="outline">
               <SignatureIcon /> Create Initials
             </Button>
+
+            <ESignatureModal
+              onClose={() => setIsModalOpen(false)}
+              isOpen={isModalOpen}
+              onSave={handleSaveSignature}
+            />
           </div>
 
           <Label>Signing</Label>
