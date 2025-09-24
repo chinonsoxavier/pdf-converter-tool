@@ -78,11 +78,11 @@ export default function ToolDownload({ label }: { label: string }) {
               <div className="center justify-center items-center rounded-full w-16 h-16 bg-secondary">
                 <Info className="text-red-500 w-14 h-8" />
               </div>
-              <p className="text-center leading-0 mt-5 text-primary-foreground text-lg font-semibold mb-4">
+              <p className="text-center mt-5 text-primary-foreground text-lg font-semibold mb-4">
                 The download link you're trying to access is no longer valid or
                 has expired.
               </p>
-              <p className="text-sm mb-5">
+              <p className="text-sm mb-5 text-center">
                 This usually happens when links are older than 1 hour.
               </p>
               <Button>

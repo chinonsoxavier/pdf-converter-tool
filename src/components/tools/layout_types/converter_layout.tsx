@@ -256,7 +256,7 @@ const ConverterLayout = ({
 
       {/* main content */}
       {loadingState === "error" ||
-      loadingState === "loading" ||
+    loadingState === "loading" ||
       loadingState === "success" ? (
         <ToolPageLoader
           label={label}
@@ -264,7 +264,7 @@ const ConverterLayout = ({
           handleSubmitFile={handleSubmitFile}
         />
       ) : (
-        <main className="w-full h-[88%] overflow-y-scroll dark:bg-primary">
+        <main className="w-full h-[88%] dark:bg-primary">
           {!selectedFiles[selectedIndex] ? (
             <div className="">
               <div className="w-full flex-col center p-4 py-20 rounded-lg ">
@@ -390,8 +390,8 @@ const ConverterLayout = ({
               />
               <div className="h-full overflow-y-auto relative flex items-start w-full justify-center ">
                 <div className="flex w-full items-center justify-start relative flex-col p-4 h-full flex-1">
-                  <div className="flex flex-col w-full justify-center p-3 items-end gap-5">
-                    <div className="items-center justify-center">
+                  <div className="flex flex-col relative w-full justify-center p-3 items-end gap-5">
+                    <div className="items-center fixed md:relative top-2 z-20 justify-center">
                       <div
                         onMouseEnter={() => setHovered(true)}
                         onMouseOver={() => setHovered(true)}
@@ -496,7 +496,7 @@ const ConverterLayout = ({
                         </Tooltip>
                       </div>
                     </div>
-                    <div className="center gap-2 duration-500 cursor-pointer text-white">
+                    <div className="center fixed md:relative gap-2 duration-500 cursor-pointer text-white">
                       <Tooltip>
                         <TooltipTrigger
                           className="bg-secondary shadow-3xl border sm:hidden drop-shadow-2xl p-2 rounded-full"

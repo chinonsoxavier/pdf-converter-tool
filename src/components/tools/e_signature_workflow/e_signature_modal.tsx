@@ -6,9 +6,15 @@ import React, {
   TouchEvent,
   ChangeEvent,
 } from "react";
-import { X, Trash2, Undo, Redo, Upload, Palette } from "lucide-react";
+import { Trash2, Undo, Redo, Upload, Palette } from "lucide-react";
 // import useUpload from "../utils/useUpload";
-
+import {
+  Select,
+  SelectContent,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from "@/components/ui/select";
 import {
   AlertDialog,
   AlertDialogAction,
@@ -49,7 +55,6 @@ const ESignatureModal: React.FC<ESignatureModalProps> = ({
   onSave,
   onClose,
 }) => {
-
   const [activeTab, setActiveTab] = useState<string>("draw");
   const [typedSignature, setTypedSignature] = useState<string>("");
   const [selectedFont, setSelectedFont] = useState<string>("font-caveat");
@@ -66,7 +71,7 @@ const ESignatureModal: React.FC<ESignatureModalProps> = ({
   const [drawColor, setDrawColor] = useState<string>("#000000");
 
   const canvasRef = useRef<HTMLCanvasElement>(null);
-//   const [upload, { loading: uploading }] = useUpload();
+  //   const [upload, { loading: uploading }] = useUpload();
 
   // Signature fonts available with proper class names
   const signatureFonts = [
@@ -290,6 +295,9 @@ const ESignatureModal: React.FC<ESignatureModalProps> = ({
       return;
     }
 
+    const imageUrl = URL.createObjectURL(file);
+    setUploadedSignature(imageUrl);
+
     // const result = await upload({ file });
     // if (result.error) {
     //   alert("Upload failed: " + result.error);
@@ -298,36 +306,36 @@ const ESignatureModal: React.FC<ESignatureModalProps> = ({
     // }
   };
 
-const getSignatureData = (): SignatureData | null => {
-  switch (activeTab) {
-    case "draw": {
-      if (strokes.length === 0) return null;
-      const canvas = canvasRef.current;
-      if (!canvas) return null;
-      return {
-        type: "canvas",
-        data: canvas.toDataURL("image/png"),
-      };
+  const getSignatureData = (): SignatureData | null => {
+    switch (activeTab) {
+      case "draw": {
+        if (strokes.length === 0) return null;
+        const canvas = canvasRef.current;
+        if (!canvas) return null;
+        return {
+          type: "canvas",
+          data: canvas.toDataURL("image/png"),
+        };
+      }
+      case "type": {
+        if (!typedSignature.trim()) return null;
+        return {
+          type: "text",
+          data: typedSignature,
+          font: selectedFont,
+        };
+      }
+      case "upload": {
+        if (!uploadedSignature) return null;
+        return {
+          type: "image",
+          data: uploadedSignature,
+        };
+      }
+      default:
+        return null;
     }
-    case "type": {
-      if (!typedSignature.trim()) return null;
-      return {
-        type: "text",
-        data: typedSignature,
-        font: selectedFont,
-      };
-    }
-    case "upload": {
-      if (!uploadedSignature) return null;
-      return {
-        type: "image",
-        data: uploadedSignature,
-      };
-    }
-    default:
-      return null;
-  }
-};
+  };
 
   const handleSave = (): void => {
     const signatureData = getSignatureData();
@@ -342,8 +350,8 @@ const getSignatureData = (): SignatureData | null => {
   if (!isOpen) return null;
 
   return (
-    <AlertDialog open={isOpen} onOpenChange={onClose} >
-      <AlertDialogContent>
+    <AlertDialog open={isOpen} onOpenChange={onClose}>
+      <AlertDialogContent className="border h-full max-h-[70vh]">
         <AlertDialogHeader>
           <AlertDialogTitle>Create Your Signature</AlertDialogTitle>
           <AlertDialogDescription>
@@ -351,16 +359,9 @@ const getSignatureData = (): SignatureData | null => {
           </AlertDialogDescription>
         </AlertDialogHeader>
 
-        <div className="fixed inset-0 flex items-center justify-center z-50 p-4">
-          <div
-            className="bg-white dark:bg-[#1E1E1E] rounded-2xl shadow-[0_20px_40px_rgba(0,0,0,0.15)] dark:shadow-[0_20px_40px_rgba(0,0,0,0.4)] max-w-2xl w-full max-h-[90vh] overflow-hidden"
-            style={{
-              fontFamily:
-                'Inter, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif',
-            }}
-          >
-            {/* Header */}
-            <div className="flex items-center justify-between p-6 border-b border-[#E6E6E6] dark:border-[#333333]">
+        <div className="h-full">
+          {/* Header */}
+          {/* <div className="flex items-center justify-between p-6 border-b border-[#E6E6E6] dark:border-[#333333]">
               <div>
                 <h2 className="text-xl font-semibold text-black dark:text-white">
                   Create Signature
@@ -372,262 +373,253 @@ const getSignatureData = (): SignatureData | null => {
               >
                 <X size={20} className="text-gray-500 dark:text-gray-400" />
               </button>
-            </div>
+            </div> */}
 
-            {/* Tab Navigation */}
-            <div className="flex border-b border-[#E6E6E6] dark:border-[#333333]">
-              <button
-                onClick={() => setActiveTab("type")}
-                className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === "type"
-                    ? "border-blue-500 text-blue-600 dark:text-blue-400"
-                    : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-                }`}
-              >
-                Input
-              </button>
-              <button
-                onClick={() => setActiveTab("upload")}
-                className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === "upload"
-                    ? "border-blue-500 text-blue-600 dark:text-blue-400"
-                    : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-                }`}
-              >
-                Image
-              </button>
-              <button
-                onClick={() => setActiveTab("draw")}
-                className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
-                  activeTab === "draw"
-                    ? "border-blue-500 text-blue-600 dark:text-blue-400"
-                    : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
-                }`}
-              >
-                Draw
-              </button>
-            </div>
+          {/* Tab Navigation */}
+          <div className="flex border-b border-[#E6E6E6] dark:border-[#333333]">
+            <button
+              onClick={() => setActiveTab("type")}
+              className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === "type"
+                  ? "border-blue-500 text-blue-600 dark:text-blue-400"
+                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              }`}
+            >
+              Input
+            </button>
+            <button
+              onClick={() => setActiveTab("upload")}
+              className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === "upload"
+                  ? "border-blue-500 text-blue-600 dark:text-blue-400"
+                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              }`}
+            >
+              Image
+            </button>
+            <button
+              onClick={() => setActiveTab("draw")}
+              className={`px-6 py-3 text-sm font-medium border-b-2 transition-colors ${
+                activeTab === "draw"
+                  ? "border-blue-500 text-blue-600 dark:text-blue-400"
+                  : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300"
+              }`}
+            >
+              Draw
+            </button>
+          </div>
 
-            {/* Tab Content */}
-            <div className="p-6">
-              {/* Type Tab */}
-              {activeTab === "type" && (
-                <div className="space-y-4">
-                  {/* Signature Preview */}
-                  <div className="w-full h-48 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-[#2A2A2A]">
-                    {typedSignature ? (
-                      <div
-                        className={`text-4xl text-black dark:text-white ${selectedFont}`}
-                      >
-                        {typedSignature}
-                      </div>
-                    ) : (
-                      <p className="text-gray-500 dark:text-gray-400">
-                        Type your signature below to see preview
-                      </p>
-                    )}
-                  </div>
-
-                  {/* Font and Input Controls */}
-                  <div className="flex gap-4 items-end">
-                    <div className="flex-1">
-                      <input
-                        type="text"
-                        value={typedSignature}
-                        onChange={(e) => setTypedSignature(e.target.value)}
-                        placeholder="Type your signature"
-                        className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-[#2A2A2A] text-black dark:text-white"
-                      />
+          {/* Tab Content */}
+          <div className="p-6 h-full">
+            {/* Type Tab */}
+            {activeTab === "type" && (
+              <div className="space-y-4">
+                {/* Signature Preview */}
+                <div className="w-full h-48 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-muted">
+                  {typedSignature ? (
+                    <div
+                      className={`text-4xl text-black dark:text-white ${selectedFont}`}
+                    >
+                      {typedSignature}
                     </div>
-                    <div className="relative">
-                      <select
-                        value={selectedFont}
-                        onChange={(e) => setSelectedFont(e.target.value)}
-                        className="appearance-none bg-white dark:bg-[#2A2A2A] border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 pr-10 text-black dark:text-white focus:ring-2 focus:ring-blue-500 focus:border-blue-500"
-                      >
+                  ) : (
+                    <p className="text-gray-500 dark:text-gray-400">
+                      Type your signature below to see preview
+                    </p>
+                  )}
+                </div>
+
+                {/* Font and Input Controls */}
+                <div className="flex gap-4 items-end">
+                  <div className="flex-1">
+                    <input
+                      type="text"
+                      value={typedSignature}
+                      onChange={(e) => setTypedSignature(e.target.value)}
+                      placeholder="Type your signature"
+                      className="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg focus:ring-2 focus:ring-blue-500 focus:border-blue-500 bg-white dark:bg-[#2A2A2A] text-black dark:text-white"
+                    />
+                  </div>
+                  <div className="relative">
+                    <Select
+                      value={selectedFont}
+                      onValueChange={(value) => setSelectedFont(value)}
+                    >
+                      <SelectTrigger className="w-[180px]">
+                        <SelectValue placeholder="Font" />
+                      </SelectTrigger>
+                      <SelectContent className="bg-nuted">
                         {signatureFonts.map((font) => (
-                          <option
+                          <SelectItem
                             key={font.className}
                             value={font.className}
-                            className={font.className}
+                            className={
+                              (font.className,
+                              "bg-muted rounded-none px-4 py-2 pr-10 text-black dark:text-white")
+                            }
                           >
                             {font.name}
-                          </option>
+                          </SelectItem>
                         ))}
-                      </select>
-                      <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
-                        <svg
-                          className="w-4 h-4 text-gray-500"
-                          fill="none"
-                          stroke="currentColor"
-                          viewBox="0 0 24 24"
-                        >
-                          <path
-                            strokeLinecap="round"
-                            strokeLinejoin="round"
-                            strokeWidth={2}
-                            d="M19 9l-7 7-7-7"
-                          />
-                        </svg>
-                      </div>
+                      </SelectContent>
+                    </Select>
+
+                    <div className="absolute right-3 top-1/2 transform -translate-y-1/2 pointer-events-none">
+                      <svg
+                        className="w-4 h-4 text-gray-500"
+                        fill="none"
+                        stroke="currentColor"
+                        viewBox="0 0 24 24"
+                      >
+                        <path
+                          strokeLinecap="round"
+                          strokeLinejoin="round"
+                          strokeWidth={2}
+                          d="M19 9l-7 7-7-7"
+                        />
+                      </svg>
                     </div>
+                  </div>
+                  <button
+                    onClick={() => setTypedSignature("")}
+                    className="p-2 text-gray-500 hover:text-red-500 transition-colors"
+                    title="Clear signature"
+                  >
+                    <Trash2 size={20} />
+                  </button>
+                </div>
+              </div>
+            )}
+
+            {/* Upload Tab */}
+            {activeTab === "upload" && (
+              <div className="space-y-4">
+                {/* Upload Preview */}
+                <div className="w-full h-48 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-[#2A2A2A]">
+                  {uploadedSignature ? (
+                    <img
+                      src={uploadedSignature}
+                      alt="Uploaded signature"
+                      className="max-h-full max-w-full object-contain"
+                    />
+                  ) : (
+                    <div className="text-center">
+                      <Upload
+                        className="mx-auto mb-2 text-gray-400"
+                        size={32}
+                      />
+                      <p className="text-gray-500 dark:text-gray-400">
+                        Upload your signature image
+                      </p>
+                      <p className="text-sm text-gray-400 mt-1">
+                        PNG, JPG, or SVG files accepted
+                      </p>
+                    </div>
+                  )}
+                </div>
+
+                {/* Upload Controls */}
+                <div className="flex gap-4 items-center">
+                  <input
+                    type="file"
+                    accept="image/*"
+                    onChange={handleFileUpload}
+                    className="hidden"
+                    id="signature-upload"
+                  />
+                  <label
+                    htmlFor="signature-upload"
+                    className={`px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg cursor-pointer transition-colors`}
+                  >
+                    {"Choose File"}
+                  </label>
+                  {uploadedSignature && (
                     <button
-                      onClick={() => setTypedSignature("")}
+                      onClick={() => setUploadedSignature(null)}
                       className="p-2 text-gray-500 hover:text-red-500 transition-colors"
-                      title="Clear signature"
+                      title="Remove image"
                     >
                       <Trash2 size={20} />
                     </button>
-                  </div>
+                  )}
                 </div>
-              )}
+              </div>
+            )}
 
-              {/* Upload Tab */}
-              {activeTab === "upload" && (
-                <div className="space-y-4">
-                  {/* Upload Preview */}
-                  <div className="w-full h-48 border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-lg flex items-center justify-center bg-gray-50 dark:bg-[#2A2A2A]">
-                    {uploadedSignature ? (
-                      <img
-                        src={uploadedSignature}
-                        alt="Uploaded signature"
-                        className="max-h-full max-w-full object-contain"
-                      />
-                    ) : (
-                      <div className="text-center">
-                        <Upload
-                          className="mx-auto mb-2 text-gray-400"
-                          size={32}
-                        />
-                        <p className="text-gray-500 dark:text-gray-400">
-                          Upload your signature image
-                        </p>
-                        <p className="text-sm text-gray-400 mt-1">
-                          PNG, JPG, or SVG files accepted
-                        </p>
-                      </div>
-                    )}
+            {/* Draw Tab */}
+            {activeTab === "draw" && (
+              <div className="space-y-4">
+                {/* Color Picker */}
+                <div className="flex items-center gap-3">
+                  <div className="flex items-center gap-2">
+                    <Palette size={16} className="text-gray-500" />
+                    <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
+                      Color:
+                    </span>
                   </div>
-
-                  {/* Upload Controls */}
-                  <div className="flex gap-4 items-center">
-                    <input
-                      type="file"
-                      accept="image/*"
-                      onChange={handleFileUpload}
-                      className="hidden"
-                      id="signature-upload"
-                    />
-                    <label
-                      htmlFor="signature-upload"
-                      className={`px-4 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg cursor-pointer transition-colors`}
-                    >
-                      {"Choose File"}
-                    </label>
-                    {uploadedSignature && (
+                  <div className="flex gap-2">
+                    {colorOptions.map((color) => (
                       <button
-                        onClick={() => setUploadedSignature(null)}
-                        className="p-2 text-gray-500 hover:text-red-500 transition-colors"
-                        title="Remove image"
-                      >
-                        <Trash2 size={20} />
-                      </button>
-                    )}
+                        key={color}
+                        onClick={() => setDrawColor(color)}
+                        className={`w-8 h-8 rounded-full border-2 transition-all ${
+                          drawColor === color
+                            ? "border-gray-400 scale-110"
+                            : "border-gray-200 hover:border-gray-300"
+                        }`}
+                        style={{ backgroundColor: color }}
+                        title={`Select ${color}`}
+                      />
+                    ))}
                   </div>
                 </div>
-              )}
 
-              {/* Draw Tab */}
-              {activeTab === "draw" && (
-                <div className="space-y-4">
-                  {/* Color Picker */}
-                  <div className="flex items-center gap-3">
-                    <div className="flex items-center gap-2">
-                      <Palette size={16} className="text-gray-500" />
-                      <span className="text-sm font-medium text-gray-700 dark:text-gray-300">
-                        Color:
-                      </span>
-                    </div>
-                    <div className="flex gap-2">
-                      {colorOptions.map((color) => (
-                        <button
-                          key={color}
-                          onClick={() => setDrawColor(color)}
-                          className={`w-8 h-8 rounded-full border-2 transition-all ${
-                            drawColor === color
-                              ? "border-gray-400 scale-110"
-                              : "border-gray-200 hover:border-gray-300"
-                          }`}
-                          style={{ backgroundColor: color }}
-                          title={`Select ${color}`}
-                        />
-                      ))}
-                    </div>
-                  </div>
-
-                  {/* Drawing Canvas */}
-                  <div className="border-2 border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden bg-white">
-                    <canvas
-                      ref={canvasRef}
-                      width={600}
-                      height={200}
-                      className="w-full h-48 cursor-crosshair"
-                      onMouseDown={startDrawing}
-                      onMouseMove={draw}
-                      onMouseUp={stopDrawing}
-                      onMouseLeave={stopDrawing}
-                      onTouchStart={startDrawing}
-                      onTouchMove={draw}
-                      onTouchEnd={stopDrawing}
-                      style={{ touchAction: "none" }}
-                    />
-                  </div>
-
-                  {/* Drawing Controls */}
-                  <div className="flex gap-2 items-center">
-                    <button
-                      onClick={undoStroke}
-                      disabled={strokes.length === 0}
-                      className="flex items-center gap-2 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-[#333333] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    >
-                      <Undo size={16} />
-                      Undo
-                    </button>
-                    <button
-                      onClick={redoStroke}
-                      disabled={redoStack.length === 0}
-                      className="flex items-center gap-2 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-[#333333] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
-                    >
-                      <Redo size={16} />
-                      Redo
-                    </button>
-                    <button
-                      onClick={clearDrawing}
-                      className="flex items-center gap-2 px-3 py-2 text-sm text-red-600 border border-red-300 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
-                    >
-                      <Trash2 size={16} />
-                      Clear
-                    </button>
-                  </div>
+                {/* Drawing Canvas */}
+                <div className="border-2 border-gray-300 dark:border-gray-600 rounded-lg overflow-hidden bg-white">
+                  <canvas
+                    ref={canvasRef}
+                    width={600}
+                    height={200}
+                    className="w-full cursor-crosshair"
+                    onMouseDown={startDrawing}
+                    onMouseMove={draw}
+                    onMouseUp={stopDrawing}
+                    onMouseLeave={stopDrawing}
+                    onTouchStart={startDrawing}
+                    onTouchMove={draw}
+                    onTouchEnd={stopDrawing}
+                    style={{ touchAction: "none" }}
+                  />
                 </div>
-              )}
-            </div>
 
-            {/* Footer */}
-            <div className="flex gap-3 p-6 border-t border-[#E6E6E6] dark:border-[#333333] justify-end">
-              <button
-                onClick={onClose}
-                className="px-4 py-2 text-gray-600 dark:text-gray-400 border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-[#333333] transition-colors"
-              >
-                Cancel
-              </button>
-              <button
-                onClick={handleSave}
-                className="px-6 py-2 bg-blue-500 hover:bg-blue-600 text-white rounded-lg transition-colors font-medium"
-              >
-                OK
-              </button>
-            </div>
+                {/* Drawing Controls */}
+                <div className="flex gap-2 items-center">
+                  <button
+                    onClick={undoStroke}
+                    disabled={strokes.length === 0}
+                    className="flex items-center gap-2 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-[#333333] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <Undo size={16} />
+                    Undo
+                  </button>
+                  <button
+                    onClick={redoStroke}
+                    disabled={redoStack.length === 0}
+                    className="flex items-center gap-2 px-3 py-2 text-sm border border-gray-300 dark:border-gray-600 rounded-lg hover:bg-gray-50 dark:hover:bg-[#333333] disabled:opacity-50 disabled:cursor-not-allowed transition-colors"
+                  >
+                    <Redo size={16} />
+                    Redo
+                  </button>
+                  <button
+                    onClick={clearDrawing}
+                    className="flex items-center gap-2 px-3 py-2 text-sm text-red-600 border border-red-300 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition-colors"
+                  >
+                    <Trash2 size={16} />
+                    Clear
+                  </button>
+                </div>
+              </div>
+            )}
           </div>
         </div>
 

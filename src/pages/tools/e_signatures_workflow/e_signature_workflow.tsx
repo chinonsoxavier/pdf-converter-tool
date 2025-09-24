@@ -33,6 +33,15 @@ interface SignatureData {
 
     const handleResize = () => {
       if (pdfContainerRef.current) {
+        if (window.innerWidth < 300) {
+          setContainerWidth(260);
+        } else if (window.innerWidth < 500) {
+          setContainerWidth(450);
+        } else if (window.innerWidth < 700) {
+          setContainerWidth(650);
+        } else if (window.innerWidth < 800) {
+          setContainerWidth(750);
+        }
         setContainerWidth(pdfContainerRef.current.clientWidth);
       }
     };
@@ -42,34 +51,24 @@ interface SignatureData {
   }, []);
 
   // Calculate scale based on container width
-  const calculateScale = () => {
-    if (containerWidth === 0) return 1;
 
-    if (containerWidth < 400) return 0.7;
-    if (containerWidth < 600) return 0.8;
-    if (containerWidth < 768) return 0.9;
-    if (containerWidth < 1024) return 1.0;
-    return 1.2;
-  };
 
    const [currentPage, setCurrentPage] = useState(1);
    const [totalPages, setTotalPages] = useState(1);
 
    // Update container width when window resizes
-   useEffect(() => {
-     if (pdfContainerRef.current) {
-       setContainerWidth(pdfContainerRef.current.clientWidth);
-     }
+useEffect(() => {
+  const updateWidth = () => {
+    if (pdfContainerRef.current) {
+      setContainerWidth(pdfContainerRef.current.clientWidth);
+    }
+  };
 
-     const handleResize = () => {
-       if (pdfContainerRef.current) {
-         setContainerWidth(pdfContainerRef.current.clientWidth);
-       }
-     };
+  updateWidth(); // initial call
+  window.addEventListener("resize", updateWidth);
 
-     window.addEventListener("resize", handleResize);
-     return () => window.removeEventListener("resize", handleResize);
-   }, []);
+  return () => window.removeEventListener("resize", updateWidth);
+}, []);
 
    // Calculate scale based on container width
   //  const calculateScale = () => {
@@ -124,8 +123,12 @@ interface SignatureData {
             <Button size="sm" variant="outline">
               <SignatureIcon /> Create Initials
             </Button>
-            <Button onClick={()=>setIsModalOpen(true)} size="sm" variant="outline">
-            <LineSquiggleIcon className="mr-2" /> Create Signature
+            <Button
+              onClick={() => setIsModalOpen(true)}
+              size="sm"
+              variant="outline"
+            >
+              <LineSquiggleIcon className="mr-2" /> Create Signature
             </Button>
             <ESignatureModal
               onClose={() => setIsModalOpen(false)}
@@ -164,7 +167,7 @@ interface SignatureData {
                 {Array.from({ length: totalPages }, (_, index) => (
                   <div
                     key={index}
-                    data-page-number={index + 1} // Add data attribute
+                    data-page-number={index + 1}
                     className="mb-4 w-full flex justify-center"
                   >
                     <Page
@@ -172,8 +175,7 @@ interface SignatureData {
                       pageNumber={index + 1}
                       renderTextLayer={false}
                       renderAnnotationLayer={false}
-                      scale={calculateScale()}
-                      width={containerWidth}
+                      width={Math.min(containerWidth, 900)} // responsive with max cap
                     />
                   </div>
                 ))}
