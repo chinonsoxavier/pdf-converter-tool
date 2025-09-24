@@ -51,7 +51,7 @@ import { baseAxios } from "./network/base_urls";
 const App = () => {
 
   const location = useLocation();
-  const { resetStore } = useToolsStore();
+  const { resetStore,setSelectedFile } = useToolsStore();
   function EmailVerificationTokenRouteWrapper() {
     const { authStatus, userAuthEmail } = useAuthStore();
   const location = useLocation();
@@ -86,6 +86,8 @@ const App = () => {
     const pingServer = async () => {
       await baseAxios.get('/');
     };
+
+    setSelectedFile(null);
     pingServer();
     resetStore();
     resetErrorMsg({status:''});

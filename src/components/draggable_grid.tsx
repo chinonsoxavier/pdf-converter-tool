@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
 import { Document, Page } from "react-pdf";
 import { RotateCwIcon, XIcon } from "lucide-react";
@@ -52,16 +52,17 @@ export default function DraggableGrid({
   pagerotable = false, // Whether the PDF can be rotated
 }: DraggableGridProps) {
   const [draggedItem, setDraggedItem] = useState<DraggedItem | null>(null);
-  const [, setDragOverIndex] = useState<number | null>(null);
+  const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
+  const touchStartPos = useRef<{ x: number; y: number } | null>(null);
+  const touchElementRef = useRef<HTMLElement | null>(null);
 
   const { selectedFiles, removeSelectedFiles, setRotateRight } =
     useToolsStore();
 
   useEffect(() => {
-  console.log(selectedFiles[selectedIndex]?.pdfPages)
-  }, [selectedFiles])
-  
-  
+    console.log(selectedFiles[selectedIndex]?.pdfPages);
+  }, [selectedFiles]);
+
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
     item: PageItem,
@@ -113,6 +114,68 @@ export default function DraggableGrid({
   const handleDragEnd = (): void => {
     setDraggedItem(null);
     setDragOverIndex(null);
+  };
+
+  // Touch event handlers for mobile
+  const handleTouchStart = (
+    e: React.TouchEvent<HTMLDivElement>,
+    item: PageItem,
+    index: number
+  ): void => {
+    touchStartPos.current = {
+      x: e.touches[0].clientX,
+      y: e.touches[0].clientY,
+    };
+    setDraggedItem({ item, index });
+    touchElementRef.current = e.currentTarget;
+    e.currentTarget.style.opacity = "0.5";
+    e.currentTarget.style.transform = "scale(0.95)";
+  };
+
+  const handleTouchMove = (e: React.TouchEvent<HTMLDivElement>): void => {
+    e.preventDefault();
+    if (!draggedItem || !touchStartPos.current) return;
+
+    const touch = e.touches[0];
+    const elements = document.elementsFromPoint(touch.clientX, touch.clientY);
+    const dropTarget = elements.find((el) =>
+      el.classList.contains("draggable-page")
+    );
+
+    if (dropTarget) {
+      const index = Number(dropTarget.getAttribute("data-index"));
+      if (index !== draggedItem.index) {
+        setDragOverIndex(index);
+      } else {
+        setDragOverIndex(null);
+      }
+    }
+  };
+
+  const handleTouchEnd = () => {
+    if (
+      draggedItem &&
+      dragOverIndex !== null &&
+      draggedItem.index !== dragOverIndex
+    ) {
+      const newItems = [...items];
+      const draggedItemData = newItems[draggedItem.index];
+      newItems.splice(draggedItem.index, 1);
+      const adjustedDropIndex =
+        draggedItem.index < dragOverIndex ? dragOverIndex - 1 : dragOverIndex;
+      newItems.splice(adjustedDropIndex, 0, draggedItemData);
+      setItems(selectedIndex,newItems);
+    }
+
+    if (touchElementRef.current) {
+      touchElementRef.current.style.opacity = "1";
+      touchElementRef.current.style.transform = "scale(1)";
+    }
+
+    setDraggedItem(null);
+    setDragOverIndex(null);
+    touchStartPos.current = null;
+    touchElementRef.current = null;
   };
 
   return (
@@ -176,6 +239,9 @@ export default function DraggableGrid({
                     onDragLeave={handleDragLeave}
                     onDrop={(e) => handleDrop(e, index)}
                     onDragEnd={handleDragEnd}
+                    onTouchStart={(e) => handleTouchStart(e, item, index)}
+                    onTouchMove={handleTouchMove}
+                    onTouchEnd={handleTouchEnd}
                     className={`
               h-auto border pdf_shadow rounded-md p-3 bg-white dark:bg-primary flex items-center justify-center
               cursor-move transition-all duration-200
