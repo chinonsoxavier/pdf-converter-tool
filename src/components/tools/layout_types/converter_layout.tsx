@@ -390,7 +390,7 @@ const ConverterLayout = ({
               />
               <div className="h-full overflow-y-auto relative flex items-start w-full justify-center ">
                 <div className="flex w-full items-center justify-start relative flex-col p-4 h-full flex-1">
-                  <div className="flex flex-col relative w-full justify-center p-3 items-end gap-5">
+                <div className="flex flex-col relative w-full tify-center p-3 items-end gap-5">
                     <div className="items-center fixed md:relative top-2 z-20 justify-center">
                       <div
                         onMouseEnter={() => setHovered(true)}

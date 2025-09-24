@@ -12,9 +12,9 @@ import PdfLoadingComponent from "./pdf_loading_component";
 
 // Define the structure of a PDF page item
 interface PageItem {
-  id: string | number; // Unique identifier for the page
-  pageNumber: number; // Page number for react-pdf
-  rotate: number[]; // Rotation for the page (synchronized with ISelectedFile.rotate)
+  id: string | number;
+  pageNumber: number;
+  rotate: number[];
 }
 
 interface DraggedItem {
@@ -24,17 +24,17 @@ interface DraggedItem {
 
 interface DraggableGridProps {
   items: PageItem[];
-  className?: string; // Optional className for styling
-  showCloseIcon?: boolean; // Whether to show the close icon
-  label?: string; // Label for the PDF file
-  pageNumber?: "all" | "1"; // Page number to display, "all" for all pages
-  setItems: (pageIndex: number, items: PageItem[]) => void;
-  file: string; // File URL from ISelectedFile.fileUrl
-  scale?: number; // Optional scale for PDF rendering
-  selectedIndex: number; // Index of the selected file
-  setNumPages: (fileIndex: number, numPages: number) => void; // Function to set number of pages
-  rotateIndividualPage: (fileIndex: number, pageIndex: number) => void; // Function to rotate a page
-  pagerotable?: boolean; // Whether pages can be rotated
+  className?: string;
+  showCloseIcon?: boolean;
+  label?: string;
+  pageNumber?: "all" | "1";
+  setItems: (fileIndex: number, items: PageItem[]) => void;
+  file: string;
+  scale?: number;
+  selectedIndex: number;
+  setNumPages: (fileIndex: number, numPages: number) => void;
+  rotateIndividualPage: (fileIndex: number, pageIndex: number) => void;
+  pagerotable?: boolean;
 }
 
 export default function DraggableGrid({
@@ -49,19 +49,18 @@ export default function DraggableGrid({
   showCloseIcon = true,
   label = "PDF Document",
   pageNumber = "all",
-  pagerotable = false, // Whether the PDF can be rotated
+  pagerotable = false,
 }: DraggableGridProps) {
   const [draggedItem, setDraggedItem] = useState<DraggedItem | null>(null);
   const [dragOverIndex, setDragOverIndex] = useState<number | null>(null);
   const touchStartPos = useRef<{ x: number; y: number } | null>(null);
   const touchElementRef = useRef<HTMLElement | null>(null);
-
   const { selectedFiles, removeSelectedFiles, setRotateRight } =
     useToolsStore();
 
   useEffect(() => {
     console.log(selectedFiles[selectedIndex]?.pdfPages);
-  }, [selectedFiles]);
+  }, [selectedFiles, selectedIndex]);
 
   const handleDragStart = (
     e: React.DragEvent<HTMLDivElement>,
@@ -90,23 +89,15 @@ export default function DraggableGrid({
     dropIndex: number
   ): void => {
     e.preventDefault();
-
-    if (draggedItem && draggedItem?.index !== dropIndex) {
-      // Safely create a copy of items
-      const newItems: PageItem[] = [...items]; // Use props.items directly
-      const draggedItemData: PageItem = newItems[draggedItem.index];
-
-      // Remove the dragged item
+    if (draggedItem && draggedItem.index !== dropIndex) {
+      const newItems = [...items];
+      const draggedItemData = newItems[draggedItem.index];
       newItems.splice(draggedItem.index, 1);
-
-      // Insert at the new position
-      const adjustedDropIndex: number =
+      const adjustedDropIndex =
         draggedItem.index < dropIndex ? dropIndex - 1 : dropIndex;
       newItems.splice(adjustedDropIndex, 0, draggedItemData);
-
       setItems(selectedIndex, newItems);
     }
-
     setDraggedItem(null);
     setDragOverIndex(null);
   };
@@ -122,6 +113,7 @@ export default function DraggableGrid({
     item: PageItem,
     index: number
   ): void => {
+    e.preventDefault(); // Prevent default scrolling
     touchStartPos.current = {
       x: e.touches[0].clientX,
       y: e.touches[0].clientY,
@@ -144,15 +136,17 @@ export default function DraggableGrid({
 
     if (dropTarget) {
       const index = Number(dropTarget.getAttribute("data-index"));
-      if (index !== draggedItem.index) {
+      if (!isNaN(index) && index !== draggedItem.index) {
         setDragOverIndex(index);
       } else {
         setDragOverIndex(null);
       }
+    } else {
+      setDragOverIndex(null);
     }
   };
 
-  const handleTouchEnd = () => {
+  const handleTouchEnd = (): void => {
     if (
       draggedItem &&
       dragOverIndex !== null &&
@@ -164,7 +158,7 @@ export default function DraggableGrid({
       const adjustedDropIndex =
         draggedItem.index < dragOverIndex ? dragOverIndex - 1 : dragOverIndex;
       newItems.splice(adjustedDropIndex, 0, draggedItemData);
-      setItems(selectedIndex,newItems);
+      setItems(selectedIndex, newItems);
     }
 
     if (touchElementRef.current) {
@@ -212,11 +206,11 @@ export default function DraggableGrid({
                 onClick={() =>
                   setRotateRight(0, selectedFiles[selectedIndex]?.numPages ?? 0)
                 }
-                className="absolute text-white opacity-80 hover:opacity-100 duration-700 bg-accent center top-4 right-10 z-10 rounded-full w-4 h-4 p-2"
+                className="absolute text-white opacity-80 hover:opacity-100 duration-700 bg-accent center top-4 right-14 z-10 rounded-full w-8 h-8 p-1"
               >
                 <RotateCwIcon />
               </TooltipTrigger>
-              <TooltipContent className="text-white">Rotate</TooltipContent>
+              <TooltipContent className="text-white">Rotate All</TooltipContent>
             </Tooltip>
           )}
           {pageNumber === "all" ? (
@@ -230,9 +224,10 @@ export default function DraggableGrid({
               className="items-center h-full flex-cl justify-evenly flex-wrap flex gap-5 duration-500 p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-secondary"
             >
               <div className="flex items-center justify-center flex-wrap gap-4">
-                {selectedFiles[selectedIndex]?.pdfPages?.map((item, index) => (
+                {items.map((item, index) => (
                   <div
                     key={item.id}
+                    data-index={index}
                     draggable
                     onDragStart={(e) => handleDragStart(e, item, index)}
                     onDragOver={(e) => handleDragOver(e, index)}
@@ -242,13 +237,11 @@ export default function DraggableGrid({
                     onTouchStart={(e) => handleTouchStart(e, item, index)}
                     onTouchMove={handleTouchMove}
                     onTouchEnd={handleTouchEnd}
-                    className={`
-              h-auto border pdf_shadow rounded-md p-3 bg-white dark:bg-primary flex items-center justify-center
-              cursor-move transition-all duration-200
-               hover:scale-102
-              ${draggedItem?.index === index ? "opacity-50 scale-95" : ""}
-           
-            `}
+                    className={cn(
+                      "draggable-page h-auto border pdf_shadow rounded-md p-3 bg-white dark:bg-primary flex items-center justify-center cursor-move transition-all duration-200 hover:scale-102",
+                      draggedItem?.index === index ? "opacity-50 scale-95" : "",
+                      dragOverIndex === index ? "border-accent" : ""
+                    )}
                   >
                     <div className="relative">
                       {pagerotable && (
@@ -269,7 +262,7 @@ export default function DraggableGrid({
                       )}
                       <Page
                         loading={<PdfLoadingComponent />}
-                        rotate={item?.rotate[index]}
+                        rotate={item.rotate[index]}
                         className="pdf_shadow flex-1 w-full rounded border"
                         pageNumber={item.pageNumber}
                         width={150}
@@ -286,22 +279,21 @@ export default function DraggableGrid({
             <div>
               <Document
                 file={file}
-                scale={10}
+                scale={scale}
                 onLoadSuccess={({ numPages }) => {
                   setNumPages(selectedIndex, numPages);
-                  // alert(numPages);
                 }}
                 onLoadError={(error) => console.error("PDF load error:", error)}
                 className="w-full flex-1 gap-5 flex-col hover:border-black/40 duration-500 center p-5 rounded-lg pdf_shadow2 hover:border border dark:bg-secondary bg-white"
               >
                 <Page
-                  loading={PdfLoadingComponent}
-                  key={pageNumber} // Use the specific page number here
+                  loading={<PdfLoadingComponent />}
+                  key={pageNumber}
                   rotate={selectedFiles[selectedIndex]?.rotate?.[0] ?? 0}
                   className="pdf_shadow rounded border"
                   pageNumber={1}
-                  width={10} // Reduced for better performance
-                  renderTextLayer={false} // Optimize rendering
+                  width={150}
+                  renderTextLayer={false}
                   renderAnnotationLayer={false}
                 />
                 <p className="text-xs leading text-secondary-foreground">
@@ -327,8 +319,7 @@ export default function DraggableGrid({
             selectedFiles[selectedIndex]?.fileType[0] === "jpg" ||
             selectedFiles[selectedIndex]?.fileType[0] === "png"
               ? ""
-              : (selectedFiles[selectedIndex]?.numPages ||
-                  selectedFiles[selectedIndex]?.numPages) + " pages"
+              : (selectedFiles[selectedIndex]?.numPages || 0) + " pages"
           }`}
         </p>
       </TooltipContent>
