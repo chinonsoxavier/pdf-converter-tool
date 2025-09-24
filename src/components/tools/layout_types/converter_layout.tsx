@@ -617,7 +617,7 @@ actionMenuSideBar &&
               }
               {
                 !actionMenuSideBar &&
-              <Button onClick={handleSubmitFile} className="absolute bottom-10 right-10 hidden sm:block" >{actionButtonText}nnn</Button>
+              <Button onClick={handleSubmitFile} className="absolute bottom-10 right-10 hidden sm:block" >{actionButtonText}</Button>
               }
               {/* {children} */}
             </div>

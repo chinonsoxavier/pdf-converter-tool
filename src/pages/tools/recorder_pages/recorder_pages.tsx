@@ -8,6 +8,7 @@ const RecorderPages = () => {
         convertingStateText="Rotate Pdf"
         label="Rotate Pdf pages"
         desc="Rotate one or more pages"
+        
       />
     </div>
   );

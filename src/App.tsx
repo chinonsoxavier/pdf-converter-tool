@@ -51,7 +51,7 @@ import { baseAxios } from "./network/base_urls";
 const App = () => {
 
   const location = useLocation();
-  const { resetStore,setSelectedFile } = useToolsStore();
+  const { resetStore,setSelectedFile,setLoadingState } = useToolsStore();
   function EmailVerificationTokenRouteWrapper() {
     const { authStatus, userAuthEmail } = useAuthStore();
   const location = useLocation();
@@ -61,7 +61,6 @@ const App = () => {
     if (hasLinkQuery || (authStatus === "email sent" || userAuthEmail)) {
       return <VerifyEmailTokenPage />;
     }
-
     return <Navigate to="/signin" />;
   }
 
@@ -88,6 +87,7 @@ const App = () => {
     };
 
     setSelectedFile(null);
+    setLoadingState("idle");
     pingServer();
     resetStore();
     resetErrorMsg({status:''});
