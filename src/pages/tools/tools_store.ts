@@ -139,7 +139,7 @@ const useToolsStore = create<ToolsStore>((set) => ({
         ...state.selectedFiles,
         {
           ...newSelectedFile,
-          rotate: newSelectedFile.numPages
+          rotate: newSelectedFile?.numPages
             ? Array(newSelectedFile.numPages).fill(0)
             : [], // Initialize rotate based on numPages
         },
