@@ -28,30 +28,17 @@ const PreviewPdfConverter = () => {
 
   // Update container width when window resizes
   useEffect(() => {
-    if (pdfContainerRef.current) {
-      setContainerWidth(pdfContainerRef.current.clientWidth);
-    }
-
-    const handleResize = () => {
+    const updateWidth = () => {
       if (pdfContainerRef.current) {
-        setContainerWidth(pdfContainerRef.current.clientWidth);
+        setContainerWidth(pdfContainerRef?.current?.clientWidth);
       }
     };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    updateWidth(); // run once on mount
+    window.addEventListener("resize", updateWidth);
 
-  // Calculate scale based on container width
-  const calculateScale = () => {
-    if (containerWidth === 0) return 1;
-
-    if (containerWidth < 400) return 0.7;
-    if (containerWidth < 600) return 0.8;
-    if (containerWidth < 768) return 0.9;
-    if (containerWidth < 1024) return 1.0;
-    return 1.2;
-  };
+    return () => window.removeEventListener("resize", updateWidth);
+  }, [pdfContainerRef?.current?.clientWidth]);
 
   const handleFileChange = async (
     event: React.ChangeEvent<HTMLInputElement> | React.DragEvent<HTMLDivElement>
@@ -152,7 +139,7 @@ const PreviewPdfConverter = () => {
 
       <main className="flex-grow overflow-y-scroll h-auto md:h-[88%] w-full dark:bg-primary">
         {!selectedFiles[selectedIndex] ? (
-          <div className="overflow-x-hidden">
+          <div className="overflow-hidden">
             <div className="w-full flex flex-col items-center p-4 py-6 md:py-20 rounded-lg">
               <motion.div
                 variants={{
@@ -258,11 +245,9 @@ const PreviewPdfConverter = () => {
         ) : (
           <div className="flex h-fit relative items-center justify-center p-2 sm:p-4">
             <div className="center w-full max-w-6xl">
-           
-
               {/* Main PDF Viewer */}
               <div
-                className="lg:col-span-3 dark:border-primary border rounded-lg py-4"
+                className="lg:col-span-3 w-full dark:border-primary border rounded-lg py-4"
                 ref={pdfContainerRef}
               >
                 <Document
@@ -287,8 +272,7 @@ const PreviewPdfConverter = () => {
                         pageNumber={index + 1}
                         renderTextLayer={false}
                         renderAnnotationLayer={false}
-                        scale={calculateScale()}
-                        width={containerWidth}
+                        width={Math.min(containerWidth, 900)} // responsive with a max width cap
                       />
                     </div>
                   ))}
@@ -305,7 +289,7 @@ const PreviewPdfConverter = () => {
                 totalPages={totalPages}
                 onNext={nextPage}
                 onPrev={prevPage}
-                onPageChange={goToPage}
+                // onPageChange={goToPage}
               />
             </div>
           </div>
@@ -321,13 +305,11 @@ const PaginationControls = ({
   totalPages,
   onNext,
   onPrev,
-  onPageChange,
 }: {
   currentPage: number;
   totalPages: number;
   onNext: () => void;
   onPrev: () => void;
-  onPageChange: (page: number) => void;
 }) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 flex items-center space-x-2">
@@ -336,10 +318,10 @@ const PaginationControls = ({
         disabled={currentPage === 1}
         className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm disabled:opacity-50"
       >
-        ← Previous
+        ←
       </button>
 
-      <span className="text-sm">
+      <span className="text-sm whitespace-nowrap">
         Page {currentPage} of {totalPages}
       </span>
 
@@ -348,17 +330,8 @@ const PaginationControls = ({
         disabled={currentPage === totalPages}
         className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm disabled:opacity-50"
       >
-        Next →
+        →
       </button>
-
-      <input
-        type="number"
-        min="1"
-        max={totalPages}
-        value={currentPage}
-        onChange={(e) => onPageChange(parseInt(e.target.value))}
-        className="w-16 px-2 py-1 border rounded text-sm text-center"
-      />
     </div>
   );
 };

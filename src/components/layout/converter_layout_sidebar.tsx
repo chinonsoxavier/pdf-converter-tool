@@ -19,7 +19,7 @@ const ConverterLayoutSidebar = ({
     <aside
       className={cn(
         sideMenuOpen ? "translate-x-0" : "-translate-x-full",
-        "absolute z-20 pb-6 ight-0 w-full sm:hidden overflow-clip h-full border-l border-r flex-col flex items-center justify-between max-w-[80%] xs:max-w-sm bg-white dark:bg-secondary duration-500"
+        "absolute z-20 w-full sm:hidden overflow-hidden h-full border-l border-r flex-col flex items-center justify-between max-w-[80%] xs:max-w-sm bg-white dark:bg-secondary duration-500"
       )}
     >
       <div className="border-b h-[12%] py-6 w-full">
@@ -27,7 +27,7 @@ const ConverterLayoutSidebar = ({
           {label}
         </p>
       </div>
-      <div className="w-full h-[76%] overflow-scroll">
+      <div className="w-full h-[76%] overflow-y-auto">
         {/* <div className="py-2 gap-2 hidden grid-cols-[repeat(auto-fill,minmax(120px,1fr))]">
           <div className="px-4 hover:border duration-500 hover:shadow hover:cursor-pointer hover:bg-secondary center gap-2 py-3 g-secondary rounded-lg flex h-12">
             <PdfToExcell size="md" />

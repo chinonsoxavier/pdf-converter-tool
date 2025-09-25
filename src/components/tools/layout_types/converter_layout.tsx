@@ -496,7 +496,7 @@ const ConverterLayout = ({
                         </Tooltip>
                       </div>
                     </div>
-                    <div className="center fixed md:relative gap-2 duration-500 cursor-pointer text-white">
+                    <div className="center top -mt-4 right-7 fixed md:relative gap-2 duration-500 cursor-pointer text-white">
                       <Tooltip>
                         <TooltipTrigger
                           className="bg-secondary shadow-3xl border sm:hidden drop-shadow-2xl p-2 rounded-full"

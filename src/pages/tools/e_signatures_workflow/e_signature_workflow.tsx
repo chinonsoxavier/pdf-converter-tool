@@ -13,64 +13,35 @@ const ESignatureWorkflow = () => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [, setSavedSignature] = useState(null);
 
-interface SignatureData {
-  type: "canvas" | "text" | "image";
-  data: string;
-  font?: string;
-}
+  interface SignatureData {
+    type: "canvas" | "text" | "image";
+    data: string;
+    font?: string;
+  }
 
-    const handleSaveSignature = (signatureData: SignatureData) => {
-      setSavedSignature(signatureData);
-      console.log("Signature saved:", signatureData);
-    };
+  const handleSaveSignature = (signatureData: SignatureData) => {
+    setSavedSignature(signatureData);
+    console.log("Signature saved:", signatureData);
+  };
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const [totalPages, setTotalPages] = useState(1);
 
   // Update container width when window resizes
   useEffect(() => {
-    if (pdfContainerRef.current) {
-      setContainerWidth(pdfContainerRef.current.clientWidth);
-    }
-
-    const handleResize = () => {
+    const updateWidth = () => {
       if (pdfContainerRef.current) {
-        if (window.innerWidth < 300) {
-          setContainerWidth(260);
-        } else if (window.innerWidth < 500) {
-          setContainerWidth(450);
-        } else if (window.innerWidth < 700) {
-          setContainerWidth(650);
-        } else if (window.innerWidth < 800) {
-          setContainerWidth(750);
-        }
         setContainerWidth(pdfContainerRef.current.clientWidth);
       }
     };
 
-    window.addEventListener("resize", handleResize);
-    return () => window.removeEventListener("resize", handleResize);
-  }, []);
+    updateWidth(); // initial call
+    window.addEventListener("resize", updateWidth);
+
+    return () => window.removeEventListener("resize", updateWidth);
+  }, [pdfContainerRef?.current?.clientWidth]);
 
   // Calculate scale based on container width
-
-
-   const [currentPage, setCurrentPage] = useState(1);
-   const [totalPages, setTotalPages] = useState(1);
-
-   // Update container width when window resizes
-useEffect(() => {
-  const updateWidth = () => {
-    if (pdfContainerRef.current) {
-      setContainerWidth(pdfContainerRef.current.clientWidth);
-    }
-  };
-
-  updateWidth(); // initial call
-  window.addEventListener("resize", updateWidth);
-
-  return () => window.removeEventListener("resize", updateWidth);
-}, []);
-
-   // Calculate scale based on container width
   //  const calculateScale = () => {
   //    if (containerWidth === 0) return 1;
 
@@ -81,45 +52,42 @@ useEffect(() => {
   //    return 1.2;
   //  };
 
-   
+  const goToPage = (page: number) => {
+    if (page >= 1 && page <= totalPages) {
+      setCurrentPage(page);
 
-   const goToPage = (page: number) => {
-     if (page >= 1 && page <= totalPages) {
-       setCurrentPage(page);
+      // Scroll to the specific page in the viewer
+      setTimeout(() => {
+        if (pdfContainerRef.current) {
+          const pageElement = pdfContainerRef.current.querySelector(
+            `[data-page-number="${page}"]`
+          );
+          if (pageElement) {
+            pageElement.scrollIntoView({ behavior: "smooth", block: "start" });
+          }
+        }
+      }, 100); // Small delay to ensure DOM updates
+    }
+  };
 
-       // Scroll to the specific page in the viewer
-       setTimeout(() => {
-         if (pdfContainerRef.current) {
-           const pageElement = pdfContainerRef.current.querySelector(
-             `[data-page-number="${page}"]`
-           );
-           if (pageElement) {
-             pageElement.scrollIntoView({ behavior: "smooth", block: "start" });
-           }
-         }
-       }, 100); // Small delay to ensure DOM updates
-     }
-   };
+  const nextPage = () => {
+    if (currentPage < totalPages) {
+      goToPage(currentPage + 1);
+    }
+  };
 
-   const nextPage = () => {
-     if (currentPage < totalPages) {
-       goToPage(currentPage + 1);
-     }
-   };
-
-   const prevPage = () => {
-     if (currentPage > 1) {
-       goToPage(currentPage - 1);
-     }
-   };
-
+  const prevPage = () => {
+    if (currentPage > 1) {
+      goToPage(currentPage - 1);
+    }
+  };
 
   return (
     <ConverterLayout
       actionMenuSideBar={
-        <div className="p-4 cnter flex-col space-y-4">
+        <div className="p-4 overflow-hidden z-50 relative flex-col space-y-4">
           <Label>Signatures and Initials</Label>
-          <div className="flex item-center justify-start gap-4 w-full">
+          <div className="flex flex-wrap overflow-hidden item-center justify-start gap-4 w-full">
             <Button size="sm" variant="outline">
               <SignatureIcon /> Create Initials
             </Button>
@@ -148,15 +116,15 @@ useEffect(() => {
       }
       // handleFileUpload={() => DeletePdfPages(selectedFiles)}
       children={
-        <div className="flex h-fit relative items-center justify-center p-2 sm:p-4">
-          <div className="center w-full max-w-6xl">
+        <div className="flex h-fit relative items-center justify-center p-2 sm:p-4 w-full">
+          <div className="center w-full w-full max-wxl">
             {/* Main PDF Viewer */}
             <div
-              className="lg:col-span-3 dark:border-primary border rounded-lg py-4"
+              className="lg:col-span-3 w-full dark:border-primary border rounded-lg py-4"
               ref={pdfContainerRef}
             >
               <Document
-                className="flex flex-col items-center"
+                className="flex w-full flex-col items-center"
                 file={selectedFiles[selectedIndex]?.fileUrl}
                 onLoadSuccess={({ numPages }) => {
                   setTotalPages(numPages);
@@ -167,15 +135,15 @@ useEffect(() => {
                 {Array.from({ length: totalPages }, (_, index) => (
                   <div
                     key={index}
-                    data-page-number={index + 1}
+                    data-page-number={index + 1} // Add data attribute
                     className="mb-4 w-full flex justify-center"
                   >
                     <Page
-                      className="max-w-full shadow-lg"
+                      className="shadow-lg"
                       pageNumber={index + 1}
                       renderTextLayer={false}
                       renderAnnotationLayer={false}
-                      width={Math.min(containerWidth, 900)} // responsive with max cap
+                      width={Math.min(containerWidth, 900)} // responsive with a max width cap
                     />
                   </div>
                 ))}
@@ -184,13 +152,14 @@ useEffect(() => {
           </div>
 
           {/* Mobile Controls */}
-          <div className="fixed w-ful bottom-10 mx-auto transform flex space-x-2 z-50">
+
+          <div className="fixed bottom-30 sm:bottom-10  left-1/4 transform translatx-1/2 flex space-x-2 z-0">
             <PaginationControls
               currentPage={currentPage}
               totalPages={totalPages}
               onNext={nextPage}
               onPrev={prevPage}
-              onPageChange={goToPage}
+              // onPageChange={goToPage}
             />
           </div>
         </div>
@@ -210,13 +179,11 @@ const PaginationControls = ({
   totalPages,
   onNext,
   onPrev,
-  onPageChange,
 }: {
   currentPage: number;
   totalPages: number;
   onNext: () => void;
   onPrev: () => void;
-  onPageChange: (page: number) => void;
 }) => {
   return (
     <div className="bg-white dark:bg-gray-800 rounded-lg shadow-lg p-3 flex items-center space-x-2">
@@ -225,10 +192,10 @@ const PaginationControls = ({
         disabled={currentPage === 1}
         className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm disabled:opacity-50"
       >
-        ← Previous
+        ←
       </button>
 
-      <span className="text-sm">
+      <span className="text-sm whitespace-nowrap">
         Page {currentPage} of {totalPages}
       </span>
 
@@ -237,19 +204,9 @@ const PaginationControls = ({
         disabled={currentPage === totalPages}
         className="px-3 py-1 bg-gray-100 dark:bg-gray-700 rounded text-sm disabled:opacity-50"
       >
-        Next →
+        →
       </button>
-
-      <input
-        type="number"
-        min="1"
-        max={totalPages}
-        value={currentPage}
-        onChange={(e) => onPageChange(parseInt(e.target.value))}
-        className="w-16 px-2 py-1 border rounded text-sm text-center"
-      />
     </div>
   );
 };
-
 export default ESignatureWorkflow;

@@ -1,3 +1,4 @@
+import { debounce } from "lodash"; // Ensure lodash is installed: npm i lodash
 import {
   AddHeaderFooter,
   AddPagesToPdf,
@@ -27,7 +28,7 @@ import ContainerLayout from "../layout/container_layout";
 import { Button } from "../ui/button";
 import { Input } from "../ui/input";
 import { cn } from "@/lib/utils";
-import { useState } from "react";
+import { useCallback, useState } from "react";
 import {
   Tooltip,
   TooltipContent,
@@ -43,6 +44,7 @@ const ToolsSection = () => {
   const [showAllTools, setShowAllTools] = useState(false);
   const [selectedTools, setSelectedTools] = useState("all-tools");
   const [searchQuery, setSearchQuery] = useState("");
+
   const toolsSectionThemes = [
     "#f2f9fe",
     "#f9fefb",
@@ -69,15 +71,15 @@ const ToolsSection = () => {
       transition: { duration: 1.5 },
     },
   };
- 
-interface Tool {
-  label: string;
-  icon: React.FC<Partial<ISvgIconComponent>>; // Define icon as a functional component
-  isFree: boolean;
-  info: string;
-  category: string;
-  color: string; 
-}
+
+  interface Tool {
+    label: string;
+    icon: React.FC<Partial<ISvgIconComponent>>; // Define icon as a functional component
+    isFree: boolean;
+    info: string;
+    category: string;
+    color: string;
+  }
   const Tools: Tool[] = [
     {
       label: "PDF to Word",
@@ -273,7 +275,6 @@ interface Tool {
     },
   ];
 
-
   const variants3 = {
     inactive: {
       y: 120,
@@ -286,11 +287,22 @@ interface Tool {
     },
   };
 
-  console.log(showAllTools)
+  const debouncedSetSearchQuery = useCallback(
+    debounce((value: string) => {
+      setSearchQuery(value.trim().toLowerCase());
+    }, 300),
+    []
+  );
+
+  // Handle input change
+  const handleInputChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    debouncedSetSearchQuery(e.target.value);
+  };
+
+  console.log(showAllTools);
 
   return (
     <ContainerLayout className="space-y-5 w-full border-t pt-6 sm:pt-10 text-center flex-col">
-
       <motion.div
         variants={variants3}
         initial={"inactive"}
@@ -304,7 +316,7 @@ interface Tool {
               size={17}
             />
             <Input
-              onChange={(e) => setSearchQuery(e.target.value)}
+              onInput={handleInputChange}
               className="max-w-xl w-full pl-10"
               placeholder="Search tools..."
             />
@@ -411,11 +423,10 @@ interface Tool {
         </div>
       </motion.div>
       <div className="grid grid-cols-[repeat(auto-fill,minmax(140px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-1.5 sm:gap-3 pb-12 sm:pb-20 w-full mt-4">
-        {Tools
-          .filter(
-            (tool) =>
-              tool.label && tool.label?.toLowerCase()?.includes(searchQuery)
-          )
+        {Tools.filter(
+          (tool) =>
+            tool.label && tool.label?.toLowerCase()?.includes(searchQuery)
+        )
           .filter(
             (tool) =>
               selectedTools === "all-tools" || selectedTools === tool.category
