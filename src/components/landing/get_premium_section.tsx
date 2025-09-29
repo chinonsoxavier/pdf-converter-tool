@@ -17,9 +17,10 @@ import {
 import { cn } from "@/lib/utils";
 import { Tooltip, TooltipContent, TooltipTrigger } from "../ui/tooltip";
 import { useNavigate } from "react-router-dom";
+import { useTheme } from "../use_theme";
 
 const GetPremiumSection = () => {
-
+const {theme} = useTheme()
   const navigate = useNavigate();
 
   interface IPremiumTools {
@@ -158,6 +159,20 @@ const GetPremiumSection = () => {
     },
   };
 
+    const toolsSectionThemes = [
+      "#f2f9fe",
+      "#f9fefb",
+      "#fffcfa",
+      "#fdf8ff",
+      "#fff5f8",
+      "#f8fcff",
+      "#fffdfa",
+      "#f2f9fe",
+      "#f7fcff",
+      "#fffcf9",
+      "#fafffe",
+      "#faf6f6",
+    ];
   return (
     <div className="bg-secondary" >
 
@@ -210,6 +225,10 @@ const GetPremiumSection = () => {
         >
           <div className="grid grid-cols-[repeat(auto-fill,minmax(160px,1fr))] sm:grid-cols-[repeat(auto-fill,minmax(180px,1fr))] gap-1.5 sm:gap-3 pb-12 sm:pb-20 w-full mt-4">
             {premiumTools.map((tool, index) => {
+                const randomIndex = Math.floor(
+              Math.random() * toolsSectionThemes.length
+            );
+            const randomColor = toolsSectionThemes[randomIndex];
               return (
                 <motion.div
                   key={index}
@@ -217,6 +236,9 @@ const GetPremiumSection = () => {
                   initial={"inactive"}
                   whileInView={"active"}
                   viewport={{ once: true }}
+                  style={{
+                    backgroundColor: theme === "dark" ? "#0b1120" : randomColor,
+                  }}
                   className={cn(
                     `w-full relative center tools flex-col border rounded-lg`
                   )}

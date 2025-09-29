@@ -153,7 +153,7 @@ const ESignatureWorkflow = () => {
 
           {/* Mobile Controls */}
 
-          <div className="fixed bottom-30 sm:bottom-10  left-1/4 transform translatx-1/2 flex space-x-2 z-0">
+          <div className="fixed to bg-t bg bottom-30 sm:bottom-10  left-1/4 transform translatx-1/2 flex space-x-2 z-0">
             <PaginationControls
               currentPage={currentPage}
               totalPages={totalPages}

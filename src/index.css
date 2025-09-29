@@ -1,29 +1,6 @@
 @import "tailwindcss";
+
 @custom-variant dark (&:is(.dark *));
-
-.font-caveat {
-  font-family: "Caveat";
-}
-
-.font-dancing-script {
-  font-family: "Dancing Script";
-}
-
-.font-great-vibes {
-  font-family: "Great Vibe";
-}
-
-.font-pacifico {
-  font-family: "Pacifico";
-}
-
-.font-sacramento {
-  font-family: "Sacramento";
-}
-
-.font-allura {
-  font-family: "Allura";
-}
 
 :root {
   --background: oklch(1 0 0);
@@ -147,13 +124,13 @@
   --breakpoint-xs: 470px;
 }
 
-.pdf_shadow {
-  box-shadow: 0 0 5px 2px rgba(0, 0, 0, .1);
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, .08)
+.pdf_shadow{
+  box-shadow: 0 0 5px 2px rgba(0,0,0,.1);
+  box-shadow: 0 0 8px 0 rgba(0,0,0,.08)
 }
 
-.pdf_shadow2 {
-  box-shadow: 0 0 8px 0 rgba(0, 0, 0, .08)
+.pdf_shadow2{
+  box-shadow: 0 0 8px 0 rgba(0,0,0,.08)
 }
 
 body {
@@ -170,12 +147,12 @@ body {
   @apply flex items-center justify-center;
 }
 
-#hero_section {
-  @apply to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4, 9, 30)];
-}
+/* #hero_section {
+  @apply to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:bg-to-[rgb(4,9,30)];
+} */
 
 .gradient {
-  @apply to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:to-[rgb(4, 9, 30)];
+  @apply to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:bg-to-[rgb(4,9,30)];
 }
 
 @layer base {
@@ -183,7 +160,6 @@ body {
     font-family: "Nunito", sans-serif;
     @apply border-border outline-ring/50;
   }
-
   body {
     @apply bg-background text-foreground;
   }

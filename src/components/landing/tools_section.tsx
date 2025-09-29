@@ -39,11 +39,14 @@ import {
   Search,
 } from "lucide-react";
 import {  useNavigate } from "react-router-dom";
+import { useTheme } from "../use_theme";
 const ToolsSection = () => {
   const navigate = useNavigate();
   const [showAllTools, setShowAllTools] = useState(false);
   const [selectedTools, setSelectedTools] = useState("all-tools");
   const [searchQuery, setSearchQuery] = useState("");
+
+  const {theme} = useTheme()
 
   const toolsSectionThemes = [
     "#f2f9fe",
@@ -53,7 +56,7 @@ const ToolsSection = () => {
     "#fff5f8",
     "#f8fcff",
     "#fffdfa",
-    "#  ",
+    "#f2f9fe",
     "#f7fcff",
     "#fffcf9",
     "#fafffe",
@@ -78,7 +81,6 @@ const ToolsSection = () => {
     isFree: boolean;
     info: string;
     category: string;
-    color: string;
   }
   const Tools: Tool[] = [
     {
@@ -87,14 +89,12 @@ const ToolsSection = () => {
       isFree: true,
       info: "Convert PDFs to editable Word documents",
       category: "convert",
-      color: "#f2f9fe",
     },
     {
       label: "Word to PDF",
       icon: WordToPdf,
       isFree: true,
       info: "Convert Word documents to PDF",
-      color: "#f2f9fe",
       category: "convert",
     },
     {
@@ -102,7 +102,6 @@ const ToolsSection = () => {
       icon: MergePdf,
       isFree: true,
       info: "Combine multiple PDF files",
-      color: "#f2f9fe",
       category: "organize",
     },
     {
@@ -110,7 +109,6 @@ const ToolsSection = () => {
       icon: SplitPdf,
       isFree: true,
       info: "Split multiple PDF files",
-      color: "#f2f9fe",
       category: "organize",
     },
     {
@@ -118,7 +116,6 @@ const ToolsSection = () => {
       icon: PdfToWord,
       isFree: true,
       info: "Reduce file size without losing quality",
-      color: "#f2f9fe",
       category: "enhance",
     },
     {
@@ -126,7 +123,6 @@ const ToolsSection = () => {
       icon: PdfToJpg,
       isFree: true,
       info: "Convert PDFs to Jpg images",
-      color: "#f2f9fe",
       category: "convert",
     },
     {
@@ -134,7 +130,6 @@ const ToolsSection = () => {
       icon: JPGTOPDF,
       isFree: true,
       info: "Convert images to PDFs",
-      color: "#f2f9fe",
       category: "convert",
     },
     {
@@ -142,7 +137,6 @@ const ToolsSection = () => {
       icon: RotatePdf,
       isFree: true,
       info: "Rotate one or more pages",
-      color: "#f2f9fe",
       category: "edit",
     },
     {
@@ -150,7 +144,6 @@ const ToolsSection = () => {
       icon: OrganisePdf,
       isFree: true,
       info: "Drag & drop rearrangement of pdf pages",
-      color: "#f2f9fe",
       category: "organize",
     },
     {
@@ -158,7 +151,6 @@ const ToolsSection = () => {
       icon: ExtractPages,
       isFree: true,
       info: "Drag & drop rearrangement of pages",
-      color: "#f2f9fe",
       category: "organize",
     },
     {
@@ -166,7 +158,6 @@ const ToolsSection = () => {
       icon: RemovePages,
       isFree: true,
       info: "Remove unwanted pages from PDF",
-      color: "#f2f9fe",
       category: "organize",
     },
     {
@@ -174,7 +165,6 @@ const ToolsSection = () => {
       icon: AddPagesToPdf,
       isFree: true,
       info: "Insert page numbers automatically",
-      color: "#f2f9fe",
       category: "edit",
     },
     {
@@ -182,7 +172,6 @@ const ToolsSection = () => {
       icon: AddHeaderFooter,
       isFree: true,
       info: "Insert simple text headers or footers",
-      color: "#f2f9fe",
       category: "edit",
     },
     {
@@ -190,7 +179,6 @@ const ToolsSection = () => {
       icon: PreviewPdf,
       isFree: true,
       info: "Built-in viewer for PDF file previews",
-      color: "#f2f9fe",
       category: "edit",
     },
     {
@@ -198,7 +186,6 @@ const ToolsSection = () => {
       icon: OcrPdf,
       isFree: false,
       info: "Turn scanned PDFs/images into editable text",
-      color: "#f2f9fe",
       category: "edit",
     },
     {
@@ -206,7 +193,6 @@ const ToolsSection = () => {
       icon: EditPdf,
       isFree: false,
       info: "Modify text, images, or layout directly",
-      color: "#f2f9fe",
       category: "edit",
     },
     {
@@ -214,7 +200,6 @@ const ToolsSection = () => {
       icon: LockPdf,
       isFree: false,
       info: "Encrypt PDFs with user-defined password",
-      color: "#f2f9fe",
       category: "secure",
     },
     {
@@ -222,7 +207,6 @@ const ToolsSection = () => {
       icon: UnlockPdf,
       isFree: false,
       info: "Remove passwords (if permitted)",
-      color: "#f2f9fe",
       category: "secure",
     },
     {
@@ -230,7 +214,6 @@ const ToolsSection = () => {
       icon: SignPdf,
       isFree: false,
       info: "Add or request signatures from others",
-      color: "#f2f9fe",
       category: "secure",
     },
     {
@@ -238,7 +221,6 @@ const ToolsSection = () => {
       icon: SignPdf,
       isFree: false,
       info: "Add form fields: checkboxes, dropdowns, etc",
-      color: "#f2f9fe",
       category: "edit",
     },
     {
@@ -247,7 +229,6 @@ const ToolsSection = () => {
       isFree: false,
       info: "Permanently remove sensitive information",
       category: "secure",
-      color: "#f2f9fe",
     },
     {
       label: "Convert PDF to Excel",
@@ -255,14 +236,12 @@ const ToolsSection = () => {
       isFree: false,
       info: "Accurate table extraction",
       category: "convert",
-      color: "#f2f9fe",
     },
     {
       label: "Convert PDF to PowerPoint",
       icon: PdfToPowerpoint,
       isFree: false,
       info: "Slide-based conversion",
-      color: "#f2f9fe",
       category: "convert",
     },
     {
@@ -271,7 +250,6 @@ const ToolsSection = () => {
       isFree: false,
       info: "Convert High-Resolution PDF to Image(300–600 DPI export)",
       category: "convert",
-      color: "#f2f9fe",
     },
   ];
 
@@ -444,10 +422,9 @@ const ToolsSection = () => {
                 initial={"inactive"}
                 whileInView={"active"}
                 viewport={{ once: true }}
-                data-color={randomColor}
+                style={{ backgroundColor: theme === "dark" ? "#0b1120" : randomColor }}
                 className={cn(
                   `w-full relative center tools flex-col border rounded-lg`,
-                  `bg-[${tool.color}]`
                 )}
               >
                 <Tooltip key={index}>

@@ -1,9 +1,8 @@
 import { create } from "zustand";
 
-
 interface LandingStore {
-    sideMenuOpen: boolean;
-    toggleSideMenuOpen: () => void;
+  sideMenuOpen: boolean;
+  toggleSideMenuOpen: () => void;
 }
 
 const useLandingStore = create<LandingStore>((set) => ({
