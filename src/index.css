@@ -124,13 +124,13 @@
   --breakpoint-xs: 470px;
 }
 
-.pdf_shadow{
-  box-shadow: 0 0 5px 2px rgba(0,0,0,.1);
-  box-shadow: 0 0 8px 0 rgba(0,0,0,.08)
+.pdf_shadow {
+  box-shadow: 0 0 5px 2px rgba(0, 0, 0, .1);
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, .08)
 }
 
-.pdf_shadow2{
-  box-shadow: 0 0 8px 0 rgba(0,0,0,.08)
+.pdf_shadow2 {
+  box-shadow: 0 0 8px 0 rgba(0, 0, 0, .08)
 }
 
 body {
@@ -151,15 +151,16 @@ body {
   @apply to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:bg-to-[rgb(4,9,30)];
 } */
 
-.gradient {
+/* .gradient {
   @apply to-primary/5 from-white bg-gradient-to-t to-80% dark:from-primary dark:bg-to-[rgb(4,9,30)];
-}
+} */
 
 @layer base {
   * {
     font-family: "Nunito", sans-serif;
     @apply border-border outline-ring/50;
   }
+
   body {
     @apply bg-background text-foreground;
   }
